@@ -1,0 +1,554 @@
+<title>Carreira em Foco</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Planeje sua carreira durante a graduação: objetivos, competências, plano de ação e oportunidades. Projeto de extensão curricular da UNIFAMETRO.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Nunito+Sans:wght@400;600;700&display=swap">
+<style>
+/* Site com cabeçalho fixo; vitrine em faixas de largura total (verde profundo + papel claro) e área do aluno em cartões. Verde UNIFAMETRO com laranja só nas ações principais. */
+:root{
+  --verde-950:#00301B; --verde-900:#003D22; --verde-700:#1F6B3F; --verde-500:#3BAA35; --laranja:#F29A1F;
+  --bg:#F1F6EF; --surface:#FFFFFF; --surface-2:#F3F8F1; --ink:#10261A; --muted:#506558; --line:#D6E2D3;
+  --accent:#1F6B3F; --accent-ink:#FFFFFF; --accent-soft:#DDEFD9;
+  --warn:#9A4A00; --warn-soft:#FDECCB; --bad:#B42318; --bad-soft:#FBE3E0; --head-bg:rgba(255,255,255,.92);
+  --band:#FFFFFF; --shadow:0 1px 2px rgba(0,40,20,.06),0 8px 24px rgba(0,40,20,.06);
+  --font-display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif; --font-body:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B1810; --surface:#122619; --surface-2:#183222; --ink:#E8F3E6; --muted:#9BB4A2; --line:#26412E;
+  --accent:#5CCB56; --accent-ink:#06210F; --accent-soft:#1E4228; --warn:#F5B450; --warn-soft:#3B2D12; --bad:#FF8F85; --bad-soft:#3D1B18;
+  --head-bg:rgba(11,24,16,.92); --band:#0F2016; --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1810; --surface:#122619; --surface-2:#183222; --ink:#E8F3E6; --muted:#9BB4A2; --line:#26412E;
+  --accent:#5CCB56; --accent-ink:#06210F; --accent-soft:#1E4228; --warn:#F5B450; --warn-soft:#3B2D12; --bad:#FF8F85; --bad-soft:#3D1B18;
+  --head-bg:rgba(11,24,16,.92); --band:#0F2016; --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55;margin:0}
+h1,h2,h3{font-family:var(--font-display);line-height:1.12;margin:0;text-wrap:balance}
+h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:1.3rem;font-weight:800}
+h3{font-size:1.05rem;font-weight:600}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--laranja);outline-offset:2px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--head-bg);z-index:41}
+
+/* cabeçalho */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--head-bg);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.in{max-width:1120px;margin:0 auto}
+.top .in{display:flex;align-items:center;gap:20px;min-height:68px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:800;font-size:1.15rem;line-height:1;text-decoration:none;color:var(--ink);flex:none}
+.nav{display:flex;gap:2px;margin-left:12px;flex:1;min-width:0}
+.nav a{padding:8px 14px;border-radius:999px;text-decoration:none;color:var(--muted);font-weight:700;font-size:.95rem;white-space:nowrap}
+.nav a:hover{color:var(--ink);background:var(--accent-soft)}
+.nav a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+.who{display:flex;align-items:center;gap:12px;margin-left:auto;font-size:.9rem}
+.who .nm{font-weight:700;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.savestat{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.savestat i{width:8px;height:8px;border-radius:50%;background:var(--verde-500);display:inline-block}
+.savestat.busy i{background:var(--laranja)}
+.savestat.err i{background:var(--bad)}
+
+/* botões e formulários */
+.btn{border:0;border-radius:12px;padding:10px 18px;font-weight:700;cursor:pointer;background:var(--accent);color:var(--accent-ink);min-height:44px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{filter:brightness(1.08)}
+.btn.sec{background:var(--accent-soft);color:var(--ink)}
+.btn.line{background:transparent;border:1.5px solid currentColor;color:inherit}
+.btn.ghost{background:transparent;color:var(--muted);padding:6px 10px;min-height:36px}
+.btn.ghost:hover{color:var(--bad)}
+.btn.orange{background:var(--laranja);color:#2B1700}
+.btn.lg{min-height:52px;padding:12px 26px;font-size:1.05rem;border-radius:14px}
+.btn.sm{padding:6px 12px;min-height:36px;font-size:.9rem}
+label{font-weight:700;font-size:.9rem;display:flex;flex-direction:column;gap:5px}
+input,select,textarea{background:var(--surface-2);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;min-height:46px;width:100%}
+textarea{min-height:96px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;align-items:end}
+.stack{display:flex;flex-direction:column;gap:14px}
+.err{background:var(--bad-soft);color:var(--bad);border-radius:10px;padding:10px 12px;font-weight:700;font-size:.92rem}
+
+/* vitrine */
+.hero{background:radial-gradient(1100px 500px at 85% 10%,#2B7A4B 0%,transparent 60%),linear-gradient(160deg,var(--verde-950),var(--verde-900) 55%,#0F5A33);color:#fff;overflow:hidden}
+.hero .in{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:40px;align-items:center;padding-block:clamp(40px,8vw,88px)}
+.hero .kick{color:#BFE9B8;font-weight:700;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase}
+.hero p.lead{font-size:1.15rem;color:#DDEFD9;max-width:50ch}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero .btn.line{color:#fff}
+.focus{position:relative;aspect-ratio:1;max-width:420px;width:100%;margin-inline:auto}
+.focus svg{width:100%;height:100%}
+.float{position:absolute;background:var(--surface);color:var(--ink);border-radius:14px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.28);font-size:.85rem;display:flex;flex-direction:column;gap:6px;min-width:180px}
+.float b{font-family:var(--font-display)}
+.float.a{left:-4%;bottom:12%}.float.b{right:-2%;top:8%}
+.band{background:var(--band)}
+.band .in{padding-block:clamp(36px,6vw,64px);display:flex;flex-direction:column;gap:28px}
+.sec-h{display:flex;flex-direction:column;gap:8px;max-width:60ch}
+.kicker{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;list-style:none;padding:0;margin:0}
+.steps li{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:3px solid var(--verde-500)}
+.steps .n{font-family:var(--font-display);font-weight:800;color:var(--laranja);font-size:1.5rem}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow)}
+.fact b{font-family:var(--font-display);font-size:2.2rem;line-height:1;color:var(--accent)}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.feat div{display:flex;flex-direction:column;gap:6px}
+.ico{width:26px;height:26px;fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cta{background:var(--verde-900);color:#fff}
+.cta .in{padding-block:48px;display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+footer .in{padding-block:24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.88rem}
+
+/* autenticação */
+.auth{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:0;border-radius:22px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line)}
+.auth .side{background:linear-gradient(160deg,var(--verde-950),var(--verde-700));color:#fff;padding:36px;display:flex;flex-direction:column;gap:16px;justify-content:center}
+.auth .side p{color:#DDEFD9}
+.auth .form-side{background:var(--surface);padding:32px;display:flex;flex-direction:column;gap:16px}
+.tabs{display:flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px}
+.tabs a{flex:1;text-align:center;padding:9px;border-radius:9px;font-weight:700;text-decoration:none;color:var(--muted)}
+.tabs a[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+/* área do aluno */
+.main{padding-block:28px 56px}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+.head{display:flex;flex-direction:column;gap:6px}
+.head h1{font-size:clamp(1.7rem,3.5vw,2.3rem)}
+.head p{color:var(--muted);max-width:62ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:14px;min-width:0;box-shadow:var(--shadow)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.muted{color:var(--muted)}
+.small{font-size:.86rem}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 12px;font-size:.8rem;font-weight:700;background:var(--accent-soft);color:var(--ink);border:0}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)}
+button.chip{cursor:pointer;min-height:32px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:700;cursor:pointer;min-height:38px}
+.pill[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.bar{height:10px;background:var(--accent-soft);border-radius:999px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--verde-500);border-radius:999px;transition:width .4s}
+.greet{background:linear-gradient(135deg,var(--verde-900),var(--verde-700));color:#fff;border-radius:22px;padding:clamp(20px,4vw,32px);display:flex;gap:28px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.greet h1{color:#fff}
+.greet p{color:#DDEFD9}
+.ring{position:relative;width:120px;height:120px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--font-display);font-size:1.6rem}
+.stats{display:flex;gap:26px;flex-wrap:wrap}
+.stat b{display:block;font-family:var(--font-display);font-size:1.9rem;line-height:1}
+.stat span{font-size:.82rem;color:#CFE8CB}
+.list{display:flex;flex-direction:column;gap:10px;list-style:none;margin:0;padding:0}
+.item{display:flex;gap:12px;align-items:center;padding:10px 12px;background:var(--surface-2);border-radius:12px;min-width:0;flex-wrap:wrap}
+.item .t{flex:1;min-width:140px;overflow-wrap:anywhere}
+.item.done .t{text-decoration:line-through;color:var(--muted)}
+.check{width:28px;height:28px;border-radius:8px;border:2px solid var(--accent);background:var(--surface);cursor:pointer;flex:none;padding:0}
+.check:hover{background:var(--accent-soft)}
+.empty{padding:22px;text-align:center;color:var(--muted);border:2px dashed var(--line);border-radius:var(--r);display:flex;flex-direction:column;gap:12px;align-items:center}
+.dots{display:flex;gap:4px}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--accent);background:var(--surface);cursor:pointer;padding:0}
+.dot[aria-pressed="true"]{background:var(--accent)}
+.opps{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.rate{display:flex;gap:8px;flex-wrap:wrap}
+.rate button{width:46px;height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-weight:800;cursor:pointer}
+.rate button[aria-pressed="true"]{background:var(--laranja);border-color:var(--laranja);color:#2B1700}
+.hbar{display:grid;grid-template-columns:minmax(90px,200px) 1fr 36px;gap:10px;align-items:center;font-size:.9rem}
+.hbar .bar{height:14px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.tile{background:var(--surface-2);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:2px}
+.tile b{font-family:var(--font-display);font-size:1.9rem;line-height:1.1}
+blockquote{margin:0;padding:10px 14px;border-left:4px solid var(--verde-500);background:var(--surface-2);border-radius:0 10px 10px 0;overflow-wrap:anywhere}
+
+.tabbar{display:none}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 86px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s;z-index:60;max-width:90vw;text-align:center}
+.toast.on{opacity:1}
+.loading{min-height:60vh;display:grid;place-items:center;color:var(--muted)}
+
+@media (max-width:900px){
+  .nav{display:none}
+  .who .nm{display:none}
+  .hero .in,.auth,.grid2{grid-template-columns:minmax(0,1fr)}
+  .focus{max-width:300px}
+  .float.a{left:0}.float.b{right:0}
+  .main{padding-bottom:110px}
+  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--head-bg);backdrop-filter:blur(10px);border-top:1px solid var(--line);justify-content:space-around;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+  .tabbar a{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);text-decoration:none;font-size:.7rem;font-weight:700;padding:6px;border-radius:10px;min-width:56px}
+  .tabbar a svg{stroke:currentColor;width:22px;height:22px}
+  .tabbar a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+  .auth .side{padding:24px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div id="root"><div class="loading">Carregando…</div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+/* ================= dados fixos ================= */
+var ICON={
+ painel:'<path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+ plano:'<path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.5 1.5L7 5M3.5 12l1.5 1.5L7 11M3.5 18l1.5 1.5L7 17"/>',
+ perfil:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
+ oportunidades:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/>',
+ avaliacao:'<path d="M21 12a8 8 0 01-11.6 7.1L4 20l1-4.6A8 8 0 1121 12z"/>',
+ coordenacao:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'
+};
+var NAV=[["painel","Painel"],["plano","Plano de ação"],["perfil","Perfil"],["oportunidades","Oportunidades"],["avaliacao","Avaliação"]];
+var PROTEGIDAS=["painel","plano","perfil","oportunidades","avaliacao","coordenacao"];
+var SEMESTRES=["1º semestre","2º semestre","3º semestre","4º semestre","5º semestre","6º semestre","7º semestre ou mais"];
+var STATUS=[["todo","A fazer"],["doing","Em andamento"],["done","Concluída"]];
+var PRAZO={curto:"Curto prazo",medio:"Médio prazo",longo:"Longo prazo"};
+var SUG=["Comunicação","Trabalho em equipe","Liderança","Inglês","Excel","Organização do tempo","Pensamento crítico","Atendimento ao público","Escrita profissional","Resolução de problemas","Currículo e LinkedIn","Oratória"];
+var OPPS=[
+ {t:"Estágio",n:"CIEE",d:"Agente de integração de estágio com vagas por curso e cidade. Cadastre o currículo e receba oportunidades.",u:"https://www.ciee.org.br"},
+ {t:"Estágio",n:"Nube",d:"Plataforma de estágios e programas de trainee com filtro por curso e cidade.",u:"https://www.nube.com.br"},
+ {t:"Vagas",n:"LinkedIn Vagas",d:"Pesquise vagas júnior e estágios e monte um perfil que recrutadores encontram.",u:"https://www.linkedin.com/jobs/"},
+ {t:"Vagas",n:"Gupy",d:"Portal usado por muitas empresas em processos seletivos de estágio e trainee.",u:"https://portal.gupy.io"},
+ {t:"Cursos",n:"Escola Virtual.Gov",d:"Cursos gratuitos com certificado em comunicação, gestão, tecnologia e outras áreas.",u:"https://www.escolavirtual.gov.br"},
+ {t:"Cursos",n:"Fundação Bradesco",d:"Cursos online gratuitos de informática, finanças, idiomas e desenvolvimento pessoal.",u:"https://www.ev.org.br"},
+ {t:"Cursos",n:"Sebrae, cursos online",d:"Cursos gratuitos de empreendedorismo, gestão e atendimento ao cliente.",u:"https://sebrae.com.br/sites/PortalSebrae/cursosonline"},
+ {t:"Eventos",n:"Sympla",d:"Encontre eventos, feiras e workshops da sua área, presenciais e online.",u:"https://www.sympla.com.br"}
+];
+var QUESTIONS=[["util","O Carreira em Foco ajuda a organizar minha carreira?"],["facil","As telas são fáceis de entender e usar?"],["voltar","Eu usaria este sistema durante a graduação?"]];
+
+/* ================= utilidades ================= */
+function uid(){return Math.random().toString(36).slice(2,10)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function iso(d){var m=d.getMonth()+1,dd=d.getDate();return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(dd<10?"0":"")+dd}
+function plusDays(n){var d=new Date();d.setDate(d.getDate()+n);return iso(d)}
+function today(){return iso(new Date())}
+function fmt(s){if(!s)return"sem prazo";var p=s.split("-");return p[2]+"/"+p[1]+"/"+p[0]}
+function ico(k){return '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">'+ICON[k]+'</svg>'}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove("on")},2400)}
+function emptyState(p){return {profile:{nome:p.nome||"",curso:p.curso||"",semestre:p.semestre||SEMESTRES[0],area:""},skills:[],goals:[],tasks:[],feedback:{texto:""}}}
+function summary(s){
+  var t=s.tasks,f=s.feedback||{};
+  return {curso:s.profile.curso||"",semestre:s.profile.semestre||"",objetivos:s.goals.length,tarefas:t.length,
+    concluidas:t.filter(function(x){return x.status==="done"}).length,atrasadas:t.filter(overdue).length,
+    util:f.util||0,facil:f.facil||0,voltar:f.voltar||0,comentario:f.texto||"",atualizado:new Date().toISOString()};
+}
+function overdue(t){return t.status!=="done"&&t.data&&t.data<today()}
+
+/* ================= camadas de dados ================= */
+/* 1) API: site real (servidor Node + SQLite).  2) Artifact: banco do claude.ai.  3) Local: navegador. */
+var ApiB={kind:"api",senha:true,
+  req:function(m,u,b){
+    return fetch(u,{method:m,credentials:"same-origin",headers:b?{"Content-Type":"application/json"}:{},body:b?JSON.stringify(b):undefined})
+      .then(function(r){return r.json().catch(function(){return{}}).then(function(j){if(!r.ok){var e=new Error(j.erro||"Algo deu errado.");e.status=r.status;throw e}return j})});
+  },
+  init:function(){return this.req("GET","/api/eu").then(function(j){return j.usuario},function(){return null})},
+  entrar:function(f){return this.req("POST","/api/entrar",f).then(function(j){return j.usuario})},
+  criar:function(f){return this.req("POST","/api/registrar",f).then(function(j){return j.usuario})},
+  sair:function(){return this.req("POST","/api/sair",{})},
+  load:function(){return this.req("GET","/api/estado")},
+  save:function(s){return this.req("PUT","/api/estado",s)},
+  admin:function(){return this.req("GET","/api/admin/resumo").then(function(j){return j.linhas})}
+};
+var LK="carreira-em-foco-v2",memState=null;
+var LocalB={kind:"local",senha:false,
+  init:function(){var s=this.read();return Promise.resolve(s?{nome:s.profile.nome,admin:false}:null)},
+  read:function(){try{var r=localStorage.getItem(LK);if(r)return JSON.parse(r)}catch(e){}return memState},
+  entrar:function(f){memState=emptyState(f);this.write(memState);return Promise.resolve({nome:f.nome,admin:false})},
+  criar:function(f){return this.entrar(f)},
+  sair:function(){return Promise.resolve()},
+  load:function(){return Promise.resolve(this.read())},
+  write:function(s){memState=s;try{localStorage.setItem(LK,JSON.stringify(s))}catch(e){}},
+  save:function(s){this.write(s);return Promise.resolve()},
+  admin:function(){return Promise.resolve([])}
+};
+var ArtB={kind:"artifact",senha:false,db:null,uid:null,isAdmin:false,
+  setup:function(){
+    var self=this;
+    return Promise.all([claude.use("db"),claude.use("user")]).then(function(r){
+      if(!r[0]||!r[1])return false;
+      return r[1].id().then(function(id){
+        if(!id)return false;
+        self.db=r[0];self.uid=id;
+        return Promise.resolve(r[1].canEdit()).then(function(a){self.isAdmin=!!a;return true});
+      });
+    }).catch(function(){return false});
+  },
+  ref:function(){return this.db.doc("data/users/"+this.uid+"/estado")},
+  init:function(){var self=this;return this.ref().get().then(function(d){if(!d.exists)return self.isAdmin?{nome:"Coordenação",admin:true}:null;self._s=d.data();return {nome:self._s.profile.nome,admin:self.isAdmin}})},
+  entrar:function(f){this._s=emptyState(f);var self=this;return this.save(this._s).then(function(){return {nome:f.nome,admin:self.isAdmin}})},
+  criar:function(f){return this.entrar(f)},
+  sair:function(){return Promise.resolve()},
+  load:function(){return Promise.resolve(this._s||null)},
+  save:function(s){
+    this._s=s;var self=this;
+    return this.ref().set(JSON.parse(JSON.stringify(s))).then(function(){return self.db.doc("resumo/"+self.uid).set(summary(s))});
+  },
+  admin:function(){return this.db.collection("resumo").get().then(function(q){return q.docs.map(function(d){return d.data()})})}
+};
+
+/* ================= estado ================= */
+var B=LocalB,S=null,USER=null,saveTimer=null;
+function save(){
+  setStat("busy");clearTimeout(saveTimer);
+  saveTimer=setTimeout(function(){
+    B.save(S).then(function(){setStat("ok")},function(){setStat("err")});
+  },500);
+}
+function setStat(k){
+  var el=document.getElementById("savestat");if(!el)return;
+  el.className="savestat "+(k==="ok"?"":k);
+  el.innerHTML='<i></i>'+(k==="ok"?"Salvo":k==="busy"?"Salvando…":"Não salvou. Tente de novo.");
+}
+function goalTasks(g){return S.tasks.filter(function(t){return t.goalId===g.id})}
+function pct(g){var ts=goalTasks(g);if(!ts.length)return 0;return Math.round(ts.filter(function(t){return t.status==="done"}).length/ts.length*100)}
+function statusLabel(s){return STATUS.filter(function(x){return x[0]===s})[0][1]}
+function dots(id,n){var h='<div class="dots" role="group" aria-label="Nível de 1 a 5">';for(var i=1;i<=5;i++)h+='<button class="dot" data-act="level" data-id="'+id+'" data-n="'+i+'" aria-pressed="'+(i<=n)+'" aria-label="Nível '+i+'"></button>';return h+'</div>'}
+
+/* ================= peças de tela ================= */
+function brandMark(){return '<svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="17" fill="#3BAA35"/><circle cx="18" cy="18" r="10" fill="none" stroke="#003D22" stroke-width="3.5"/><circle cx="18" cy="18" r="3.6" fill="#F29A1F"/></svg>'}
+function header(v){
+  var h='<header class="top gut"><div class="in"><a class="brand" href="#'+(USER?"painel":"inicio")+'">'+brandMark()+'<span>Carreira em Foco</span></a>';
+  if(USER){
+    var items=NAV.slice();if(USER.admin)items.push(["coordenacao","Coordenação"]);
+    h+='<nav class="nav" aria-label="Menu principal">'+items.map(function(n){return '<a href="#'+n[0]+'"'+(v===n[0]?' aria-current="page"':"")+'>'+n[1]+'</a>'}).join("")+'</nav>';
+    h+='<div class="who"><span class="savestat" id="savestat"><i></i>Salvo</span><span class="nm">'+esc(USER.nome)+'</span>'+(B.kind==="api"?'<button class="btn sec sm" data-act="sair">Sair</button>':'')+'</div>';
+  }else{
+    h+='<div class="who"><a class="btn sec sm" href="#entrar">Entrar</a><a class="btn orange sm" href="#criar">Criar conta</a></div>';
+  }
+  return h+'</div></header>';
+}
+function tabbar(v){
+  if(!USER)return"";
+  var items=NAV.slice();if(USER.admin)items.push(["coordenacao","Coord."]);
+  var short={"Plano de ação":"Plano","Oportunidades":"Vagas","Avaliação":"Avaliar"};
+  return '<nav class="tabbar" aria-label="Menu principal">'+items.map(function(n){return '<a href="#'+n[0]+'"'+(v===n[0]?' aria-current="page"':"")+'>'+ico(n[0])+'<span>'+(short[n[1]]||n[1])+'</span></a>'}).join("")+'</nav>';
+}
+
+/* ---------- vitrine ---------- */
+function vInicio(){
+  var cta=USER?'<a class="btn orange lg" href="#painel">Ir para o meu painel</a>':'<a class="btn orange lg" href="#criar">Criar minha conta</a><a class="btn line lg" href="#entrar">Já tenho conta</a>';
+  return '<section class="hero gut"><div class="in"><div class="stack" style="gap:20px"><span class="kick">UNIFAMETRO · Extensão curricular</span><h1>Sua carreira começa a ser planejada na graduação.</h1>'+
+  '<p class="lead">Defina objetivos, descubra quais competências desenvolver e acompanhe cada passo até o primeiro estágio.</p><div class="ctas">'+cta+'</div></div>'+
+  '<div class="focus" aria-hidden="true"><svg viewBox="0 0 400 400"><circle cx="200" cy="200" r="190" fill="none" stroke="#3BAA35" stroke-opacity=".35" stroke-width="2"/><circle cx="200" cy="200" r="145" fill="none" stroke="#3BAA35" stroke-opacity=".55" stroke-width="2"/><circle cx="200" cy="200" r="100" fill="#2B7A4B" fill-opacity=".55" stroke="#3BAA35" stroke-width="3"/><circle cx="200" cy="200" r="52" fill="#3BAA35"/><circle cx="200" cy="200" r="18" fill="#F29A1F"/><path d="M200 10v60M200 330v60M10 200h60M330 200h60" stroke="#BFE9B8" stroke-width="3" stroke-linecap="round"/></svg>'+
+  '<div class="float a"><b>Conseguir um estágio</b><div class="bar"><i style="width:60%"></i></div><span class="muted">3 de 5 tarefas feitas</span></div><div class="float b"><b>Inglês</b><span class="muted">competência a desenvolver</span><div class="dots"><i class="dot" style="background:var(--accent)"></i><i class="dot" style="background:var(--accent)"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></div></div></div></div></section>'+
+  '<section class="band gut"><div class="in"><div class="sec-h"><span class="kicker">Por que existe</span><h2>Os estudantes querem planejar, mas falta uma ferramenta simples.</h2><p class="muted">Um diagnóstico com 19 estudantes da UNIFAMETRO mostrou a lacuna que o Carreira em Foco procura fechar.</p></div>'+
+  '<div class="facts"><div class="fact"><b>17 de 19</b><span>acham útil ou muito útil uma ferramenta para organizar objetivos, habilidades e metas</span></div><div class="fact"><b>10 de 19</b><span>não têm um plano de ação organizado para a carreira</span></div><div class="fact"><b>4 de 19</b><span>nunca receberam orientação sobre carreira ou mercado de trabalho</span></div></div></div></section>'+
+  '<section class="gut" style="background:var(--bg)"><div class="in" style="padding-block:clamp(36px,6vw,64px);display:flex;flex-direction:column;gap:28px"><div class="sec-h"><span class="kicker">Como funciona</span><h2>Do perfil ao plano de ação em quatro passos.</h2></div>'+
+  '<ol class="steps"><li><span class="n">1</span><h3>Monte seu perfil</h3><p class="muted">Registre pontos fortes e as competências que quer desenvolver, com nível de 1 a 5.</p></li><li><span class="n">2</span><h3>Defina objetivos</h3><p class="muted">Separe o que alcançar no curto, no médio e no longo prazo.</p></li><li><span class="n">3</span><h3>Crie o plano de ação</h3><p class="muted">Transforme cada objetivo em tarefas com prazo e status.</p></li><li><span class="n">4</span><h3>Acompanhe o progresso</h3><p class="muted">Veja no painel o que já foi feito e o que está atrasado.</p></li></ol></div></section>'+
+  '<section class="band gut"><div class="in"><div class="sec-h"><span class="kicker">O que você encontra</span><h2>Tudo para organizar a carreira em um só lugar.</h2></div><div class="feat">'+
+  '<div>'+ico("perfil")+'<h3>Perfil e competências</h3><p class="muted">Veja seus pontos fortes e as lacunas que o mercado pede para fechar.</p></div>'+
+  '<div>'+ico("plano")+'<h3>Plano de ação</h3><p class="muted">Objetivos com tarefas, prazos e status que avançam com um toque.</p></div>'+
+  '<div>'+ico("oportunidades")+'<h3>Oportunidades</h3><p class="muted">Links de estágios, vagas, cursos gratuitos e eventos, prontos para virar tarefa.</p></div>'+
+  '<div>'+ico("painel")+'<h3>Painel de progresso</h3><p class="muted">Percentual concluído, próximas tarefas e atrasos à vista.</p></div></div></div></section>'+
+  '<section class="cta gut"><div class="in"><div><h2 style="color:#fff">Comece hoje o plano da sua carreira.</h2><p style="color:#CFE8CB">Leva dois minutos para criar a conta.</p></div>'+(USER?'<a class="btn orange lg" href="#painel">Ir para o painel</a>':'<a class="btn orange lg" href="#criar">Criar minha conta</a>')+'</div></section>'+
+  '<footer class="gut"><div class="in"><span>Carreira em Foco · Projeto de extensão curricular · UNIFAMETRO</span><span>Central de Extensão Curricular</span></div></footer>';
+}
+
+/* ---------- entrar / criar ---------- */
+function vAuth(modo){
+  var criar=modo==="criar",api=B.senha;
+  var h='<main class="main gut"><div class="auth"><div class="side"><span class="kicker" style="color:#BFE9B8">Carreira em Foco</span><h2 style="font-size:1.8rem;color:#fff">'+(criar?"Crie sua conta e monte seu plano.":"Que bom ver você de novo.")+'</h2><p>Seus objetivos, competências e tarefas ficam guardados na sua conta, prontos para continuar de onde parou.</p></div>'+
+  '<div class="form-side">';
+  if(api)h+='<div class="tabs"><a href="#entrar"'+(!criar?' aria-current="page"':"")+'>Entrar</a><a href="#criar"'+(criar?' aria-current="page"':"")+'>Criar conta</a></div>';
+  h+='<form class="stack" data-form="auth" data-modo="'+(api&&!criar?"entrar":"criar")+'" novalidate><div class="err" id="auth-err" role="alert" hidden></div>';
+  if(!api||criar)h+='<label for="a-nome">Nome<input id="a-nome" name="nome" autocomplete="name" required></label>';
+  if(api)h+='<label for="a-email">E-mail<input id="a-email" name="email" type="email" autocomplete="email" required></label>';
+  if(!api||criar)h+='<label for="a-curso">Curso<input id="a-curso" name="curso" required placeholder="Ex.: Análise e Desenvolvimento de Sistemas"></label><label for="a-sem">Semestre<select id="a-sem" name="semestre">'+SEMESTRES.map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label>';
+  if(api)h+='<label for="a-senha">Senha'+(criar?" (mínimo de 8 caracteres)":"")+'<input id="a-senha" name="senha" type="password" autocomplete="'+(criar?"new-password":"current-password")+'" required></label>';
+  h+='<button class="btn orange lg" type="submit">'+(api&&!criar?"Entrar":api?"Criar conta":"Começar")+'</button></form></div></div></main>';
+  return h;
+}
+
+/* ---------- área do aluno ---------- */
+function vPainel(){
+  var all=S.tasks.length,done=S.tasks.filter(function(t){return t.status==="done"}).length;
+  var p=all?Math.round(done/all*100):0,late=S.tasks.filter(overdue).length;
+  var C=2*Math.PI*52,off=C*(1-p/100);
+  var next=S.tasks.filter(function(t){return t.status!=="done"}).sort(function(a,b){return (a.data||"9999").localeCompare(b.data||"9999")}).slice(0,6);
+  var dev=S.skills.filter(function(s){return s.kind==="desenvolver"});
+  var nome=(S.profile.nome||"").split(" ")[0];
+  var h='<div class="wrap"><section class="greet"><div class="stack" style="gap:8px"><h1>'+(nome?"Olá, "+esc(nome)+"!":"Seu painel")+'</h1><p>'+(all?"Veja como está o seu plano e o que fazer em seguida.":"Seu plano está vazio. Crie um objetivo ou comece por um modelo sugerido.")+'</p></div>'+
+   '<div class="row" style="gap:28px"><div class="ring"><svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="12"/><circle cx="60" cy="60" r="52" fill="none" stroke="#3BAA35" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'"/></svg><b>'+p+'%</b></div>'+
+   '<div class="stats"><div class="stat"><b>'+S.goals.length+'</b><span>objetivos</span></div><div class="stat"><b>'+done+'/'+all+'</b><span>tarefas feitas</span></div><div class="stat"><b style="color:'+(late?"#FFB4AB":"#fff")+'">'+late+'</b><span>atrasadas</span></div></div></div></section>';
+  h+='<div class="grid2"><section class="card"><div class="row between"><h2>Próximas tarefas</h2><a href="#plano" class="small">Ver plano</a></div>';
+  if(!next.length)h+='<div class="empty">Nenhuma tarefa pendente.<a class="btn sec sm" href="#plano">Criar tarefa</a></div>';
+  else h+='<ul class="list">'+next.map(function(t){return '<li class="item"><button class="check" role="checkbox" aria-checked="false" aria-label="Concluir: '+esc(t.titulo)+'" data-act="toggle" data-id="'+t.id+'"></button><span class="t">'+esc(t.titulo)+'<br><span class="small muted">'+fmt(t.data)+'</span></span>'+(overdue(t)?'<span class="chip bad">Atrasada</span>':'<span class="chip">'+statusLabel(t.status)+'</span>')+'</li>'}).join("")+'</ul>';
+  h+='</section><section class="card"><div class="row between"><h2>Objetivos</h2><a href="#plano" class="small">Editar</a></div>';
+  if(!S.goals.length)h+='<div class="empty">Você ainda não definiu objetivos.<a class="btn sec sm" href="#plano">Definir objetivo</a></div>';
+  else h+='<ul class="list">'+S.goals.map(function(g){var q=pct(g);return '<li class="item" style="flex-direction:column;align-items:stretch;gap:6px"><div class="row between"><b>'+esc(g.titulo)+'</b><span class="chip">'+PRAZO[g.prazo]+'</span></div><div class="bar" role="progressbar" aria-valuenow="'+q+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+q+'%"></i></div><span class="small muted">'+q+'% concluído · até '+fmt(g.data)+'</span></li>'}).join("")+'</ul>';
+  h+='</section></div><section class="card"><div class="row between"><h2>Competências para desenvolver</h2><a href="#perfil" class="small">Editar</a></div>';
+  if(!dev.length)h+='<div class="empty">Adicione competências no seu perfil.<a class="btn sec sm" href="#perfil">Ir para o perfil</a></div>';
+  else h+='<ul class="list">'+dev.map(function(s){return '<li class="item"><span class="t">'+esc(s.nome)+'</span><div class="bar" style="width:40%;min-width:90px"><i style="width:'+s.nivel*20+'%"></i></div><span class="small muted">nível '+s.nivel+'/5</span></li>'}).join("")+'</ul>';
+  return h+'</section></div>';
+}
+
+function vPlano(){
+  var f=window.__f||"todos";
+  var gs=S.goals.filter(function(g){return f==="todos"||g.prazo===f});
+  var h='<div class="wrap"><div class="head"><h1>Plano de ação</h1><p>Defina o que quer alcançar e quebre cada objetivo em passos com prazo. Toque no status para avançar a tarefa.</p></div>';
+  h+='<form class="card" data-form="goal"><h2>Novo objetivo</h2><div class="form"><label for="g-t">O que você quer alcançar?<input id="g-t" name="titulo" required maxlength="120" placeholder="Ex.: Fazer meu primeiro estágio"></label>'+
+   '<label for="g-p">Prazo<select id="g-p" name="prazo"><option value="curto">Curto (até 6 meses)</option><option value="medio">Médio (6 meses a 2 anos)</option><option value="longo">Longo (mais de 2 anos)</option></select></label>'+
+   '<label for="g-d">Data alvo<input id="g-d" name="data" type="date"></label><button class="btn" type="submit">Adicionar objetivo</button></div></form>';
+  if(S.goals.length)h+='<div class="pills" role="group" aria-label="Filtrar por prazo">'+[["todos","Todos"],["curto","Curto prazo"],["medio","Médio prazo"],["longo","Longo prazo"]].map(function(x){return '<button class="pill" data-act="filter" data-v="'+x[0]+'" aria-pressed="'+(f===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>';
+  if(!S.goals.length)h+='<div class="empty"><b>Seu plano ainda está vazio.</b><span>Crie um objetivo acima ou comece por um modelo com três objetivos e tarefas de exemplo para editar.</span><button class="btn orange" data-act="modelo">Usar modelo sugerido</button></div>';
+  else if(!gs.length)h+='<div class="empty">Nenhum objetivo neste filtro.</div>';
+  gs.forEach(function(g){
+    var ts=goalTasks(g),q=pct(g);
+    h+='<section class="card"><div class="row between"><div><span class="chip">'+PRAZO[g.prazo]+'</span> <span class="small muted">até '+fmt(g.data)+'</span><h2 style="margin-top:6px">'+esc(g.titulo)+'</h2></div><button class="btn ghost" data-act="del-goal" data-id="'+g.id+'">Excluir objetivo</button></div>'+
+     '<div class="bar" role="progressbar" aria-valuenow="'+q+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+q+'%"></i></div>';
+    if(!ts.length)h+='<div class="empty">Sem tarefas ainda. Adicione o primeiro passo abaixo.</div>';
+    else h+='<ul class="list">'+ts.map(function(t){return '<li class="item'+(t.status==="done"?" done":"")+'"><span class="t">'+esc(t.titulo)+'<br><span class="small muted">'+fmt(t.data)+'</span></span>'+(overdue(t)?'<span class="chip bad">Atrasada</span>':'')+'<button class="chip'+(t.status==="doing"?" warn":"")+'" data-act="cycle" data-id="'+t.id+'" aria-label="Status: '+statusLabel(t.status)+'. Tocar para avançar">'+statusLabel(t.status)+'</button><button class="btn ghost" data-act="del-task" data-id="'+t.id+'" aria-label="Excluir tarefa">Excluir</button></li>'}).join("")+'</ul>';
+    h+='<form class="form" data-form="task" data-goal="'+g.id+'"><label for="t-'+g.id+'">Nova tarefa<input id="t-'+g.id+'" name="titulo" required maxlength="120" placeholder="Ex.: Pedir indicação a um professor"></label><label for="d-'+g.id+'">Prazo<input id="d-'+g.id+'" name="data" type="date"></label><button class="btn sec" type="submit">Adicionar tarefa</button></form></section>';
+  });
+  return h+'</div>';
+}
+
+function skillBlock(kind,titulo,desc){
+  var ss=S.skills.filter(function(s){return s.kind===kind});
+  var h='<section class="card"><div><h2>'+titulo+'</h2><p class="muted small">'+desc+'</p></div>';
+  if(!ss.length)h+='<div class="empty">Nada por aqui ainda.</div>';
+  else h+='<ul class="list">'+ss.map(function(s){return '<li class="item"><span class="t">'+esc(s.nome)+'</span>'+dots(s.id,s.nivel)+'<button class="btn ghost" data-act="del-skill" data-id="'+s.id+'" aria-label="Remover '+esc(s.nome)+'">Remover</button></li>'}).join("")+'</ul>';
+  h+='<form class="form" data-form="skill" data-kind="'+kind+'"><label for="s-'+kind+'">Adicionar<input id="s-'+kind+'" name="nome" required maxlength="60"></label><button class="btn sec" type="submit">Adicionar</button></form>';
+  var have=S.skills.filter(function(s){return s.kind===kind}).map(function(s){return s.nome.toLowerCase()});
+  h+='<div class="pills">'+SUG.filter(function(x){return have.indexOf(x.toLowerCase())<0}).slice(0,6).map(function(x){return '<button class="chip" data-act="sug" data-kind="'+kind+'" data-nome="'+esc(x)+'">+ '+esc(x)+'</button>'}).join("")+'</div></section>';
+  return h;
+}
+function vPerfil(){
+  var p=S.profile;
+  return '<div class="wrap"><div class="head"><h1>Perfil profissional</h1><p>Conhecer seus pontos fortes e lacunas mostra por onde começar. Toque nos círculos para marcar o nível de 1 a 5.</p></div>'+
+  '<section class="card"><h2>Seus dados</h2><div class="form"><label for="p-nome">Nome<input id="p-nome" data-field="nome" value="'+esc(p.nome)+'"></label><label for="p-curso">Curso<input id="p-curso" data-field="curso" value="'+esc(p.curso)+'"></label>'+
+  '<label for="p-sem">Semestre<select id="p-sem" data-field="semestre">'+SEMESTRES.map(function(x){return '<option'+(x===p.semestre?" selected":"")+'>'+x+'</option>'}).join("")+'</select></label>'+
+  '<label for="p-area">Área em que quero atuar<input id="p-area" data-field="area" value="'+esc(p.area)+'" placeholder="Ex.: desenvolvimento web"></label></div></section>'+
+  '<div class="grid2">'+skillBlock("forte","Meus pontos fortes","Habilidades que você já tem e pode destacar no currículo.")+skillBlock("desenvolver","Quero desenvolver","Competências que o mercado pede e você ainda precisa treinar.")+'</div></div>';
+}
+
+function vOpp(){
+  var f=window.__o||"Todos";
+  var h='<div class="wrap"><div class="head"><h1>Oportunidades</h1><p>Onde procurar estágios, vagas, cursos e eventos. Use “Criar tarefa” para levar uma oportunidade ao seu plano de ação.</p></div>';
+  h+='<div class="pills" role="group" aria-label="Filtrar por tipo">'+["Todos","Estágio","Vagas","Cursos","Eventos"].map(function(x){return '<button class="pill" data-act="ofilter" data-v="'+x+'" aria-pressed="'+(f===x)+'">'+x+'</button>'}).join("")+'</div><div class="opps">';
+  OPPS.forEach(function(o,i){if(f!=="Todos"&&o.t!==f)return;
+    h+='<article class="card"><div><span class="chip">'+o.t+'</span></div><h3>'+o.n+'</h3><p class="muted small">'+o.d+'</p><div class="row" style="margin-top:auto"><a class="btn sm" href="'+o.u+'" target="_blank" rel="noopener noreferrer">Abrir site</a><button class="btn sec sm" data-act="opp-task" data-i="'+i+'">Criar tarefa</button></div></article>'});
+  return h+'</div><section class="card"><h2>Antes de se candidatar</h2><ul class="list"><li class="item">Atualize o currículo com curso, semestre e projetos de extensão.</li><li class="item">Peça a um professor ou colega para revisar o texto.</li><li class="item">Confira se a vaga exige documento da faculdade e converse com a coordenação do curso.</li></ul></section></div>';
+}
+
+function vAvaliacao(){
+  var fb=S.feedback;
+  var h='<div class="wrap"><div class="head"><h1>Avalie o Carreira em Foco</h1><p>Suas respostas ajudam a coordenação a melhorar o sistema. Elas são enviadas sem o seu nome.</p></div><section class="card">';
+  QUESTIONS.forEach(function(q){h+='<div class="stack" style="gap:8px"><p style="font-weight:700">'+q[1]+'</p><div class="rate" role="group" aria-label="'+q[1]+'">'+[1,2,3,4,5].map(function(n){return '<button data-act="rate" data-q="'+q[0]+'" data-n="'+n+'" aria-pressed="'+(fb[q[0]]===n)+'">'+n+'</button>'}).join("")+'</div></div>'});
+  return h+'<p class="muted small">1 = discordo totalmente · 5 = concordo totalmente</p><label for="fb-t">O que você mudaria ou acrescentaria?<textarea id="fb-t" data-fbtext>'+esc(fb.texto||"")+'</textarea></label><p class="muted small">Suas respostas são salvas automaticamente.</p></section></div>';
+}
+
+/* ---------- coordenação ---------- */
+function avg(rows,k){var v=rows.map(function(r){return r[k]}).filter(function(x){return x>0});return v.length?(v.reduce(function(a,b){return a+b},0)/v.length):0}
+function vCoord(){
+  var rows=window.__rows;
+  var h='<div class="wrap"><div class="head"><h1>Painel da coordenação</h1><p>Dados agregados de uso do sistema. Nomes e e-mails dos estudantes não aparecem aqui.</p></div>';
+  if(!rows)return h+'<div class="loading">Carregando dados…</div></div>';
+  if(!rows.length)return h+'<div class="empty">Ainda não há estudantes cadastrados.</div></div>';
+  var n=rows.length,tar=rows.reduce(function(a,r){return a+r.tarefas},0),con=rows.reduce(function(a,r){return a+r.concluidas},0),atr=rows.reduce(function(a,r){return a+r.atrasadas},0);
+  var comPlano=rows.filter(function(r){return r.objetivos>0}).length;
+  var f1=function(x){return x?x.toFixed(1).replace(".",","):"–"};
+  h+='<section class="tiles"><div class="tile"><b>'+n+'</b><span class="muted small">estudantes cadastrados</span></div><div class="tile"><b>'+Math.round(comPlano/n*100)+'%</b><span class="muted small">já criaram objetivos ('+comPlano+')</span></div><div class="tile"><b>'+(tar?Math.round(con/tar*100):0)+'%</b><span class="muted small">das tarefas concluídas ('+con+' de '+tar+')</span></div><div class="tile"><b>'+atr+'</b><span class="muted small">tarefas atrasadas</span></div></section>';
+  var cursos={};rows.forEach(function(r){var c=r.curso||"Não informado";cursos[c]=(cursos[c]||0)+1});
+  var cl=Object.keys(cursos).sort(function(a,b){return cursos[b]-cursos[a]}).slice(0,10),mx=cursos[cl[0]];
+  h+='<div class="grid2"><section class="card"><h2>Estudantes por curso</h2>'+cl.map(function(c){return '<div class="hbar"><span>'+esc(c)+'</span><div class="bar"><i style="width:'+Math.round(cursos[c]/mx*100)+'%"></i></div><b>'+cursos[c]+'</b></div>'}).join("")+'</section>';
+  h+='<section class="card"><h2>Avaliação do sistema</h2><div class="tiles"><div class="tile"><b>'+f1(avg(rows,"util"))+'</b><span class="muted small">ajuda a organizar a carreira</span></div><div class="tile"><b>'+f1(avg(rows,"facil"))+'</b><span class="muted small">fácil de usar</span></div><div class="tile"><b>'+f1(avg(rows,"voltar"))+'</b><span class="muted small">usaria na graduação</span></div></div><p class="muted small">Médias de 1 a 5, considerando só quem respondeu ('+rows.filter(function(r){return r.util>0}).length+' avaliações).</p></section></div>';
+  var cm=rows.filter(function(r){return r.comentario});
+  h+='<section class="card"><div class="row between"><h2>Sugestões dos estudantes</h2>'+(B.kind==="api"?'<a class="btn sec sm" href="/api/admin/exportar.csv">Baixar planilha (CSV)</a>':'')+'</div>'+(cm.length?cm.map(function(r){return '<blockquote>'+esc(r.comentario)+'<br><span class="small muted">'+esc(r.curso||"")+' · '+esc(r.semestre||"")+'</span></blockquote>'}).join(""):'<p class="muted">Nenhuma sugestão enviada ainda.</p>')+'</section></div>';
+  return h;
+}
+
+/* ================= rotas e render ================= */
+function modelo(){
+  var g1=uid(),g2=uid(),g3=uid(),mk=function(g,t,d){return{id:uid(),goalId:g,titulo:t,data:plusDays(d),status:"todo"}};
+  S.goals.push({id:g1,titulo:"Melhorar meu currículo e meu perfil profissional",prazo:"curto",data:plusDays(30)},{id:g2,titulo:"Conseguir um estágio na minha área",prazo:"medio",data:plusDays(180)},{id:g3,titulo:"Ser contratado(a) na minha área de formação",prazo:"longo",data:plusDays(900)});
+  S.tasks.push(mk(g1,"Escrever a primeira versão do currículo",7),mk(g1,"Criar o perfil no LinkedIn",14),mk(g1,"Pedir a um professor para revisar o currículo",21),mk(g2,"Cadastrar o currículo no CIEE",35),mk(g2,"Fazer um curso gratuito de inglês básico",90),mk(g3,"Pesquisar empresas da minha área",60));
+}
+function view(){
+  var h=(location.hash||"").replace("#","");
+  if(!h)return USER?"painel":"inicio";
+  return h;
+}
+function render(){
+  var v=view();
+  if((v==="entrar"||v==="criar")&&USER){location.hash="painel";return}
+  if(PROTEGIDAS.indexOf(v)>-1&&!USER){location.hash="entrar";return}
+  if(v==="coordenacao"&&!USER.admin){location.hash="painel";return}
+  var body;
+  if(v==="entrar"||v==="criar")body=vAuth(v);
+  else if(PROTEGIDAS.indexOf(v)>-1){
+    var m={painel:vPainel,plano:vPlano,perfil:vPerfil,oportunidades:vOpp,avaliacao:vAvaliacao,coordenacao:vCoord};
+    body='<main class="main gut">'+m[v]()+'</main>';
+  }else body=vInicio();
+  document.getElementById("root").innerHTML=header(v)+body+tabbar(v);
+  if(v==="coordenacao"&&!window.__rows)B.admin().then(function(r){window.__rows=r;if(view()==="coordenacao")render()},function(){window.__rows=[];render()});
+}
+window.addEventListener("hashchange",function(){if(view()!=="coordenacao")window.__rows=null;render();window.scrollTo(0,0)});
+
+function find(arr,id){return arr.filter(function(x){return x.id===id})[0]}
+function oppGoal(){
+  var g=S.goals.filter(function(x){return x.titulo==="Explorar oportunidades"})[0];
+  if(!g){g={id:uid(),titulo:"Explorar oportunidades",prazo:"curto",data:plusDays(60)};S.goals.push(g)}
+  return g;
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-act]");if(!b)return;
+  var a=b.getAttribute("data-act"),id=b.getAttribute("data-id");
+  if(a==="sair"){B.sair().then(function(){USER=null;S=null;location.hash="inicio";render()});return}
+  if(a==="toggle"){var t=find(S.tasks,id);t.status=t.status==="done"?"todo":"done";toast(t.status==="done"?"Tarefa concluída":"Tarefa reaberta")}
+  else if(a==="cycle"){var t2=find(S.tasks,id);var i=STATUS.map(function(x){return x[0]}).indexOf(t2.status);t2.status=STATUS[(i+1)%3][0]}
+  else if(a==="del-task"){S.tasks=S.tasks.filter(function(x){return x.id!==id});toast("Tarefa excluída")}
+  else if(a==="del-goal"){S.goals=S.goals.filter(function(x){return x.id!==id});S.tasks=S.tasks.filter(function(x){return x.goalId!==id});toast("Objetivo excluído")}
+  else if(a==="filter"){window.__f=b.getAttribute("data-v")}
+  else if(a==="ofilter"){window.__o=b.getAttribute("data-v")}
+  else if(a==="level"){find(S.skills,id).nivel=+b.getAttribute("data-n")}
+  else if(a==="del-skill"){S.skills=S.skills.filter(function(x){return x.id!==id})}
+  else if(a==="sug"){S.skills.push({id:uid(),kind:b.getAttribute("data-kind"),nome:b.getAttribute("data-nome"),nivel:1})}
+  else if(a==="modelo"){modelo();toast("Modelo adicionado. Edite como quiser.")}
+  else if(a==="opp-task"){var o=OPPS[+b.getAttribute("data-i")],g=oppGoal();S.tasks.push({id:uid(),goalId:g.id,titulo:"Conhecer "+o.n+" ("+o.t.toLowerCase()+")",data:plusDays(14),status:"todo"});toast("Tarefa criada no plano de ação")}
+  else if(a==="rate"){S.feedback[b.getAttribute("data-q")]=+b.getAttribute("data-n")}
+  save();render();
+});
+document.addEventListener("submit",function(e){
+  var f=e.target,k=f.getAttribute("data-form");if(!k)return;e.preventDefault();
+  var d=new FormData(f),o={};d.forEach(function(v,key){o[key]=typeof v==="string"?v.trim():v});
+  if(k==="auth"){
+    var errEl=document.getElementById("auth-err");
+    var fail=function(m){errEl.textContent=m;errEl.hidden=false};
+    var modo=f.getAttribute("data-modo");
+    if(modo==="criar"&&(!o.nome||!o.curso))return fail("Preencha nome e curso.");
+    if(B.senha&&(!o.email||!o.senha))return fail("Preencha e-mail e senha.");
+    if(B.senha&&modo==="criar"&&o.senha.length<8)return fail("A senha precisa ter pelo menos 8 caracteres.");
+    var btn=f.querySelector("button[type=submit]");btn.disabled=true;
+    (modo==="entrar"?B.entrar(o):B.criar(o)).then(function(u){
+      USER=u;return B.load().then(function(s){S=s||emptyState(o);location.hash="painel";render()});
+    }).catch(function(er){btn.disabled=false;fail(er.message||"Não foi possível entrar.")});
+    return;
+  }
+  if(k==="goal"){S.goals.push({id:uid(),titulo:o.titulo,prazo:o.prazo,data:o.data||""});toast("Objetivo adicionado")}
+  if(k==="task"){S.tasks.push({id:uid(),goalId:f.getAttribute("data-goal"),titulo:o.titulo,data:o.data||"",status:"todo"});toast("Tarefa adicionada")}
+  if(k==="skill"){S.skills.push({id:uid(),kind:f.getAttribute("data-kind"),nome:o.nome,nivel:1})}
+  save();render();
+});
+document.addEventListener("input",function(e){
+  var t=e.target;
+  if(t.hasAttribute("data-field")){S.profile[t.getAttribute("data-field")]=t.value;save()}
+  if(t.hasAttribute("data-fbtext")){S.feedback.texto=t.value;save()}
+});
+
+/* ================= início ================= */
+function start(){
+  var pick;
+  if(window.claude&&typeof claude.use==="function"){
+    pick=ArtB.setup().then(function(ok){return ok?ArtB:LocalB});
+  }else{
+    pick=fetch("/api/eu",{credentials:"same-origin"}).then(function(r){return (r.status===200||r.status===401)?ApiB:LocalB},function(){return LocalB});
+  }
+  pick.then(function(b){
+    B=b;
+    return B.init().then(function(u){
+      USER=u;
+      if(!u)return;
+      return B.load().then(function(s){S=s||emptyState({nome:u.nome});if(!s)USER.semEstado=true});
+    });
+  }).then(function(){if(USER&&!S)S=emptyState({nome:USER.nome});render()},function(){render()});
+}
+start();
+})();
+</script>
