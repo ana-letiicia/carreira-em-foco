@@ -1,0 +1,49 @@
+name: Deploy do site para o GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Executar o Build
+        run: node build.js
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload do resultado do Build
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # ATENÇÃO: Se o seu script 'build.js' gerar os ficheiros finais
+          # numa pasta diferente (ex: 'dist' ou 'build'), mude 'public' abaixo para essa pasta.
+          path: "./public"
+
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
