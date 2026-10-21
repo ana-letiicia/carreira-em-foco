@@ -18,6 +18,8 @@ const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'data', 'carreira.db
 const PROD = process.env.NODE_ENV === 'production';
 const ADMINS = (process.env.ADMIN_EMAILS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
 const SESSION_DAYS = 14;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const GOOGLE_ALLOWED_DOMAIN = (process.env.GOOGLE_ALLOWED_DOMAIN || '').toLowerCase().replace(/^@/, '');
 
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 const db = new DatabaseSync(DB_PATH);
@@ -61,6 +63,12 @@ function limitado(chave) {
 }
 function falhou(chave) { const l = tentativas.get(chave) || []; l.push(Date.now()); tentativas.set(chave, l); }
 
+const EVENTOS_OK = new Set(['tela', 'objetivo_criado', 'tarefa_criada', 'tarefa_concluida', 'competencia_adicionada',
+  'modelo_usado', 'oportunidade_aberta', 'oportunidade_tarefa', 'avaliacao_nota']);
+function evento(userId, tipo, detalhe) {
+  try { db.prepare('INSERT INTO eventos(user_id,tipo,detalhe) VALUES (?,?,?)').run(userId || null, tipo, str(detalhe, 80)); } catch (e) { console.error(e); }
+}
+
 /* ---------- helpers HTTP ---------- */
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon', '.json': 'application/json' };
@@ -102,6 +110,7 @@ function registrar(req, res, b) {
   const info = db.prepare('INSERT INTO users(nome,email,senha_hash,senha_salt,curso,semestre,role) VALUES (?,?,?,?,?,?,?)')
     .run(nome, email, hash(senha, salt), salt, curso, semestre, role);
   setSession(res, Number(info.lastInsertRowid));
+  evento(Number(info.lastInsertRowid), 'cadastro', 'senha');
   send(res, 200, { usuario: { nome, email, admin: role === 'coordenacao' } });
 }
 
@@ -113,6 +122,40 @@ function entrar(req, res, b) {
   const ok = u && crypto.timingSafeEqual(Buffer.from(hash(senha, u.senha_salt), 'hex'), Buffer.from(u.senha_hash, 'hex'));
   if (!ok) { falhou(chave); return send(res, 401, { erro: 'E-mail ou senha incorretos.' }); }
   setSession(res, u.id);
+  evento(u.id, 'login', 'senha');
+  send(res, 200, { usuario: publicUser(u) });
+}
+
+/* login com Google: valida o token de identidade no Google e cria a conta no primeiro acesso */
+async function entrarGoogle(req, res, b) {
+  if (!GOOGLE_CLIENT_ID) return send(res, 503, { erro: 'Login com Google não está configurado.' });
+  const credential = String(b.credential || '');
+  if (!credential) return send(res, 400, { erro: 'Token ausente.' });
+  let info;
+  try {
+    const r = await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(credential));
+    info = await r.json();
+    if (!r.ok) throw new Error('token');
+  } catch (e) { return send(res, 401, { erro: 'Não foi possível validar sua conta Google. Tente de novo.' }); }
+  const email = str(info.email, 160).toLowerCase();
+  const okIss = info.iss === 'accounts.google.com' || info.iss === 'https://accounts.google.com';
+  if (info.aud !== GOOGLE_CLIENT_ID || !okIss || String(info.email_verified) !== 'true' || !emailOk(email) || Number(info.exp) * 1000 < Date.now())
+    return send(res, 401, { erro: 'Conta Google não validada.' });
+  if (GOOGLE_ALLOWED_DOMAIN && !email.endsWith('@' + GOOGLE_ALLOWED_DOMAIN))
+    return send(res, 403, { erro: 'Use sua conta @' + GOOGLE_ALLOWED_DOMAIN + ' para entrar.' });
+  let u = db.prepare('SELECT * FROM users WHERE email=?').get(email);
+  let novo = false;
+  if (!u) {
+    const salt = crypto.randomBytes(16).toString('hex');
+    const role = ADMINS.includes(email) ? 'coordenacao' : 'aluno';
+    const ins = db.prepare('INSERT INTO users(nome,email,senha_hash,senha_salt,role) VALUES (?,?,?,?,?)')
+      .run(str(info.name, 100) || email.split('@')[0], email, hash(crypto.randomBytes(24).toString('hex'), salt), salt, role);
+    u = db.prepare('SELECT * FROM users WHERE id=?').get(Number(ins.lastInsertRowid));
+    novo = true;
+  }
+  setSession(res, u.id);
+  evento(u.id, novo ? 'cadastro' : 'login_google', 'google');
+  if (novo) evento(u.id, 'login_google', 'google');
   send(res, 200, { usuario: publicUser(u) });
 }
 
@@ -176,6 +219,16 @@ const SQL_RESUMO = `
   FROM users u LEFT JOIN feedback f ON f.user_id=u.id
   WHERE u.role='aluno' ORDER BY u.criado_em`;
 
+function atividade() {
+  const por_dia = db.prepare(`SELECT date(criado_em) AS dia, COUNT(*) AS acessos, COUNT(DISTINCT user_id) AS usuarios
+    FROM eventos WHERE tipo IN ('login','login_google') AND criado_em >= datetime('now','-14 days')
+    GROUP BY dia ORDER BY dia`).all();
+  const por_tela = db.prepare(`SELECT detalhe, COUNT(*) AS n FROM eventos WHERE tipo='tela' GROUP BY detalhe ORDER BY n DESC LIMIT 10`).all();
+  const por_acao = db.prepare(`SELECT tipo, CASE WHEN tipo IN ('oportunidade_aberta','oportunidade_tarefa') THEN detalhe ELSE '' END AS detalhe, COUNT(*) AS n
+    FROM eventos WHERE tipo<>'tela' GROUP BY tipo, detalhe ORDER BY n DESC LIMIT 12`).all();
+  return { por_dia, por_tela, por_acao };
+}
+
 function exportarCsv(res) {
   const rows = db.prepare(SQL_RESUMO).all();
   const cols = ['curso', 'semestre', 'objetivos', 'tarefas', 'concluidas', 'atrasadas', 'util', 'facil', 'voltar', 'comentario', 'atualizado'];
@@ -187,9 +240,11 @@ function exportarCsv(res) {
 
 const PUBLIC = path.join(__dirname, 'public');
 function estatico(req, res, pathname) {
+  if (pathname === '/favicon.ico') pathname = '/favicon.svg';
   let file = path.normalize(path.join(PUBLIC, pathname === '/' ? 'index.html' : pathname));
-  if (!file.startsWith(PUBLIC) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) file = path.join(PUBLIC, 'index.html');
-  res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
+  let code = 200;
+  if (!file.startsWith(PUBLIC) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { file = path.join(PUBLIC, 'index.html'); code = 404; }
+  res.writeHead(code, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
   fs.createReadStream(file).pipe(res);
 }
 
@@ -201,6 +256,8 @@ const server = http.createServer(async (req, res) => {
   try {
     if (!pathname.startsWith('/api/')) return estatico(req, res, pathname);
     const m = req.method;
+    if (m === 'GET' && pathname === '/api/config') return send(res, 200, { googleClientId: GOOGLE_CLIENT_ID });
+    if (m === 'POST' && pathname === '/api/google') return await entrarGoogle(req, res, await readBody(req));
     if (m === 'POST' && pathname === '/api/registrar') return registrar(req, res, await readBody(req));
     if (m === 'POST' && pathname === '/api/entrar') return entrar(req, res, await readBody(req));
     if (m === 'POST' && pathname === '/api/sair') {
@@ -213,10 +270,16 @@ const server = http.createServer(async (req, res) => {
     if (!u) return send(res, 401, { erro: 'Entre para continuar.' });
     if (m === 'GET' && pathname === '/api/eu') return send(res, 200, { usuario: publicUser(u) });
     if (m === 'GET' && pathname === '/api/estado') return estado(req, res, u);
+    if (m === 'POST' && pathname === '/api/evento') {
+      const b = await readBody(req);
+      if (EVENTOS_OK.has(b.tipo)) evento(u.id, b.tipo, b.detalhe);
+      return send(res, 200, { ok: true });
+    }
     if (m === 'PUT' && pathname === '/api/estado') { salvar(u.id, await readBody(req)); return send(res, 200, { ok: true }); }
     if (pathname.startsWith('/api/admin/')) {
       if (u.role !== 'coordenacao') return send(res, 403, { erro: 'Acesso restrito à coordenação.' });
       if (m === 'GET' && pathname === '/api/admin/resumo') return send(res, 200, { linhas: db.prepare(SQL_RESUMO).all() });
+      if (m === 'GET' && pathname === '/api/admin/atividade') return send(res, 200, atividade());
       if (m === 'GET' && pathname === '/api/admin/exportar.csv') return exportarCsv(res);
     }
     send(res, 404, { erro: 'Rota não encontrada.' });

@@ -8,6 +8,7 @@
 <body>
 <title>Carreira em Foco</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 36 36%27%3E%3Ccircle cx=%2718%27 cy=%2718%27 r=%2717%27 fill=%27%233BAA35%27/%3E%3Ccircle cx=%2718%27 cy=%2718%27 r=%2710%27 fill=%27none%27 stroke=%27%23003D22%27 stroke-width=%273.5%27/%3E%3Ccircle cx=%2718%27 cy=%2718%27 r=%273.6%27 fill=%27%23F29A1F%27/%3E%3C/svg%3E">
 <meta name="description" content="Planeje sua carreira durante a graduação: objetivos, competências, plano de ação e oportunidades. Projeto de extensão curricular da UNIFAMETRO.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Nunito+Sans:wght@400;600;700&display=swap">
 <style>
@@ -196,14 +197,14 @@ blockquote{margin:0;padding:10px 14px;border-left:4px solid var(--verde-500);bac
 /* ================= dados fixos ================= */
 var ICON={
  painel:'<path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/>',
- plano:'<path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.5 1.5L7 5M3.5 12l1.5 1.5L7 11M3.5 18l1.5 1.5L7 17"/>',
+ planodeacao:'<path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.5 1.5L7 5M3.5 12l1.5 1.5L7 11M3.5 18l1.5 1.5L7 17"/>',
  perfil:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
  oportunidades:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/>',
  avaliacao:'<path d="M21 12a8 8 0 01-11.6 7.1L4 20l1-4.6A8 8 0 1121 12z"/>',
  coordenacao:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'
 };
-var NAV=[["painel","Painel"],["plano","Plano de ação"],["perfil","Perfil"],["oportunidades","Oportunidades"],["avaliacao","Avaliação"]];
-var PROTEGIDAS=["painel","plano","perfil","oportunidades","avaliacao","coordenacao"];
+var NAV=[["painel","Painel"],["planodeacao","Plano de ação"],["perfil","Perfil"],["oportunidades","Oportunidades"],["avaliacao","Avaliação"]];
+var PROTEGIDAS=["painel","planodeacao","perfil","oportunidades","avaliacao","coordenacao"];
 var SEMESTRES=["1º semestre","2º semestre","3º semestre","4º semestre","5º semestre","6º semestre","7º semestre ou mais"];
 var STATUS=[["todo","A fazer"],["doing","Em andamento"],["done","Concluída"]];
 var PRAZO={curto:"Curto prazo",medio:"Médio prazo",longo:"Longo prazo"};
@@ -248,6 +249,9 @@ var ApiB={kind:"api",senha:true,
   init:function(){return this.req("GET","/api/eu").then(function(j){return j.usuario},function(){return null})},
   entrar:function(f){return this.req("POST","/api/entrar",f).then(function(j){return j.usuario})},
   criar:function(f){return this.req("POST","/api/registrar",f).then(function(j){return j.usuario})},
+  google:function(cred){return this.req("POST","/api/google",{credential:cred}).then(function(j){return j.usuario})},
+  config:function(){return this.req("GET","/api/config").catch(function(){return{}})},
+  atividade:function(){return this.req("GET","/api/admin/atividade")},
   sair:function(){return this.req("POST","/api/sair",{})},
   load:function(){return this.req("GET","/api/estado")},
   save:function(s){return this.req("PUT","/api/estado",s)},
@@ -257,7 +261,7 @@ var LK="carreira-em-foco-v2",memState=null;
 var LocalB={kind:"local",senha:false,
   init:function(){var s=this.read();return Promise.resolve(s?{nome:s.profile.nome,admin:false}:null)},
   read:function(){try{var r=localStorage.getItem(LK);if(r)return JSON.parse(r)}catch(e){}return memState},
-  entrar:function(f){memState=emptyState(f);this.write(memState);return Promise.resolve({nome:f.nome,admin:false})},
+  entrar:function(f){var ex=this.read();if(ex)return Promise.resolve({nome:ex.profile.nome,admin:false});memState=emptyState(f);this.write(memState);return Promise.resolve({nome:f.nome,admin:false})},
   criar:function(f){return this.entrar(f)},
   sair:function(){return Promise.resolve()},
   load:function(){return Promise.resolve(this.read())},
@@ -279,7 +283,7 @@ var ArtB={kind:"artifact",senha:false,db:null,uid:null,isAdmin:false,
   },
   ref:function(){return this.db.doc("data/users/"+this.uid+"/estado")},
   init:function(){var self=this;return this.ref().get().then(function(d){if(!d.exists)return self.isAdmin?{nome:"Coordenação",admin:true}:null;self._s=d.data();return {nome:self._s.profile.nome,admin:self.isAdmin}})},
-  entrar:function(f){this._s=emptyState(f);var self=this;return this.save(this._s).then(function(){return {nome:f.nome,admin:self.isAdmin}})},
+  entrar:function(f){if(this._s&&this._s.profile)return Promise.resolve({nome:this._s.profile.nome,admin:this.isAdmin});this._s=emptyState(f);var self=this;return this.save(this._s).then(function(){return {nome:f.nome,admin:self.isAdmin}})},
   criar:function(f){return this.entrar(f)},
   sair:function(){return Promise.resolve()},
   load:function(){return Promise.resolve(this._s||null)},
@@ -291,6 +295,14 @@ var ArtB={kind:"artifact",senha:false,db:null,uid:null,isAdmin:false,
 };
 
 /* ================= estado ================= */
+var lastTrack="";
+function track(tipo,detalhe){
+  if(B.kind!=="api"||!USER)return;
+  var k=tipo+"|"+(detalhe||"");
+  if(tipo==="tela"&&k===lastTrack)return;
+  lastTrack=k;
+  try{fetch("/api/evento",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify({tipo:tipo,detalhe:detalhe||""}),keepalive:true}).catch(function(){})}catch(e){}
+}
 var B=LocalB,S=null,USER=null,saveTimer=null;
 function save(){
   setStat("busy");clearTimeout(saveTimer);
@@ -311,11 +323,11 @@ function dots(id,n){var h='<div class="dots" role="group" aria-label="Nível de 
 /* ================= peças de tela ================= */
 function brandMark(){return '<svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="17" fill="#3BAA35"/><circle cx="18" cy="18" r="10" fill="none" stroke="#003D22" stroke-width="3.5"/><circle cx="18" cy="18" r="3.6" fill="#F29A1F"/></svg>'}
 function header(v){
-  var h='<header class="top gut"><div class="in"><a class="brand" href="#'+(USER?"painel":"inicio")+'">'+brandMark()+'<span>Carreira em Foco</span></a>';
+  var h='<header class="top gut"><div class="in"><a class="brand" href="#planodeacao">'+brandMark()+'<span>Carreira em Foco</span></a>';
   if(USER){
     var items=NAV.slice();if(USER.admin)items.push(["coordenacao","Coordenação"]);
     h+='<nav class="nav" aria-label="Menu principal">'+items.map(function(n){return '<a href="#'+n[0]+'"'+(v===n[0]?' aria-current="page"':"")+'>'+n[1]+'</a>'}).join("")+'</nav>';
-    h+='<div class="who"><span class="savestat" id="savestat"><i></i>Salvo</span><span class="nm">'+esc(USER.nome)+'</span>'+(B.kind==="api"?'<button class="btn sec sm" data-act="sair">Sair</button>':'')+'</div>';
+    h+='<div class="who"><span class="savestat" id="savestat"><i></i>Salvo</span><span class="nm">'+esc(USER.nome)+'</span>'+'<button class="btn sec sm" data-act="sair">Sair</button>'+'</div>';
   }else{
     h+='<div class="who"><a class="btn sec sm" href="#entrar">Entrar</a><a class="btn orange sm" href="#criar">Criar conta</a></div>';
   }
@@ -341,7 +353,7 @@ function vInicio(){
   '<ol class="steps"><li><span class="n">1</span><h3>Monte seu perfil</h3><p class="muted">Registre pontos fortes e as competências que quer desenvolver, com nível de 1 a 5.</p></li><li><span class="n">2</span><h3>Defina objetivos</h3><p class="muted">Separe o que alcançar no curto, no médio e no longo prazo.</p></li><li><span class="n">3</span><h3>Crie o plano de ação</h3><p class="muted">Transforme cada objetivo em tarefas com prazo e status.</p></li><li><span class="n">4</span><h3>Acompanhe o progresso</h3><p class="muted">Veja no painel o que já foi feito e o que está atrasado.</p></li></ol></div></section>'+
   '<section class="band gut"><div class="in"><div class="sec-h"><span class="kicker">O que você encontra</span><h2>Tudo para organizar a carreira em um só lugar.</h2></div><div class="feat">'+
   '<div>'+ico("perfil")+'<h3>Perfil e competências</h3><p class="muted">Veja seus pontos fortes e as lacunas que o mercado pede para fechar.</p></div>'+
-  '<div>'+ico("plano")+'<h3>Plano de ação</h3><p class="muted">Objetivos com tarefas, prazos e status que avançam com um toque.</p></div>'+
+  '<div>'+ico("planodeacao")+'<h3>Plano de ação</h3><p class="muted">Objetivos com tarefas, prazos e status que avançam com um toque.</p></div>'+
   '<div>'+ico("oportunidades")+'<h3>Oportunidades</h3><p class="muted">Links de estágios, vagas, cursos gratuitos e eventos, prontos para virar tarefa.</p></div>'+
   '<div>'+ico("painel")+'<h3>Painel de progresso</h3><p class="muted">Percentual concluído, próximas tarefas e atrasos à vista.</p></div></div></div></section>'+
   '<section class="cta gut"><div class="in"><div><h2 style="color:#fff">Comece hoje o plano da sua carreira.</h2><p style="color:#CFE8CB">Leva dois minutos para criar a conta.</p></div>'+(USER?'<a class="btn orange lg" href="#painel">Ir para o painel</a>':'<a class="btn orange lg" href="#criar">Criar minha conta</a>')+'</div></section>'+
@@ -354,6 +366,7 @@ function vAuth(modo){
   var h='<main class="main gut"><div class="auth"><div class="side"><span class="kicker" style="color:#BFE9B8">Carreira em Foco</span><h2 style="font-size:1.8rem;color:#fff">'+(criar?"Crie sua conta e monte seu plano.":"Que bom ver você de novo.")+'</h2><p>Seus objetivos, competências e tarefas ficam guardados na sua conta, prontos para continuar de onde parou.</p></div>'+
   '<div class="form-side">';
   if(api)h+='<div class="tabs"><a href="#entrar"'+(!criar?' aria-current="page"':"")+'>Entrar</a><a href="#criar"'+(criar?' aria-current="page"':"")+'>Criar conta</a></div>';
+  if(api&&window.__googleId)h+='<div id="g-btn" style="min-height:44px;display:flex;justify-content:center"></div><div class="row" style="gap:12px;color:var(--muted);font-size:.85rem"><hr style="flex:1;border:0;border-top:1px solid var(--line)">ou use seu e-mail<hr style="flex:1;border:0;border-top:1px solid var(--line)"></div>';
   h+='<form class="stack" data-form="auth" data-modo="'+(api&&!criar?"entrar":"criar")+'" novalidate><div class="err" id="auth-err" role="alert" hidden></div>';
   if(!api||criar)h+='<label for="a-nome">Nome<input id="a-nome" name="nome" autocomplete="name" required></label>';
   if(api)h+='<label for="a-email">E-mail<input id="a-email" name="email" type="email" autocomplete="email" required></label>';
@@ -361,6 +374,10 @@ function vAuth(modo){
   if(api)h+='<label for="a-senha">Senha'+(criar?" (mínimo de 8 caracteres)":"")+'<input id="a-senha" name="senha" type="password" autocomplete="'+(criar?"new-password":"current-password")+'" required></label>';
   h+='<button class="btn orange lg" type="submit">'+(api&&!criar?"Entrar":api?"Criar conta":"Começar")+'</button></form></div></div></main>';
   return h;
+}
+
+function vCompletar(){
+  return '<main class="main gut"><div class="auth" style="max-width:560px;grid-template-columns:minmax(0,1fr)"><div class="form-side"><span class="kicker">Quase pronto</span><h2>Conte um pouco sobre você</h2><p class="muted">Precisamos do seu curso e semestre para montar o seu plano.</p><form class="stack" data-form="completar"><label for="c-curso">Curso<input id="c-curso" name="curso" required placeholder="Ex.: Análise e Desenvolvimento de Sistemas"></label><label for="c-sem">Semestre<select id="c-sem" name="semestre">'+SEMESTRES.map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label><button class="btn orange lg" type="submit">Continuar</button></form></div></div></main>';
 }
 
 /* ---------- área do aluno ---------- */
@@ -374,11 +391,11 @@ function vPainel(){
   var h='<div class="wrap"><section class="greet"><div class="stack" style="gap:8px"><h1>'+(nome?"Olá, "+esc(nome)+"!":"Seu painel")+'</h1><p>'+(all?"Veja como está o seu plano e o que fazer em seguida.":"Seu plano está vazio. Crie um objetivo ou comece por um modelo sugerido.")+'</p></div>'+
    '<div class="row" style="gap:28px"><div class="ring"><svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="12"/><circle cx="60" cy="60" r="52" fill="none" stroke="#3BAA35" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'"/></svg><b>'+p+'%</b></div>'+
    '<div class="stats"><div class="stat"><b>'+S.goals.length+'</b><span>objetivos</span></div><div class="stat"><b>'+done+'/'+all+'</b><span>tarefas feitas</span></div><div class="stat"><b style="color:'+(late?"#FFB4AB":"#fff")+'">'+late+'</b><span>atrasadas</span></div></div></div></section>';
-  h+='<div class="grid2"><section class="card"><div class="row between"><h2>Próximas tarefas</h2><a href="#plano" class="small">Ver plano</a></div>';
-  if(!next.length)h+='<div class="empty">Nenhuma tarefa pendente.<a class="btn sec sm" href="#plano">Criar tarefa</a></div>';
+  h+='<div class="grid2"><section class="card"><div class="row between"><h2>Próximas tarefas</h2><a href="#planodeacao" class="small">Ver plano</a></div>';
+  if(!next.length)h+='<div class="empty">Nenhuma tarefa pendente.<a class="btn sec sm" href="#planodeacao">Criar tarefa</a></div>';
   else h+='<ul class="list">'+next.map(function(t){return '<li class="item"><button class="check" role="checkbox" aria-checked="false" aria-label="Concluir: '+esc(t.titulo)+'" data-act="toggle" data-id="'+t.id+'"></button><span class="t">'+esc(t.titulo)+'<br><span class="small muted">'+fmt(t.data)+'</span></span>'+(overdue(t)?'<span class="chip bad">Atrasada</span>':'<span class="chip">'+statusLabel(t.status)+'</span>')+'</li>'}).join("")+'</ul>';
-  h+='</section><section class="card"><div class="row between"><h2>Objetivos</h2><a href="#plano" class="small">Editar</a></div>';
-  if(!S.goals.length)h+='<div class="empty">Você ainda não definiu objetivos.<a class="btn sec sm" href="#plano">Definir objetivo</a></div>';
+  h+='</section><section class="card"><div class="row between"><h2>Objetivos</h2><a href="#planodeacao" class="small">Editar</a></div>';
+  if(!S.goals.length)h+='<div class="empty">Você ainda não definiu objetivos.<a class="btn sec sm" href="#planodeacao">Definir objetivo</a></div>';
   else h+='<ul class="list">'+S.goals.map(function(g){var q=pct(g);return '<li class="item" style="flex-direction:column;align-items:stretch;gap:6px"><div class="row between"><b>'+esc(g.titulo)+'</b><span class="chip">'+PRAZO[g.prazo]+'</span></div><div class="bar" role="progressbar" aria-valuenow="'+q+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+q+'%"></i></div><span class="small muted">'+q+'% concluído · até '+fmt(g.data)+'</span></li>'}).join("")+'</ul>';
   h+='</section></div><section class="card"><div class="row between"><h2>Competências para desenvolver</h2><a href="#perfil" class="small">Editar</a></div>';
   if(!dev.length)h+='<div class="empty">Adicione competências no seu perfil.<a class="btn sec sm" href="#perfil">Ir para o perfil</a></div>';
@@ -422,7 +439,7 @@ function vPerfil(){
   return '<div class="wrap"><div class="head"><h1>Perfil profissional</h1><p>Conhecer seus pontos fortes e lacunas mostra por onde começar. Toque nos círculos para marcar o nível de 1 a 5.</p></div>'+
   '<section class="card"><h2>Seus dados</h2><div class="form"><label for="p-nome">Nome<input id="p-nome" data-field="nome" value="'+esc(p.nome)+'"></label><label for="p-curso">Curso<input id="p-curso" data-field="curso" value="'+esc(p.curso)+'"></label>'+
   '<label for="p-sem">Semestre<select id="p-sem" data-field="semestre">'+SEMESTRES.map(function(x){return '<option'+(x===p.semestre?" selected":"")+'>'+x+'</option>'}).join("")+'</select></label>'+
-  '<label for="p-area">Área em que quero atuar<input id="p-area" data-field="area" value="'+esc(p.area)+'" placeholder="Ex.: desenvolvimento web"></label></div></section>'+
+  '<label for="p-area">Área em que quero atuar<input id="p-area" data-field="area" value="'+esc(p.area)+'" placeholder="Ex.: desenvolvimento web"></label></div><div class="row"><button class="btn sec" data-act="sair">Sair da conta</button></div></section>'+
   '<div class="grid2">'+skillBlock("forte","Meus pontos fortes","Habilidades que você já tem e pode destacar no currículo.")+skillBlock("desenvolver","Quero desenvolver","Competências que o mercado pede e você ainda precisa treinar.")+'</div></div>';
 }
 
@@ -431,7 +448,7 @@ function vOpp(){
   var h='<div class="wrap"><div class="head"><h1>Oportunidades</h1><p>Onde procurar estágios, vagas, cursos e eventos. Use “Criar tarefa” para levar uma oportunidade ao seu plano de ação.</p></div>';
   h+='<div class="pills" role="group" aria-label="Filtrar por tipo">'+["Todos","Estágio","Vagas","Cursos","Eventos"].map(function(x){return '<button class="pill" data-act="ofilter" data-v="'+x+'" aria-pressed="'+(f===x)+'">'+x+'</button>'}).join("")+'</div><div class="opps">';
   OPPS.forEach(function(o,i){if(f!=="Todos"&&o.t!==f)return;
-    h+='<article class="card"><div><span class="chip">'+o.t+'</span></div><h3>'+o.n+'</h3><p class="muted small">'+o.d+'</p><div class="row" style="margin-top:auto"><a class="btn sm" href="'+o.u+'" target="_blank" rel="noopener noreferrer">Abrir site</a><button class="btn sec sm" data-act="opp-task" data-i="'+i+'">Criar tarefa</button></div></article>'});
+    h+='<article class="card"><div><span class="chip">'+o.t+'</span></div><h3>'+o.n+'</h3><p class="muted small">'+o.d+'</p><div class="row" style="margin-top:auto"><a class="btn sm" href="'+o.u+'" target="_blank" rel="noopener noreferrer" data-track="oportunidade_aberta" data-detalhe="'+o.n+'">Abrir site</a><button class="btn sec sm" data-act="opp-task" data-i="'+i+'">Criar tarefa</button></div></article>'});
   return h+'</div><section class="card"><h2>Antes de se candidatar</h2><ul class="list"><li class="item">Atualize o currículo com curso, semestre e projetos de extensão.</li><li class="item">Peça a um professor ou colega para revisar o texto.</li><li class="item">Confira se a vaga exige documento da faculdade e converse com a coordenação do curso.</li></ul></section></div>';
 }
 
@@ -443,6 +460,20 @@ function vAvaliacao(){
 }
 
 /* ---------- coordenação ---------- */
+var NOMES={tela:"Telas visitadas",objetivo_criado:"Objetivos criados",tarefa_criada:"Tarefas criadas",tarefa_concluida:"Tarefas concluídas",competencia_adicionada:"Competências adicionadas",modelo_usado:"Modelo sugerido usado",oportunidade_aberta:"Sites de oportunidades abertos",oportunidade_tarefa:"Oportunidades levadas ao plano",avaliacao_nota:"Notas da avaliação",login:"Logins",login_google:"Logins com Google",cadastro:"Contas criadas"};
+function vUso(){
+  if(B.kind!=="api")return"";
+  var a=window.__ativ;
+  if(!a)return '<section class="card"><h2>Uso do site</h2><p class="muted">Carregando…</p></section>';
+  var dias=a.por_dia||[],mx=Math.max.apply(null,dias.map(function(d){return d.acessos}).concat([1]));
+  var h='<section class="card"><h2>Uso do site</h2><p class="muted small">Acessos e estudantes ativos por dia nos últimos 14 dias.</p>';
+  if(!dias.length)h+='<div class="empty">Ainda sem acessos registrados.</div>';
+  else h+='<div style="display:flex;align-items:flex-end;gap:6px;height:130px" role="img" aria-label="Acessos por dia">'+dias.map(function(d){return '<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;min-width:0;height:100%"><span class="small">'+d.acessos+'</span><div title="'+d.usuarios+' estudantes" style="width:100%;background:var(--verde-500);border-radius:6px 6px 0 0;height:'+Math.max(4,Math.round(d.acessos/mx*80))+'%"></div><span class="small muted">'+d.dia.slice(8)+'/'+d.dia.slice(5,7)+'</span></div>'}).join("")+'</div>';
+  var telas=(a.por_tela||[]).slice(0,8),acoes=(a.por_acao||[]).slice(0,10);
+  h+='<div class="grid2"><div class="stack" style="gap:8px"><h3>Telas mais visitadas</h3>'+(telas.length?telas.map(function(t){return '<div class="hbar"><span>'+esc(t.detalhe)+'</span><div class="bar"><i style="width:'+Math.round(t.n/telas[0].n*100)+'%"></i></div><b>'+t.n+'</b></div>'}).join(""):'<p class="muted small">Sem dados.</p>')+'</div>'+
+   '<div class="stack" style="gap:8px"><h3>Ações mais feitas</h3>'+(acoes.length?acoes.map(function(t){return '<div class="hbar"><span>'+esc((NOMES[t.tipo]||t.tipo)+(t.detalhe?" ("+t.detalhe+")":""))+'</span><div class="bar"><i style="width:'+Math.round(t.n/acoes[0].n*100)+'%"></i></div><b>'+t.n+'</b></div>'}).join(""):'<p class="muted small">Sem dados.</p>')+'</div></div></section>';
+  return h;
+}
 function avg(rows,k){var v=rows.map(function(r){return r[k]}).filter(function(x){return x>0});return v.length?(v.reduce(function(a,b){return a+b},0)/v.length):0}
 function vCoord(){
   var rows=window.__rows;
@@ -458,6 +489,8 @@ function vCoord(){
   h+='<div class="grid2"><section class="card"><h2>Estudantes por curso</h2>'+cl.map(function(c){return '<div class="hbar"><span>'+esc(c)+'</span><div class="bar"><i style="width:'+Math.round(cursos[c]/mx*100)+'%"></i></div><b>'+cursos[c]+'</b></div>'}).join("")+'</section>';
   h+='<section class="card"><h2>Avaliação do sistema</h2><div class="tiles"><div class="tile"><b>'+f1(avg(rows,"util"))+'</b><span class="muted small">ajuda a organizar a carreira</span></div><div class="tile"><b>'+f1(avg(rows,"facil"))+'</b><span class="muted small">fácil de usar</span></div><div class="tile"><b>'+f1(avg(rows,"voltar"))+'</b><span class="muted small">usaria na graduação</span></div></div><p class="muted small">Médias de 1 a 5, considerando só quem respondeu ('+rows.filter(function(r){return r.util>0}).length+' avaliações).</p></section></div>';
   var cm=rows.filter(function(r){return r.comentario});
+  h+=vUso();
+  h+='<section class="card"><h2>Respostas da avaliação</h2><p class="muted small">Cada linha é um estudante, sem nome. Notas de 1 a 5.</p><div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;min-width:520px;font-size:.9rem"><thead><tr style="text-align:left;color:var(--muted)"><th style="padding:6px">Curso</th><th>Semestre</th><th>Ajuda</th><th>Fácil</th><th>Usaria</th></tr></thead><tbody>'+rows.filter(function(r){return r.util>0||r.facil>0||r.voltar>0}).map(function(r){return '<tr style="border-top:1px solid var(--line)"><td style="padding:8px 6px">'+esc(r.curso||"")+'</td><td>'+esc(r.semestre||"")+'</td><td>'+(r.util||"–")+'</td><td>'+(r.facil||"–")+'</td><td>'+(r.voltar||"–")+'</td></tr>'}).join("")+'</tbody></table></div></section>';
   h+='<section class="card"><div class="row between"><h2>Sugestões dos estudantes</h2>'+(B.kind==="api"?'<a class="btn sec sm" href="/api/admin/exportar.csv">Baixar planilha (CSV)</a>':'')+'</div>'+(cm.length?cm.map(function(r){return '<blockquote>'+esc(r.comentario)+'<br><span class="small muted">'+esc(r.curso||"")+' · '+esc(r.semestre||"")+'</span></blockquote>'}).join(""):'<p class="muted">Nenhuma sugestão enviada ainda.</p>')+'</section></div>';
   return h;
 }
@@ -468,24 +501,50 @@ function modelo(){
   S.goals.push({id:g1,titulo:"Melhorar meu currículo e meu perfil profissional",prazo:"curto",data:plusDays(30)},{id:g2,titulo:"Conseguir um estágio na minha área",prazo:"medio",data:plusDays(180)},{id:g3,titulo:"Ser contratado(a) na minha área de formação",prazo:"longo",data:plusDays(900)});
   S.tasks.push(mk(g1,"Escrever a primeira versão do currículo",7),mk(g1,"Criar o perfil no LinkedIn",14),mk(g1,"Pedir a um professor para revisar o currículo",21),mk(g2,"Cadastrar o currículo no CIEE",35),mk(g2,"Fazer um curso gratuito de inglês básico",90),mk(g3,"Pesquisar empresas da minha área",60));
 }
+var VALIDAS=["inicio","entrar","criar","completar"].concat(PROTEGIDAS);
 function view(){
+  if(location.pathname!=="/"&&!/\/index\.html$/.test(location.pathname)&&location.pathname.indexOf("/api/")!==0&&window.__servidor)return "naoencontrada";
   var h=(location.hash||"").replace("#","");
   if(!h)return USER?"painel":"inicio";
+  if(VALIDAS.indexOf(h)<0)return "naoencontrada";
   return h;
+}
+function vNaoEncontrada(){
+  return '<main class="main gut"><div class="wrap" style="align-items:center;text-align:center;padding-block:48px"><svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="none" stroke="var(--line)" stroke-width="3"/><circle cx="60" cy="60" r="34" fill="none" stroke="var(--verde-500)" stroke-width="4"/><circle cx="60" cy="60" r="9" fill="var(--laranja)"/></svg><span class="kicker">Erro 404</span><h1>Página não encontrada</h1><p class="muted" style="max-width:46ch">O endereço que você digitou não existe ou mudou de lugar. Confira o link ou volte para uma página do sistema.</p><div class="row" style="justify-content:center"><a class="btn orange" href="'+(USER?"#painel":"#inicio")+'" data-nav="1">'+(USER?"Ir para o painel":"Ir para o início")+'</a>'+(USER?'<a class="btn sec" href="#planodeacao">Plano de ação</a>':'<a class="btn sec" href="#entrar">Entrar</a>')+'</div></div></main>';
 }
 function render(){
   var v=view();
   if((v==="entrar"||v==="criar")&&USER){location.hash="painel";return}
   if(PROTEGIDAS.indexOf(v)>-1&&!USER){location.hash="entrar";return}
   if(v==="coordenacao"&&!USER.admin){location.hash="painel";return}
+  if(USER&&S&&!S.profile.curso&&!USER.admin&&v!=="completar"&&v!=="naoencontrada"&&PROTEGIDAS.indexOf(v)>-1){location.hash="completar";return}
+  if(v==="completar"&&(!USER||S.profile.curso)){location.hash=USER?"painel":"entrar";return}
+  track("tela",v);
   var body;
-  if(v==="entrar"||v==="criar")body=vAuth(v);
+  if(v==="naoencontrada")body=vNaoEncontrada();
+  else if(v==="completar")body=vCompletar();
+  else if(v==="entrar"||v==="criar")body=vAuth(v);
   else if(PROTEGIDAS.indexOf(v)>-1){
-    var m={painel:vPainel,plano:vPlano,perfil:vPerfil,oportunidades:vOpp,avaliacao:vAvaliacao,coordenacao:vCoord};
+    var m={painel:vPainel,planodeacao:vPlano,perfil:vPerfil,oportunidades:vOpp,avaliacao:vAvaliacao,coordenacao:vCoord};
     body='<main class="main gut">'+m[v]()+'</main>';
   }else body=vInicio();
   document.getElementById("root").innerHTML=header(v)+body+tabbar(v);
+  if((v==="entrar"||v==="criar")&&window.__googleId)montarGoogle();
+  if(v==="coordenacao"&&B.kind==="api"&&!window.__ativ)B.atividade().then(function(a){window.__ativ=a;if(view()==="coordenacao")render()},function(){window.__ativ={por_dia:[],por_acao:[],por_tela:[]};});
   if(v==="coordenacao"&&!window.__rows)B.admin().then(function(r){window.__rows=r;if(view()==="coordenacao")render()},function(){window.__rows=[];render()});
+}
+function montarGoogle(){
+  var go=function(){
+    var el=document.getElementById("g-btn");if(!el||!window.google||!google.accounts)return;
+    google.accounts.id.initialize({client_id:window.__googleId,callback:function(r){
+      ApiB.google(r.credential).then(function(u){USER=u;return B.load().then(function(s){S=s||emptyState({nome:u.nome});location.hash=S.profile.curso?"painel":"completar";render()})})
+        .catch(function(er){var e=document.getElementById("auth-err");if(e){e.textContent=er.message||"Não foi possível entrar com o Google.";e.hidden=false}});
+    }});
+    google.accounts.id.renderButton(el,{theme:"outline",size:"large",width:Math.min(320,el.clientWidth||320),text:"continue_with",locale:"pt-BR"});
+  };
+  if(window.google&&google.accounts)return go();
+  if(document.getElementById("gsi"))return;
+  var sc=document.createElement("script");sc.id="gsi";sc.src="https://accounts.google.com/gsi/client";sc.async=true;sc.onload=go;document.head.appendChild(sc);
 }
 window.addEventListener("hashchange",function(){if(view()!=="coordenacao")window.__rows=null;render();window.scrollTo(0,0)});
 
@@ -496,11 +555,12 @@ function oppGoal(){
   return g;
 }
 document.addEventListener("click",function(e){
+  var tk=e.target.closest("[data-track]");if(tk)track(tk.getAttribute("data-track"),tk.getAttribute("data-detalhe"));
   var b=e.target.closest("[data-act]");if(!b)return;
   var a=b.getAttribute("data-act"),id=b.getAttribute("data-id");
-  if(a==="sair"){B.sair().then(function(){USER=null;S=null;location.hash="inicio";render()});return}
-  if(a==="toggle"){var t=find(S.tasks,id);t.status=t.status==="done"?"todo":"done";toast(t.status==="done"?"Tarefa concluída":"Tarefa reaberta")}
-  else if(a==="cycle"){var t2=find(S.tasks,id);var i=STATUS.map(function(x){return x[0]}).indexOf(t2.status);t2.status=STATUS[(i+1)%3][0]}
+  if(a==="sair"){B.sair().then(function(){USER=null;S=null;window.__rows=null;window.__ativ=null;location.hash="inicio";render();toast("Você saiu da conta")});return}
+  if(a==="toggle"){var t=find(S.tasks,id);t.status=t.status==="done"?"todo":"done";if(t.status==="done")track("tarefa_concluida");toast(t.status==="done"?"Tarefa concluída":"Tarefa reaberta")}
+  else if(a==="cycle"){var t2=find(S.tasks,id);var i=STATUS.map(function(x){return x[0]}).indexOf(t2.status);t2.status=STATUS[(i+1)%3][0];if(t2.status==="done")track("tarefa_concluida")}
   else if(a==="del-task"){S.tasks=S.tasks.filter(function(x){return x.id!==id});toast("Tarefa excluída")}
   else if(a==="del-goal"){S.goals=S.goals.filter(function(x){return x.id!==id});S.tasks=S.tasks.filter(function(x){return x.goalId!==id});toast("Objetivo excluído")}
   else if(a==="filter"){window.__f=b.getAttribute("data-v")}
@@ -508,9 +568,9 @@ document.addEventListener("click",function(e){
   else if(a==="level"){find(S.skills,id).nivel=+b.getAttribute("data-n")}
   else if(a==="del-skill"){S.skills=S.skills.filter(function(x){return x.id!==id})}
   else if(a==="sug"){S.skills.push({id:uid(),kind:b.getAttribute("data-kind"),nome:b.getAttribute("data-nome"),nivel:1})}
-  else if(a==="modelo"){modelo();toast("Modelo adicionado. Edite como quiser.")}
-  else if(a==="opp-task"){var o=OPPS[+b.getAttribute("data-i")],g=oppGoal();S.tasks.push({id:uid(),goalId:g.id,titulo:"Conhecer "+o.n+" ("+o.t.toLowerCase()+")",data:plusDays(14),status:"todo"});toast("Tarefa criada no plano de ação")}
-  else if(a==="rate"){S.feedback[b.getAttribute("data-q")]=+b.getAttribute("data-n")}
+  else if(a==="modelo"){track("modelo_usado");modelo();toast("Modelo adicionado. Edite como quiser.")}
+  else if(a==="opp-task"){var o=OPPS[+b.getAttribute("data-i")],g=oppGoal();track("oportunidade_tarefa",o.n);S.tasks.push({id:uid(),goalId:g.id,titulo:"Conhecer "+o.n+" ("+o.t.toLowerCase()+")",data:plusDays(14),status:"todo"});toast("Tarefa criada no plano de ação")}
+  else if(a==="rate"){track("avaliacao_nota",b.getAttribute("data-q"));S.feedback[b.getAttribute("data-q")]=+b.getAttribute("data-n")}
   save();render();
 });
 document.addEventListener("submit",function(e){
@@ -529,9 +589,10 @@ document.addEventListener("submit",function(e){
     }).catch(function(er){btn.disabled=false;fail(er.message||"Não foi possível entrar.")});
     return;
   }
-  if(k==="goal"){S.goals.push({id:uid(),titulo:o.titulo,prazo:o.prazo,data:o.data||""});toast("Objetivo adicionado")}
-  if(k==="task"){S.tasks.push({id:uid(),goalId:f.getAttribute("data-goal"),titulo:o.titulo,data:o.data||"",status:"todo"});toast("Tarefa adicionada")}
-  if(k==="skill"){S.skills.push({id:uid(),kind:f.getAttribute("data-kind"),nome:o.nome,nivel:1})}
+  if(k==="completar"){if(!o.curso)return;S.profile.curso=o.curso;S.profile.semestre=o.semestre;save();location.hash="painel";render();return}
+  if(k==="goal"){track("objetivo_criado");S.goals.push({id:uid(),titulo:o.titulo,prazo:o.prazo,data:o.data||""});toast("Objetivo adicionado")}
+  if(k==="task"){track("tarefa_criada");S.tasks.push({id:uid(),goalId:f.getAttribute("data-goal"),titulo:o.titulo,data:o.data||"",status:"todo"});toast("Tarefa adicionada")}
+  if(k==="skill"){track("competencia_adicionada",f.getAttribute("data-kind"));S.skills.push({id:uid(),kind:f.getAttribute("data-kind"),nome:o.nome,nivel:1})}
   save();render();
 });
 document.addEventListener("input",function(e){
@@ -546,7 +607,10 @@ function start(){
   if(window.claude&&typeof claude.use==="function"){
     pick=ArtB.setup().then(function(ok){return ok?ArtB:LocalB});
   }else{
-    pick=fetch("/api/eu",{credentials:"same-origin"}).then(function(r){return (r.status===200||r.status===401)?ApiB:LocalB},function(){return LocalB});
+    pick=fetch("/api/eu",{credentials:"same-origin"}).then(function(r){
+      if(r.status===200||r.status===401){window.__servidor=true;return ApiB.config().then(function(c){window.__googleId=c.googleClientId||"";return ApiB})}
+      return LocalB;
+    },function(){return LocalB});
   }
   pick.then(function(b){
     B=b;

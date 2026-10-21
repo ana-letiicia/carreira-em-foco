@@ -63,3 +63,14 @@ CREATE INDEX IF NOT EXISTS idx_skills_user ON skills(user_id);
 CREATE INDEX IF NOT EXISTS idx_goals_user  ON goals(user_id);
 CREATE INDEX IF NOT EXISTS idx_tasks_user  ON tasks(user_id);
 CREATE INDEX IF NOT EXISTS idx_tasks_goal  ON tasks(goal_id);
+
+-- Registro de interações (telas visitadas, ações, logins) para a coordenação
+CREATE TABLE IF NOT EXISTS eventos (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id    INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  tipo       TEXT NOT NULL,
+  detalhe    TEXT NOT NULL DEFAULT '',
+  criado_em  TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_eventos_data ON eventos(criado_em);
+CREATE INDEX IF NOT EXISTS idx_eventos_tipo ON eventos(tipo);
