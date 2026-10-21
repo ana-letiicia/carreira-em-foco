@@ -151,14 +151,21 @@ function entrar(req, res, b) {
   const email = str(b.email, 160).toLowerCase(), senha = String(b.senha || '');
   const chave = req.socket.remoteAddress + '|' + email;
   if (limitado(chave)) return send(res, 429, { erro: 'Muitas tentativas. Aguarde alguns minutos.' });
-  const u = db.prepare('SELECT * FROM users WHERE email=?').get(email);
+  
+  let u = db.prepare('SELECT * FROM users WHERE email=?').get(email);
   const ok = u && crypto.timingSafeEqual(Buffer.from(hash(senha, u.senha_salt), 'hex'), Buffer.from(u.senha_hash, 'hex'));
   if (!ok) { falhou(chave); return send(res, 401, { erro: 'E-mail ou senha incorretos.' }); }
+
+  // Garante que se o e-mail estiver nos admins, o cargo é atualizado para coordenação na hora
+  if (ADMINS.includes(email) && u.role !== 'coordenacao') {
+      db.prepare("UPDATE users SET role='coordenacao' WHERE id=?").run(u.id);
+      u.role = 'coordenacao';
+  }
+
   setSession(res, u.id);
   evento(u.id, 'login', 'senha');
   send(res, 200, { usuario: publicUser(u) });
 }
-
 /* login com Google: valida o token de identidade no Google e cria a conta no primeiro acesso */
 async function entrarGoogle(req, res, b) {
   if (!GOOGLE_CLIENT_ID) return send(res, 503, { erro: 'Login com Google não está configurado.' });
