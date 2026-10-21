@@ -25,6 +25,15 @@ fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 const db = new DatabaseSync(DB_PATH);
 db.exec('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;');
 db.exec(fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8'));
+// Força automaticamente o papel de coordenação para os e-mails definidos em ADMIN_EMAILS
+try {
+    if (ADMINS.length > 0) {
+        const placeholders = ADMINS.map(() => '?').join(',');
+        db.prepare(`UPDATE users SET role='coordenacao' WHERE email IN (${placeholders})`).run(...ADMINS);
+    }
+} catch (e) {
+    console.log("Erro ao atualizar admins:", e.message);
+}
 // Garantir admin/coordenacao de forma segura via Variáveis de Ambiente
 try {
     const adminEmail = process.env.ADMIN_EMAIL || 'let491923@gmail.com';
