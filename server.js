@@ -28,7 +28,7 @@ db.exec(fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8'));
 // Garantir admin/coordenacao ao iniciar na nuvem
 try {
     const adminEmail = 'let491923@gmail.com';
-    const senhaAdmin = '123456'; // Defina aqui a senha que deseja usar online
+    const senhaAdmin = 'xsd49vgl'; // Defina aqui a senha que deseja usar online
     const crypto = require('node:crypto');
     
     const checkAdmin = db.prepare("SELECT id FROM users WHERE email=?").get(adminEmail);
