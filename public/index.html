@@ -112,6 +112,9 @@ footer .in{padding-block:24px;display:flex;justify-content:space-between;gap:12p
 .auth .side{background:linear-gradient(160deg,var(--verde-950),var(--verde-700));color:#fff;padding:36px;display:flex;flex-direction:column;gap:16px;justify-content:center}
 .auth .side p{color:#DDEFD9}
 .auth .form-side{background:var(--surface);padding:32px;display:flex;flex-direction:column;gap:16px}
+.back{align-self:flex-start;font-weight:700;font-size:.9rem;text-decoration:none;color:var(--muted);padding:6px 0}
+.back:hover{color:var(--accent)}
+.gbtn{background:var(--surface);color:var(--ink);border:1.5px solid var(--line);min-height:46px}
 .tabs{display:flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px}
 .tabs a{flex:1;text-align:center;padding:9px;border-radius:9px;font-weight:700;text-decoration:none;color:var(--muted)}
 .tabs a[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
@@ -323,7 +326,7 @@ function dots(id,n){var h='<div class="dots" role="group" aria-label="Nível de 
 /* ================= peças de tela ================= */
 function brandMark(){return '<svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="17" fill="#3BAA35"/><circle cx="18" cy="18" r="10" fill="none" stroke="#003D22" stroke-width="3.5"/><circle cx="18" cy="18" r="3.6" fill="#F29A1F"/></svg>'}
 function header(v){
-  var h='<header class="top gut"><div class="in"><a class="brand" href="#planodeacao">'+brandMark()+'<span>Carreira em Foco</span></a>';
+  var h='<header class="top gut"><div class="in"><a class="brand" href="#inicio">'+brandMark()+'<span>Carreira em Foco</span></a>';
   if(USER){
     var items=NAV.slice();if(USER.admin)items.push(["coordenacao","Coordenação"]);
     h+='<nav class="nav" aria-label="Menu principal">'+items.map(function(n){return '<a href="#'+n[0]+'"'+(v===n[0]?' aria-current="page"':"")+'>'+n[1]+'</a>'}).join("")+'</nav>';
@@ -364,9 +367,10 @@ function vInicio(){
 function vAuth(modo){
   var criar=modo==="criar",api=B.senha;
   var h='<main class="main gut"><div class="auth"><div class="side"><span class="kicker" style="color:#BFE9B8">Carreira em Foco</span><h2 style="font-size:1.8rem;color:#fff">'+(criar?"Crie sua conta e monte seu plano.":"Que bom ver você de novo.")+'</h2><p>Seus objetivos, competências e tarefas ficam guardados na sua conta, prontos para continuar de onde parou.</p></div>'+
-  '<div class="form-side">';
+  '<div class="form-side"><a class="back" href="#inicio">← Voltar à tela inicial</a>';
   if(api)h+='<div class="tabs"><a href="#entrar"'+(!criar?' aria-current="page"':"")+'>Entrar</a><a href="#criar"'+(criar?' aria-current="page"':"")+'>Criar conta</a></div>';
-  if(api&&window.__googleId)h+='<div id="g-btn" style="min-height:44px;display:flex;justify-content:center"></div><div class="row" style="gap:12px;color:var(--muted);font-size:.85rem"><hr style="flex:1;border:0;border-top:1px solid var(--line)">ou use seu e-mail<hr style="flex:1;border:0;border-top:1px solid var(--line)"></div>';
+  var gAtivo=api&&window.__googleId;
+  h+=(gAtivo?'<div id="g-btn" style="min-height:44px;display:flex;justify-content:center"></div>':'<button type="button" class="btn gbtn" data-act="google-off">Continuar com Google</button>')+'<div class="row" style="gap:12px;color:var(--muted);font-size:.85rem"><hr style="flex:1;border:0;border-top:1px solid var(--line)">'+(api?"ou use seu e-mail":"ou preencha seus dados")+'<hr style="flex:1;border:0;border-top:1px solid var(--line)"></div>';
   h+='<form class="stack" data-form="auth" data-modo="'+(api&&!criar?"entrar":"criar")+'" novalidate><div class="err" id="auth-err" role="alert" hidden></div>';
   if(!api||criar)h+='<label for="a-nome">Nome<input id="a-nome" name="nome" autocomplete="name" required></label>';
   if(api)h+='<label for="a-email">E-mail<input id="a-email" name="email" type="email" autocomplete="email" required></label>';
@@ -558,6 +562,7 @@ document.addEventListener("click",function(e){
   var tk=e.target.closest("[data-track]");if(tk)track(tk.getAttribute("data-track"),tk.getAttribute("data-detalhe"));
   var b=e.target.closest("[data-act]");if(!b)return;
   var a=b.getAttribute("data-act"),id=b.getAttribute("data-id");
+  if(a==="google-off"){var ee=document.getElementById("auth-err");ee.textContent=B.senha?"O login com Google ainda não foi ativado neste site. Use e-mail e senha por enquanto.":"O login com Google fica disponível no site publicado. Aqui, preencha seus dados.";ee.hidden=false;return}
   if(a==="sair"){B.sair().then(function(){USER=null;S=null;window.__rows=null;window.__ativ=null;location.hash="inicio";render();toast("Você saiu da conta")});return}
   if(a==="toggle"){var t=find(S.tasks,id);t.status=t.status==="done"?"todo":"done";if(t.status==="done")track("tarefa_concluida");toast(t.status==="done"?"Tarefa concluída":"Tarefa reaberta")}
   else if(a==="cycle"){var t2=find(S.tasks,id);var i=STATUS.map(function(x){return x[0]}).indexOf(t2.status);t2.status=STATUS[(i+1)%3][0];if(t2.status==="done")track("tarefa_concluida")}
