@@ -25,26 +25,26 @@ fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 const db = new DatabaseSync(DB_PATH);
 db.exec('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;');
 db.exec(fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8'));
-// Garantir admin/coordenacao ao iniciar na nuvem
+// Garantir admin/coordenacao de forma segura via Variáveis de Ambiente
 try {
-    const adminEmail = 'let491923@gmail.com';
-    const senhaAdmin = 'xsd49vgl'; // Defina aqui a senha que deseja usar online
-    const crypto = require('node:crypto');
+    const adminEmail = process.env.ADMIN_EMAIL || 'let491923@gmail.com';
+    const senhaAdmin = process.env.ADMIN_PASSWORD; 
     
-    const checkAdmin = db.prepare("SELECT id FROM users WHERE email=?").get(adminEmail);
-    
-    const salt = crypto.randomBytes(16).toString('hex');
-    const hash = crypto.scryptSync(senhaAdmin, salt, 64).toString('hex');
+    if (senhaAdmin) {
+        const crypto = require('node:crypto');
+        const checkAdmin = db.prepare("SELECT id FROM users WHERE email=?").get(adminEmail);
+        
+        const salt = crypto.randomBytes(16).toString('hex');
+        const hash = crypto.scryptSync(senhaAdmin, salt, 64).toString('hex');
 
-    if (!checkAdmin) {
-        db.prepare(`
-            INSERT INTO users (nome, email, senha_hash, senha_salt, curso, semestre, area, role)
-            VALUES (?, ?, ?, ?, 'Administração', '1° semestre', 'Geral', 'coordenacao')
-        `).run('Coordenador', adminEmail, hash, salt);
-        console.log("Utilizador administrador criado com sucesso na nuvem!");
-    } else {
-        db.prepare("UPDATE users SET role='coordenacao', senha_hash=?, senha_salt=? WHERE email=?").run(hash, salt, adminEmail);
-        console.log("Utilizador atualizado para coordenação na nuvem!");
+        if (!checkAdmin) {
+            db.prepare(`
+                INSERT INTO users (nome, email, senha_hash, senha_salt, curso, semestre, area, role)
+                VALUES (?, ?, ?, ?, 'Administração', '1° semestre', 'Geral', 'coordenacao')
+            `).run('Coordenador', adminEmail, hash, salt);
+        } else {
+            db.prepare("UPDATE users SET role='coordenacao', senha_hash=?, senha_salt=? WHERE email=?").run(hash, salt, adminEmail);
+        }
     }
 } catch (e) {
     console.log("Erro ao configurar admin:", e.message);
