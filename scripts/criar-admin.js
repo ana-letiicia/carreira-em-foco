@@ -4,7 +4,7 @@ const path = require('path');
 const crypto = require('node:crypto');
 
 const email = (process.argv[2] || '').toLowerCase();
-const senha = process.argv[3] || '123456'; // Senha padrão caso não informe uma
+const senha = process.argv[3] || process.env.ADMIN_PASSWORD;
 
 if (!email) {
     console.error('Uso: npm run criar-admin -- email@exemplo.com [senha]');
