@@ -36,7 +36,7 @@ try {
 }
 // Garantir admin/coordenacao de forma segura via Variáveis de Ambiente
 try {
-    const adminEmail = process.env.ADMIN_EMAIL || 'let491923@gmail.com';
+    const adminEmail = process.env.ADMIN_EMAIL;
     const senhaAdmin = process.env.ADMIN_PASSWORD; 
     
     if (senhaAdmin) {
