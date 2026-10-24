@@ -25,10 +25,10 @@ const path = require('path');
 const PORT = process.env.PORT || 3000;
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'data', 'carreira.db');
 const PROD = process.env.NODE_ENV === 'production';
-const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'let491923@gmail.com').trim().toLowerCase();
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || '').trim().toLowerCase();
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 const ADMINS = (process.env.ADMIN_EMAILS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-if (ADMIN_PASSWORD && !ADMINS.includes(ADMIN_EMAIL)) ADMINS.push(ADMIN_EMAIL);
+if (ADMIN_PASSWORD && ADMIN_EMAIL && !ADMINS.includes(ADMIN_EMAIL)) ADMINS.push(ADMIN_EMAIL);
 const PROXY_HOPS = PROD ? Math.max(0, parseInt(process.env.TRUST_PROXY_HOPS || '1', 10) || 0) : 0;
 const SESSION_DAYS = 14;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
@@ -77,7 +77,8 @@ function senhaFraca(senha, email) {
 /* conta de coordenação inicial, definida só por variáveis de ambiente */
 try {
   if (ADMIN_PASSWORD) {
-    if (ADMIN_PASSWORD.length < 10) console.error('ADMIN_PASSWORD precisa ter pelo menos 10 caracteres. Conta de coordenação não criada.');
+    if (!ADMIN_EMAIL) console.error('Defina ADMIN_EMAIL junto com ADMIN_PASSWORD. Conta de coordenação não criada.');
+    else if (ADMIN_PASSWORD.length < 10) console.error('ADMIN_PASSWORD precisa ter pelo menos 10 caracteres. Conta de coordenação não criada.');
     else {
       const salt = crypto.randomBytes(16).toString('hex'), h = hash(ADMIN_PASSWORD, salt);
       if (!db.prepare('SELECT id FROM users WHERE email=?').get(ADMIN_EMAIL))

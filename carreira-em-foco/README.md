@@ -23,7 +23,7 @@ node server.js            # ou: npm start
 | `GOOGLE_CLIENT_ID` | Ativa "Continuar com Google" |
 | `MICROSOFT_CLIENT_ID`, `MICROSOFT_TENANT` | Ativa "Continuar com Microsoft 365". `MICROSOFT_TENANT` deve ser o **ID (GUID)** do diretório da faculdade |
 | `ALLOWED_DOMAIN` | (opcional) limita os logins Google e Microsoft a um domínio, ex.: `unifametro.edu.br` |
-| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Criam a conta de coordenação inicial (senha com 10+ caracteres). Defina só nas variáveis do servidor (Railway), nunca no código. **A cada reinício a senha dessa conta volta ao valor da variável.** Sem `ADMIN_EMAIL`, vale o padrão antigo do projeto: defina-o |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Juntos, criam a conta de coordenação inicial (senha com 10+ caracteres). Defina ambos só nas variáveis do servidor (Railway), nunca no código. **A cada reinício a senha dessa conta volta ao valor da variável.** Não há e-mail administrador padrão. |
 | `TRUST_PROXY_HOPS` | Quantos proxies ficam na frente do servidor (padrão 1 em produção, como no Railway). Serve para o limite de tentativas usar o IP real de cada pessoa |
 | `LEMBRETE_HORA`, `LEMBRETE_INTERVALO_MS`, `TZ_LEMBRETE` | Horário (padrão 8h), intervalo de verificação e fuso (padrão America/Fortaleza) dos lembretes |
 

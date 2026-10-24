@@ -225,11 +225,11 @@ a{text-underline-offset:.18em}
 .float{position:absolute;z-index:2;width:46%;padding:12px 14px;border-radius:16px;background:#10261A;color:#fff;box-shadow:0 16px 36px rgba(0,0,0,.24)}
 .float.a{top:8%;right:0}
 .float.b{bottom:8%;left:0}
-.float strong{display:block;font-family:var(--font-display);font-size:clamp(.82rem,1.15vw,1rem);line-height:1.2}
+.float strong{display:block;overflow-wrap:anywhere;font-family:var(--font-display);font-size:clamp(.82rem,1.15vw,1rem);line-height:1.2}
 .float p{margin:8px 0 6px;color:#9BB4A2;font-size:clamp(.72rem,.95vw,.86rem);line-height:1.35}
 .skill-dots{display:flex;gap:4px}
 .skill-dots i{width:22px;height:22px;border:2px solid #3BAA35;border-radius:50%}
-.skill-dots i:nth-child(-n+2){background:#5ACB52}
+.skill-dots i.filled{background:#5ACB52}
 .mini-progress{height:9px;margin:7px 0 5px;border-radius:999px;background:#234630;overflow:hidden}
 .mini-progress i{display:block;width:60%;height:100%;border-radius:inherit;background:#3BAA35}
 .float.b p{margin:0;color:#9BB4A2}
@@ -564,11 +564,22 @@ function tabbar(v){
 /* ---------- vitrine ---------- */
 function vInicio(){
   var cta=USER?'<a class="btn orange lg" href="#painel">Ir para o meu painel</a>':'<a class="btn orange lg" href="#criar">Criar minha conta</a><a class="btn line lg" href="#entrar">Já tenho conta</a>';
+  var skills=USER&&S?S.skills.filter(function(x){return x&&String(x.nome||"").trim()}):[];
+  var goals=USER&&S?S.goals.filter(function(x){return x&&String(x.titulo||"").trim()}):[];
+  var skill=skills.length?skills[skills.length-1]:null;
+  var goal=goals.length?goals[goals.length-1]:null;
+  var cards="";
+  if(skill){
+    var nivel=Math.max(1,Math.min(5,Number(skill.nivel)||1));
+    cards+='<div class="float a"><strong>'+esc(skill.nome)+'</strong><p>Nível '+nivel+' de 5</p><div class="skill-dots" role="img" aria-label="Nível '+nivel+' de 5">'+[1,2,3,4,5].map(function(i){return '<i'+(i<=nivel?' class="filled"':'')+'></i>'}).join("")+'</div></div>';
+  }
+  if(goal){
+    var ts=S.tasks.filter(function(t){return t&&t.goalId===goal.id}),done=ts.filter(function(t){return t.status==="done"}).length;
+    cards+='<div class="float b"><strong>'+esc(goal.titulo)+'</strong>'+(ts.length?'<div class="mini-progress" role="img" aria-label="'+done+' de '+ts.length+' tarefas concluídas"><i style="width:'+pc(done,ts.length)+'%"></i></div><p>'+done+' de '+ts.length+' tarefas concluídas</p>':'')+'</div>';
+  }
   return '<section class="hero gut"><div class="in"><div class="stack hero-copy" style="gap:20px"><h1>Sua carreira começa a ser planejada na graduação.</h1><span class="affiliation">UNIFAMETRO · Extensão curricular</span>'+
   '<p class="lead">Defina objetivos, descubra quais competências desenvolver e acompanhe cada passo até o primeiro estágio.</p><div class="ctas">'+cta+'</div></div>'+
-  '<div class="focus target-art" aria-hidden="true"><svg viewBox="0 0 420 420" focusable="false"><circle class="target-ring" cx="210" cy="210" r="198"/><circle class="target-ring" cx="210" cy="210" r="153"/><circle class="target-ring inner" cx="210" cy="210" r="104"/><circle class="target-core" cx="210" cy="210" r="54"/><circle class="target-center" cx="210" cy="210" r="19"/><path class="target-mark" d="M210 12v64M210 344v64M12 210h64M344 210h64"/></svg>'+
-  '<div class="float a"><strong>Inglês</strong><p>competência a desenvolver</p><div class="skill-dots"><i></i><i></i><i></i><i></i><i></i></div></div>'+
-  '<div class="float b"><strong>Conseguir um estágio</strong><div class="mini-progress"><i></i></div><p>3 de 5 tarefas feitas</p></div></div></section>'+
+  '<div class="focus target-art"'+(cards?'':' aria-hidden="true"')+'><svg viewBox="0 0 420 420" aria-hidden="true" focusable="false"><circle class="target-ring" cx="210" cy="210" r="198"/><circle class="target-ring" cx="210" cy="210" r="153"/><circle class="target-ring inner" cx="210" cy="210" r="104"/><circle class="target-core" cx="210" cy="210" r="54"/><circle class="target-center" cx="210" cy="210" r="19"/><path class="target-mark" d="M210 12v64M210 344v64M12 210h64M344 210h64"/></svg>'+cards+'</div></section>'+
   '<section class="band gut"><div class="in"><div class="sec-h"><span class="kicker">Por que existe</span><h2>Os estudantes querem planejar, mas falta uma ferramenta simples.</h2><p class="muted">Um diagnóstico com 19 estudantes da UNIFAMETRO mostrou a lacuna que o Carreira em Foco procura fechar.</p></div>'+
   '<div class="facts"><div class="fact"><b>17 de 19</b><span>acham útil ou muito útil uma ferramenta para organizar objetivos, habilidades e metas</span></div><div class="fact"><b>10 de 19</b><span>não têm um plano de ação organizado para a carreira</span></div><div class="fact"><b>4 de 19</b><span>nunca receberam orientação sobre carreira ou mercado de trabalho</span></div></div></div></section>'+
   '<section class="gut" style="background:var(--bg)"><div class="in" style="padding-block:clamp(36px,6vw,64px);display:flex;flex-direction:column;gap:28px"><div class="sec-h"><span class="kicker">Como funciona</span><h2>Do perfil ao plano de ação em quatro passos.</h2></div>'+
