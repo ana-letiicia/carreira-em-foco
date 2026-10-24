@@ -1,0 +1,1219 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Carreira em Foco</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Planeje sua carreira durante a graduação: objetivos, competências, plano de ação e oportunidades. Projeto de extensão curricular da UNIFAMETRO.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Nunito+Sans:wght@400;600;700&display=swap">
+<style>
+/* Site com cabeçalho fixo; vitrine em faixas de largura total (verde profundo + papel claro) e área do aluno em cartões. Verde UNIFAMETRO com laranja só nas ações principais. */
+:root{
+  --verde-950:#00301B; --verde-900:#003D22; --verde-700:#1F6B3F; --verde-500:#3BAA35; --hero-panel:#0F4F30; --laranja:#F29A1F;
+  --bg:#F1F6EF; --surface:#FFFFFF; --surface-2:#F3F8F1; --ink:#10261A; --muted:#506558; --line:#D6E2D3;
+  --accent:#1F6B3F; --accent-ink:#FFFFFF; --accent-soft:#DDEFD9;
+  --warn:#9A4A00; --warn-soft:#FDECCB; --bad:#B42318; --bad-soft:#FBE3E0; --head-bg:rgba(255,255,255,.92);
+  --band:#FFFFFF; --shadow:0 1px 2px rgba(0,40,20,.06),0 8px 24px rgba(0,40,20,.06);
+  --font-display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif; --font-body:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B1810; --surface:#122619; --surface-2:#183222; --ink:#E8F3E6; --muted:#9BB4A2; --line:#26412E;
+  --accent:#5CCB56; --accent-ink:#06210F; --accent-soft:#1E4228; --warn:#F5B450; --warn-soft:#3B2D12; --bad:#FF8F85; --bad-soft:#3D1B18;
+  --head-bg:rgba(11,24,16,.92); --band:#0F2016; --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1810; --surface:#122619; --surface-2:#183222; --ink:#E8F3E6; --muted:#9BB4A2; --line:#26412E;
+  --accent:#5CCB56; --accent-ink:#06210F; --accent-soft:#1E4228; --warn:#F5B450; --warn-soft:#3B2D12; --bad:#FF8F85; --bad-soft:#3D1B18;
+  --head-bg:rgba(11,24,16,.92); --band:#0F2016; --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55;margin:0}
+h1,h2,h3{font-family:var(--font-display);line-height:1.12;margin:0;text-wrap:balance}
+h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:1.3rem;font-weight:800}
+h3{font-size:1.05rem;font-weight:600}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--laranja);outline-offset:2px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--head-bg);z-index:41}
+
+/* cabeçalho */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--head-bg);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.in{max-width:1120px;margin:0 auto}
+.top .in{display:flex;align-items:center;gap:14px;min-height:68px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:800;font-size:1.15rem;line-height:1;text-decoration:none;color:var(--ink);flex:none}
+.nav{display:flex;gap:2px;margin-left:12px;flex:1;min-width:0}
+.nav a{padding:8px 9px;border-radius:999px;text-decoration:none;color:var(--muted);font-weight:700;font-size:.9rem;white-space:nowrap}
+.nav a:hover{color:var(--ink);background:var(--accent-soft)}
+.nav a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+.who{display:flex;align-items:center;gap:12px;margin-left:auto;font-size:.9rem}
+.who .nm{font-weight:700;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.savestat{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.savestat i{width:8px;height:8px;border-radius:50%;background:var(--verde-500);display:inline-block}
+.savestat.busy i{background:var(--laranja)}
+.savestat.err i{background:var(--bad)}
+
+/* botões e formulários */
+.btn{border:0;border-radius:12px;padding:10px 18px;font-weight:700;cursor:pointer;background:var(--accent);color:var(--accent-ink);min-height:44px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{filter:brightness(1.08)}
+.btn.sec{background:var(--accent-soft);color:var(--ink)}
+.btn.line{background:transparent;border:1.5px solid currentColor;color:inherit}
+.btn.ghost{background:transparent;color:var(--muted);padding:6px 10px;min-height:36px}
+.btn.ghost:hover{color:var(--bad)}
+.btn.orange{background:var(--laranja);color:#2B1700}
+.btn.lg{min-height:52px;padding:12px 26px;font-size:1.05rem;border-radius:14px}
+.btn.sm{padding:6px 12px;min-height:36px;font-size:.9rem}
+label{font-weight:700;font-size:.9rem;display:flex;flex-direction:column;gap:5px}
+input,select,textarea{background:var(--surface-2);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;min-height:46px;width:100%}
+textarea{min-height:96px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;align-items:end}
+.stack{display:flex;flex-direction:column;gap:14px}
+.err{background:var(--bad-soft);color:var(--bad);border-radius:10px;padding:10px 12px;font-weight:700;font-size:.92rem}
+
+/* vitrine */
+.hero{background:radial-gradient(1100px 500px at 85% 10%,#2B7A4B 0%,transparent 60%),linear-gradient(160deg,var(--verde-950),var(--verde-900) 55%,#0F5A33);color:#fff;overflow:hidden}
+.hero .in{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:40px;align-items:center;padding-block:clamp(40px,8vw,88px)}
+.hero .affiliation{align-self:flex-start;border:1px solid rgba(191,233,184,.3);border-radius:999px;padding:6px 12px;color:#BFE9B8;font-weight:700;font-size:.78rem;letter-spacing:.04em}
+.hero p.lead{font-size:1.15rem;color:#DDEFD9;max-width:50ch}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero .btn.line{color:#fff}
+.focus{position:relative;aspect-ratio:1;max-width:420px;width:100%;margin-inline:auto}
+.band{background:var(--band)}
+.band .in{padding-block:clamp(36px,6vw,64px);display:flex;flex-direction:column;gap:28px}
+.sec-h{display:flex;flex-direction:column;gap:8px;max-width:60ch}
+.kicker{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;list-style:none;padding:0;margin:0}
+.steps li{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:3px solid var(--verde-500)}
+.steps .n{font-family:var(--font-display);font-weight:800;color:var(--laranja);font-size:1.5rem}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow)}
+.fact b{font-family:var(--font-display);font-size:2.2rem;line-height:1;color:var(--accent)}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.feat div{display:flex;flex-direction:column;gap:6px}
+.ico{width:26px;height:26px;fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cta{background:var(--verde-900);color:#fff}
+.cta .in{padding-block:48px;display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+footer .in{padding-block:24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.88rem}
+
+/* autenticação */
+.auth{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:0;border-radius:22px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line)}
+.auth .side{background:linear-gradient(160deg,var(--verde-950),var(--verde-700));color:#fff;padding:36px;display:flex;flex-direction:column;gap:16px;justify-content:center}
+.auth .side p{color:#DDEFD9}
+.auth .form-side{background:var(--surface);padding:32px;display:flex;flex-direction:column;gap:16px}
+.back{align-self:flex-start;font-weight:700;font-size:.9rem;text-decoration:none;color:var(--muted);padding:6px 0}
+.back:hover{color:var(--accent)}
+.gbtn{background:var(--surface);color:var(--ink);border:1.5px solid var(--line);min-height:52px;width:100%;border-radius:12px;font-size:1rem;transition:box-shadow .2s,border-color .2s}
+.gbtn:hover,.gslot:hover{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);filter:none}
+.gbtn svg{width:20px;height:20px;flex:none}
+.gslot{border:1.5px solid var(--line);border-radius:12px;background:var(--surface-2);min-height:52px;display:flex;align-items:center;justify-content:center;padding:3px;transition:box-shadow .2s,border-color .2s;overflow:hidden}
+.gnote{text-align:center;color:var(--muted);font-size:.8rem;margin-top:-6px}
+.sep{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.85rem}
+.sep::before,.sep::after{content:"";flex:1;border-top:1px solid var(--line)}
+.tabs{display:flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px}
+.tabs a{flex:1;text-align:center;padding:9px;border-radius:9px;font-weight:700;text-decoration:none;color:var(--muted)}
+.tabs a[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+/* área do aluno */
+.main{padding-block:28px 56px}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+.head{display:flex;flex-direction:column;gap:6px}
+.head h1{font-size:clamp(1.7rem,3.5vw,2.3rem)}
+.head p{color:var(--muted);max-width:62ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:14px;min-width:0;box-shadow:var(--shadow)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.muted{color:var(--muted)}
+.small{font-size:.86rem}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 12px;font-size:.8rem;font-weight:700;background:var(--accent-soft);color:var(--ink);border:0}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)}
+button.chip{cursor:pointer;min-height:32px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:700;cursor:pointer;min-height:38px}
+.pill[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.bar{height:10px;background:var(--accent-soft);border-radius:999px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--verde-500);border-radius:999px;transition:width .4s}
+.greet{background:linear-gradient(135deg,var(--verde-900),var(--verde-700));color:#fff;border-radius:22px;padding:clamp(20px,4vw,32px);display:flex;gap:28px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.greet h1{color:#fff}
+.greet p{color:#DDEFD9}
+.ring{position:relative;width:120px;height:120px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--font-display);font-size:1.6rem}
+.stats{display:flex;gap:26px;flex-wrap:wrap}
+.stat b{display:block;font-family:var(--font-display);font-size:1.9rem;line-height:1}
+.stat span{font-size:.82rem;color:#CFE8CB}
+.list{display:flex;flex-direction:column;gap:10px;list-style:none;margin:0;padding:0}
+.item{display:flex;gap:12px;align-items:center;padding:10px 12px;background:var(--surface-2);border-radius:12px;min-width:0;flex-wrap:wrap}
+.item .t{flex:1;min-width:140px;overflow-wrap:anywhere}
+.item.done .t{text-decoration:line-through;color:var(--muted)}
+.check{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;border:2px solid var(--accent);background:var(--surface);color:var(--accent-ink);cursor:pointer;flex:none;padding:0}
+.check:hover{background:var(--accent-soft)}
+.check svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.check[aria-checked="true"]{background:var(--accent)}
+.check[aria-checked="true"] svg{opacity:1}
+.empty{padding:22px;text-align:center;color:var(--muted);border:2px dashed var(--line);border-radius:var(--r);display:flex;flex-direction:column;gap:12px;align-items:center}
+.dots{display:flex;gap:4px}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--accent);background:var(--surface);cursor:pointer;padding:0}
+.dot[aria-pressed="true"]{background:var(--accent)}
+.opps{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.rate{display:flex;gap:8px;flex-wrap:wrap}
+.rate button{width:46px;height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-weight:800;cursor:pointer}
+.rate button[aria-pressed="true"]{background:var(--laranja);border-color:var(--laranja);color:#2B1700}
+.hbar{display:grid;grid-template-columns:minmax(90px,200px) 1fr 36px;gap:10px;align-items:center;font-size:.9rem}
+.hbar .bar{height:14px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.tile{background:var(--surface-2);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:2px}
+.tile b{font-family:var(--font-display);font-size:1.9rem;line-height:1.1}
+blockquote{margin:0;padding:10px 14px;border-left:4px solid var(--verde-500);background:var(--surface-2);border-radius:0 10px 10px 0;overflow-wrap:anywhere}
+
+.subnav{display:flex;gap:6px;flex-wrap:wrap}
+.subnav a{padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);text-decoration:none;font-weight:700;color:var(--muted);background:var(--surface);font-size:.92rem}
+.subnav a:hover{color:var(--ink)}
+.subnav a[aria-current="page"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.main>.wrap+.wrap{margin-top:20px}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.badge{display:flex;flex-direction:column;gap:3px;padding:14px;border-radius:14px;background:var(--surface-2);border:1.5px dashed var(--line);color:var(--muted)}
+.badge .bi{font-size:1.4rem;line-height:1}
+.badge.on{border:1.5px solid var(--laranja);background:var(--warn-soft);color:var(--ink)}
+.badge.on .bi{color:var(--laranja)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.tl{list-style:none;margin:0;padding:0 0 0 14px;border-left:3px solid var(--verde-500);display:flex;flex-direction:column;gap:12px}
+.tl-i{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;position:relative}
+.tl-i::before{content:"";position:absolute;left:-23px;top:6px;width:11px;height:11px;border-radius:50%;background:var(--verde-500)}
+.tl-i.goal::before{background:var(--laranja);width:13px;height:13px;left:-24px}
+.tl-i.done .t{text-decoration:line-through;color:var(--muted)}
+.tl-d{font-weight:800;font-family:var(--font-display);min-width:46px}
+.cvdoc{background:#fff;color:#111;border:1px solid var(--line);border-radius:10px;padding:24px;font-family:Calibri,Arial,sans-serif;font-size:.92rem;overflow-wrap:anywhere}
+.cvdoc h1{font-size:1.6rem;color:#111}.cvdoc h2{font-size:.95rem;border-bottom:1px solid var(--verde-700);color:var(--verde-700);margin:14px 0 4px}
+.cvdoc ul{margin:0;padding-left:18px}.cvdoc .cv-c{color:#444}
+.cvgrid{align-items:start}
+@media print{body *{visibility:hidden}#cv,#cv *{visibility:visible}#cv{position:absolute;left:0;top:0;width:100%;border:0;padding:0}}
+.tabbar{display:none}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 86px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s;z-index:60;max-width:90vw;text-align:center}
+.toast.on{opacity:1}
+.loading{min-height:60vh;display:grid;place-items:center;color:var(--muted)}
+
+@media (max-width:1180px){
+  .nav{display:none}
+  .who .nm{display:none}
+  .hero .in,.auth,.grid2{grid-template-columns:minmax(0,1fr)}
+  .focus{max-width:300px}
+  .main{padding-bottom:110px}
+  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--head-bg);backdrop-filter:blur(10px);border-top:1px solid var(--line);justify-content:space-around;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+  .tabbar a{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);text-decoration:none;font-size:.66rem;font-weight:700;padding:6px 2px;border-radius:10px;min-width:0;flex:1}
+  .tabbar a svg{stroke:currentColor;width:22px;height:22px}
+  .tabbar a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+  .auth .side{padding:24px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* Vitrine: ilustração de foco e metas com cartões de progresso. */
+::selection{background:var(--accent);color:var(--accent-ink)}
+input,textarea{caret-color:var(--accent)}
+a{text-underline-offset:.18em}
+.hero .in{max-width:1200px;grid-template-columns:minmax(0,1.1fr) minmax(380px,.9fr);gap:clamp(40px,4vw,56px);min-height:570px}
+.hero h1{max-width:20ch;font-size:clamp(3rem,4.2vw,4rem);line-height:1.03;letter-spacing:-.035em}
+.hero p.lead{max-width:42ch}
+.hero .ctas .btn{transition:filter .2s,transform .2s}
+.hero .ctas .btn:hover{transform:translateY(-2px)}
+.focus.target-art{display:grid;place-items:center;max-width:460px;overflow:visible}
+.target-art svg{position:absolute;inset:2%;width:96%;height:96%;overflow:visible}
+.target-ring{fill:none;stroke:#24743D;stroke-width:2}
+.target-ring.inner{stroke:#3BAA35;stroke-width:3}
+.target-core{fill:#38AE37}
+.target-center{fill:var(--laranja)}
+.target-mark{stroke:#BFE9B8;stroke-width:3;stroke-linecap:round}
+.float{position:absolute;z-index:2;width:46%;padding:12px 14px;border-radius:16px;background:#10261A;color:#fff;box-shadow:0 16px 36px rgba(0,0,0,.24)}
+.float.a{top:8%;right:0}
+.float.b{bottom:8%;left:0}
+.float strong{display:block;font-family:var(--font-display);font-size:clamp(.82rem,1.15vw,1rem);line-height:1.2}
+.float p{margin:8px 0 6px;color:#9BB4A2;font-size:clamp(.72rem,.95vw,.86rem);line-height:1.35}
+.skill-dots{display:flex;gap:4px}
+.skill-dots i{width:22px;height:22px;border:2px solid #3BAA35;border-radius:50%}
+.skill-dots i:nth-child(-n+2){background:#5ACB52}
+.mini-progress{height:9px;margin:7px 0 5px;border-radius:999px;background:#234630;overflow:hidden}
+.mini-progress i{display:block;width:60%;height:100%;border-radius:inherit;background:#3BAA35}
+.float.b p{margin:0;color:#9BB4A2}
+.facts{gap:0;margin-top:10px;border-block:1px solid var(--line)}
+.fact{min-height:158px;justify-content:center;padding:22px clamp(16px,2.2vw,30px);border:0;border-radius:0;background:transparent;box-shadow:none}
+.fact:not(:last-child){border-right:1px solid var(--line)}
+.fact b{font-size:clamp(2.3rem,4vw,3rem);font-variant-numeric:tabular-nums}
+.feat{column-gap:28px;row-gap:0}
+.feat div{padding:18px 0;border-top:1px solid var(--line)}
+.feat h3{font-size:1.12rem}
+.feat p{max-width:34ch}
+.steps{column-gap:28px;row-gap:28px}
+.steps li{padding-top:18px}
+
+@media (max-width:1180px){
+  .hero .in{min-height:0;grid-template-columns:minmax(0,1fr);gap:36px;padding-block:56px}
+  .hero h1{max-width:15ch}
+  .focus.target-art{max-width:360px}
+}
+@media (max-width:680px){
+  .top .in{width:calc(100vw - 32px);min-width:0;justify-content:space-between;gap:8px;min-height:60px}
+  .brand{flex:0 1 auto;min-width:0;gap:6px;font-size:1rem}
+  .brand svg{width:32px;height:32px}
+  .brand span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .who{flex:0 0 auto;min-width:0;gap:6px;margin-left:0}
+  .who .btn{min-height:36px;padding:6px 9px;font-size:.82rem}
+  .hero .in{width:calc(100vw - 32px);max-width:calc(100vw - 32px);min-width:0;gap:30px;padding-block:40px}
+  .hero-copy{width:calc(100vw - 48px);max-width:100%;min-width:0;margin-inline:auto}
+  .hero h1{font-size:clamp(2.55rem,11.5vw,3.5rem);letter-spacing:-.03em}
+  .hero p.lead{width:100%;max-width:100%;min-width:0;overflow-wrap:anywhere}
+  .hero .ctas{width:100%;max-width:100%;min-width:0;flex-direction:column;align-items:stretch}
+  .hero .ctas .btn{box-sizing:border-box;width:100%;max-width:100%;min-width:0;flex:1 1 auto}
+  .focus.target-art{width:min(100%,360px);max-width:100%;margin-inline:auto}
+  .float{padding:10px 11px;border-radius:14px}
+  .skill-dots i{width:19px;height:19px}
+  .facts{grid-template-columns:minmax(0,1fr)}
+  .fact{min-height:0;padding:18px 0}
+  .fact:not(:last-child){border-right:0;border-bottom:1px solid var(--line)}
+  .fact b{font-size:2.5rem}
+  .feat{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 18px}
+}
+@media (max-width:420px){
+  .hero h1{font-size:clamp(2.35rem,11.2vw,2.9rem)}
+  .top .who a[href="#criar"]{display:none}
+  .feat,.steps{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero .ctas .btn:hover{transform:none}
+}
+</style>
+
+<div id="root"><div class="loading">Carregando…</div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+/* ================= dados fixos ================= */
+var ICON={
+ painel:'<path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+ planodeacao:'<path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.5 1.5L7 5M3.5 12l1.5 1.5L7 11M3.5 18l1.5 1.5L7 17"/>',
+ perfil:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
+ oportunidades:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/>',
+ avaliacao:'<path d="M21 12a8 8 0 01-11.6 7.1L4 20l1-4.6A8 8 0 1121 12z"/>',
+ coordenacao:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+ mentoria:'<path d="M17 20v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M21 20v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8"/>'
+};
+var NAV=[["painel","Painel"],["planodeacao","Plano de a\u00e7\u00e3o"],["perfil","Perfil"],["oportunidades","Oportunidades"],["avaliacao","Avalia\u00e7\u00e3o"]];
+var PROTEGIDAS=["painel","planodeacao","perfil","oportunidades","mentoria","avaliacao","coordenacao","linhadotempo","teste","curriculo","coordvagas","coordmentorias","relatorio"];
+var SEMESTRES=["1\u00ba semestre","2\u00ba semestre","3\u00ba semestre","4\u00ba semestre","5\u00ba semestre","6\u00ba semestre","7\u00ba semestre ou mais"];
+var STATUS=[["todo","A fazer"],["doing","Em andamento"],["done","Conclu\u00edda"]];
+var PRAZO={curto:"Curto prazo",medio:"M\u00e9dio prazo",longo:"Longo prazo"};
+var SUG=["Comunica\u00e7\u00e3o","Trabalho em equipe","Lideran\u00e7a","Ingl\u00eas","Excel","Organiza\u00e7\u00e3o do tempo","Pensamento cr\u00edtico","Atendimento ao p\u00fablico","Escrita profissional","Resolu\u00e7\u00e3o de problemas","Curr\u00edculo e LinkedIn","Orat\u00f3ria"];
+var OPPS=[
+ {t:"Est\u00e1gio",n:"CIEE",d:"Agente de integra\u00e7\u00e3o de est\u00e1gio com vagas por curso e cidade. Cadastre o curr\u00edculo e receba oportunidades.",u:"https://www.ciee.org.br"},
+ {t:"Est\u00e1gio",n:"Nube",d:"Plataforma de est\u00e1gios e programas de trainee com filtro por curso e cidade.",u:"https://www.nube.com.br"},
+ {t:"Vagas",n:"LinkedIn Vagas",d:"Pesquise vagas j\u00fanior e est\u00e1gios e monte um perfil que recrutadores encontram.",u:"https://www.linkedin.com/jobs/"},
+ {t:"Vagas",n:"Gupy",d:"Portal usado por muitas empresas em processos seletivos de est\u00e1gio e trainee.",u:"https://portal.gupy.io"},
+ {t:"Cursos",n:"Escola Virtual.Gov",d:"Cursos gratuitos com certificado em comunica\u00e7\u00e3o, gest\u00e3o, tecnologia e outras \u00e1reas.",u:"https://www.escolavirtual.gov.br"},
+ {t:"Cursos",n:"Funda\u00e7\u00e3o Bradesco",d:"Cursos online gratuitos de inform\u00e1tica, finan\u00e7as, idiomas e desenvolvimento pessoal.",u:"https://www.ev.org.br"},
+ {t:"Cursos",n:"Sebrae, cursos online",d:"Cursos gratuitos de empreendedorismo, gest\u00e3o e atendimento ao cliente.",u:"https://sebrae.com.br/sites/PortalSebrae/cursosonline"},
+ {t:"Eventos",n:"Sympla",d:"Encontre eventos, feiras e workshops da sua \u00e1rea, presenciais e online.",u:"https://www.sympla.com.br"}
+];
+var QUESTIONS=[["util","O Carreira em Foco ajuda a organizar minha carreira?"],["facil","As telas s\u00e3o f\u00e1ceis de entender e usar?"],["voltar","Eu usaria este sistema durante a gradua\u00e7\u00e3o?"]];
+
+/* ================= dados do novo ciclo ================= */
+var TEMAS=["Escolha da \u00e1rea","Curr\u00edculo e entrevista","Est\u00e1gio e primeiro emprego","P\u00f3s-gradua\u00e7\u00e3o","Outro"];
+var ADMINROTAS=["coordenacao","coordvagas","coordmentorias","relatorio"];
+var GRUPO={linhadotempo:"planodeacao",teste:"perfil",curriculo:"perfil",coordvagas:"coordenacao",coordmentorias:"coordenacao",relatorio:"coordenacao"};
+var SUBS={
+ planodeacao:[["planodeacao","Lista de objetivos"],["linhadotempo","Linha do tempo"]],
+ perfil:[["perfil","Dados e compet\u00eancias"],["teste","Teste de perfil"],["curriculo","Curr\u00edculo"]],
+ coordenacao:[["coordenacao","Resumo"],["coordvagas","Vagas e eventos"],["coordmentorias","Mentorias"],["relatorio","Relat\u00f3rio do portf\u00f3lio"]]
+};
+var AREAS=[
+ {id:"tec",nome:"Tecnologia e an\u00e1lise",desc:"Voc\u00ea tende a gostar de entender como as coisas funcionam, resolver problemas l\u00f3gicos e trabalhar com dados e sistemas.",comp:["Pensamento cr\u00edtico","Resolu\u00e7\u00e3o de problemas","An\u00e1lise de dados","L\u00f3gica de programa\u00e7\u00e3o"],ex:"desenvolvimento de sistemas, an\u00e1lise de dados, seguran\u00e7a da informa\u00e7\u00e3o, pesquisa e engenharia"},
+ {id:"saude",nome:"Sa\u00fade e cuidado",desc:"Voc\u00ea tende a se realizar ajudando pessoas, com escuta, paci\u00eancia e senso de responsabilidade.",comp:["Empatia e escuta ativa","Comunica\u00e7\u00e3o","\u00c9tica profissional","Trabalho em equipe"],ex:"fisioterapia, odontologia, medicina veterin\u00e1ria, est\u00e9tica, enfermagem e psicologia"},
+ {id:"criacao",nome:"Cria\u00e7\u00e3o e design",desc:"Voc\u00ea tende a gostar de criar, imaginar e dar forma a ideias, com aten\u00e7\u00e3o \u00e0 est\u00e9tica e aos detalhes visuais.",comp:["Criatividade","Design e comunica\u00e7\u00e3o visual","Escrita profissional","Apresenta\u00e7\u00e3o de ideias"],ex:"arquitetura, design, publicidade, produ\u00e7\u00e3o de conte\u00fado e comunica\u00e7\u00e3o"},
+ {id:"neg",nome:"Neg\u00f3cios e lideran\u00e7a",desc:"Voc\u00ea tende a gostar de convencer, negociar, liderar pessoas e iniciativas e buscar resultados.",comp:["Lideran\u00e7a","Negocia\u00e7\u00e3o","Orat\u00f3ria","Vis\u00e3o estrat\u00e9gica"],ex:"administra\u00e7\u00e3o, empreendedorismo, vendas, gest\u00e3o de projetos e advocacia empresarial"},
+ {id:"org",nome:"Organiza\u00e7\u00e3o e processos",desc:"Voc\u00ea tende a se sentir bem planejando, organizando e fazendo as coisas com m\u00e9todo e precis\u00e3o.",comp:["Organiza\u00e7\u00e3o do tempo","Aten\u00e7\u00e3o a detalhes","Planejamento","Gest\u00e3o de documentos e processos"],ex:"gest\u00e3o administrativa, contabilidade, rotinas jur\u00eddicas, log\u00edstica, qualidade e compliance"}
+];
+var TQ=[
+ ["tec","Gosto de resolver problemas l\u00f3gicos e entender como as coisas funcionam."],
+ ["saude","Fico satisfeito(a) quando ajudo algu\u00e9m a se sentir melhor ou mais seguro."],
+ ["criacao","Gosto de criar coisas novas: ideias, textos, imagens ou projetos."],
+ ["neg","Gosto de convencer pessoas, negociar e liderar iniciativas."],
+ ["org","Gosto de planejar, organizar rotinas e deixar tudo em ordem."],
+ ["tec","Me sinto bem analisando dados, n\u00fameros ou sistemas para achar padr\u00f5es."],
+ ["saude","Tenho paci\u00eancia para ouvir e acompanhar pessoas em momentos dif\u00edceis."],
+ ["criacao","Percebo detalhes de est\u00e9tica e gosto de dar um visual cuidadoso ao que fa\u00e7o."],
+ ["neg","Tenho vontade de empreender ou de gerir um neg\u00f3cio ou uma equipe."],
+ ["org","Prefiro seguir regras claras e fazer minhas tarefas com precis\u00e3o."]
+];
+var CONQ=[
+ {id:"obj1",n:"Primeiro passo",d:"Criar seu primeiro objetivo.",ok:function(){return S.goals.length>=1}},
+ {id:"t1",n:"M\u00e3o na massa",d:"Concluir sua primeira tarefa.",ok:function(){return nDone()>=1}},
+ {id:"t5",n:"Em ritmo",d:"Concluir 5 tarefas.",ok:function(){return nDone()>=5}},
+ {id:"t15",n:"Maratonista",d:"Concluir 15 tarefas.",ok:function(){return nDone()>=15}},
+ {id:"prazos",n:"Vis\u00e3o de futuro",d:"Ter objetivos de curto, m\u00e9dio e longo prazo.",ok:function(){return ["curto","medio","longo"].every(function(p){return S.goals.some(function(g){return g.prazo===p})})}},
+ {id:"perfil",n:"Perfil completo",d:"Preencher curso, semestre e \u00e1rea e ter 3 compet\u00eancias.",ok:function(){var p=S.profile;return !!(p.curso&&p.semestre&&p.area&&S.skills.length>=3)}},
+ {id:"teste",n:"Autoconhecimento",d:"Fazer o teste de perfil.",ok:function(){return !!S.extra.teste}},
+ {id:"cv",n:"Curr\u00edculo pronto",d:"Gerar seu curr\u00edculo em PDF ou Word.",ok:function(){return !!S.extra.cvGerado}},
+ {id:"ment",n:"Rede de apoio",d:"Pedir uma mentoria.",ok:function(){return !!S.extra.mentoriaPedida}},
+ {id:"aval",n:"Opini\u00e3o valiosa",d:"Avaliar o sistema.",ok:function(){return (S.feedback.util||0)>0}},
+ {id:"s3",n:"Const\u00e2ncia",d:"Acessar 3 dias seguidos.",ok:function(){return streak()>=3}},
+ {id:"s7",n:"Semana inteira",d:"Acessar 7 dias seguidos.",ok:function(){return streak()>=7}},
+ {id:"s30",n:"M\u00eas de foco",d:"Acessar 30 dias seguidos.",ok:function(){return streak()>=30}}
+];
+
+/* ================= utilidades ================= */
+function uid(){return Math.random().toString(36).slice(2,10)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function iso(d){var m=d.getMonth()+1,dd=d.getDate();return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(dd<10?"0":"")+dd}
+function plusDays(n){var d=new Date();d.setDate(d.getDate()+n);return iso(d)}
+function today(){return iso(new Date())}
+function fmt(s){if(!s)return"sem prazo";var p=s.split("-");return p[2]+"/"+p[1]+"/"+p[0]}
+function ico(k){return '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">'+ICON[k]+'</svg>'}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove("on")},2400)}
+function emptyState(p){return {profile:{nome:p.nome||"",curso:p.curso||"",semestre:p.semestre||SEMESTRES[0],area:"",lembretes:false},skills:[],goals:[],tasks:[],feedback:{texto:""},extra:{}}}
+function pl(n,s,p){return n+" "+(n===1?s:p)}
+function f1(x){return x?x.toFixed(1).replace(".",","):"\u2013"}
+function pc(a,b){return b?Math.round(a/b*100):0}
+function fmtDT(s){return s?fmt(String(s).slice(0,10)):""}
+function rnd(){var a=new Uint8Array(16);try{crypto.getRandomValues(a)}catch(e){for(var i=0;i<16;i++)a[i]=Math.floor(Math.random()*256)}return Array.prototype.map.call(a,function(x){return("0"+x.toString(16)).slice(-2)}).join("")}
+function copiar(txt){var ok=function(){toast("Copiado")},fail=function(){toast("N\u00e3o foi poss\u00edvel copiar. Selecione o texto e copie.")};try{navigator.clipboard.writeText(txt).then(ok,fail)}catch(e){fail()}}
+function slug(s){return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-zA-Z0-9]+/g,"-").replace(/^-|-$/g,"").toLowerCase()||"curriculo"}
+function norm(s){s.extra=s.extra&&typeof s.extra==="object"&&!Array.isArray(s.extra)?s.extra:{};s.profile=s.profile||{};s.profile.lembretes=!!s.profile.lembretes;s.skills=s.skills||[];s.goals=s.goals||[];s.tasks=s.tasks||[];s.feedback=s.feedback||{texto:""};return s}
+function setS(s,p){S=norm(s||emptyState(p||{}));return S}
+var CH={};
+function carregar(chave,fn,vista,padrao){
+  if(CH[chave]!==undefined)return;
+  var mine=CH;mine[chave]=null;
+  fn().then(function(r){if(CH===mine)mine[chave]=r},function(){if(CH===mine)mine[chave]=padrao}).then(function(){if(CH===mine&&view()===vista)render()});
+}
+function nDone(){return S.tasks.filter(function(t){return t.status==="done"}).length}
+function streak(){var d=S.extra.dias||[],set={},n=0,c=new Date();d.forEach(function(x){set[x]=1});while(set[iso(c)]){n++;c.setDate(c.getDate()-1)}return n}
+function checkConquistas(silent){
+  if(!S)return;
+  var have=S.extra.conq||[],novas=CONQ.filter(function(c){return have.indexOf(c.id)<0&&c.ok()});
+  if(!novas.length)return;
+  S.extra.conq=have.concat(novas.map(function(c){return c.id}));
+  if(!silent){setTimeout(function(){toast("Conquista desbloqueada: "+novas[0].n+(novas.length>1?" (+"+(novas.length-1)+")":""))},900);novas.forEach(function(c){track("conquista",c.id)})}
+}
+function marcarDia(){
+  if(!S)return;
+  var d=S.extra.dias=S.extra.dias||[],t=today();
+  if(d.indexOf(t)<0){d.push(t);if(d.length>120)S.extra.dias=d.slice(-120);checkConquistas(true);save()}else checkConquistas(true);
+}
+
+function summary(s){
+  var t=s.tasks,f=s.feedback||{};
+  return {curso:s.profile.curso||"",semestre:s.profile.semestre||"",objetivos:s.goals.length,tarefas:t.length,
+    concluidas:t.filter(function(x){return x.status==="done"}).length,atrasadas:t.filter(overdue).length,
+    util:f.util||0,facil:f.facil||0,voltar:f.voltar||0,comentario:f.texto||"",atualizado:new Date().toISOString()};
+}
+function overdue(t){return t.status!=="done"&&t.data&&t.data<today()}
+
+/* ================= camadas de dados ================= */
+/* 1) API: site real (servidor Node + SQLite).  2) Artifact: banco do claude.ai.  3) Local: navegador. */
+var ApiB={kind:"api",senha:true,temVagas:true,temMentoria:true,
+  req:function(m,u,b){
+    return fetch(u,{method:m,credentials:"same-origin",headers:b?{"Content-Type":"application/json"}:{},body:b?JSON.stringify(b):undefined})
+      .then(function(r){return r.json().catch(function(){return{}}).then(function(j){if(!r.ok){var e=new Error(j.erro||"Algo deu errado.");e.status=r.status;throw e}return j})});
+  },
+  init:function(){return this.req("GET","/api/eu").then(function(j){return j.usuario},function(){return null})},
+  entrar:function(f){return this.req("POST","/api/entrar",f).then(function(j){return j.usuario})},
+  criar:function(f){return this.req("POST","/api/registrar",f).then(function(j){return j.usuario})},
+  google:function(cred){return this.req("POST","/api/google",{credential:cred}).then(function(j){return j.usuario})},
+  microsoft:function(tok,nonce){return this.req("POST","/api/microsoft",{id_token:tok,nonce:nonce}).then(function(j){return j.usuario})},
+  esqueci:function(email){return this.req("POST","/api/esqueci",{email:email})},
+  redefinir:function(token,senha){return this.req("POST","/api/redefinir",{token:token,senha:senha})},
+  config:function(){return this.req("GET","/api/config").catch(function(){return{}})},
+  atividade:function(){return this.req("GET","/api/admin/atividade")},
+  sair:function(){return this.req("POST","/api/sair",{})},
+  load:function(){return this.req("GET","/api/estado")},
+  save:function(s){return this.req("PUT","/api/estado",s)},
+  admin:function(){return this.req("GET","/api/admin/resumo").then(function(j){return j.linhas})},
+  vagas:function(){return this.req("GET","/api/vagas").then(function(j){return j.vagas})},
+  mentorias:function(){return this.req("GET","/api/mentorias").then(function(j){return j.mentorias})},
+  mentoriaCriar:function(f){return this.req("POST","/api/mentorias",{tema:f.tema,mensagem:f.mensagem})},
+  adminVagas:function(){return this.req("GET","/api/admin/vagas").then(function(j){return j.vagas})},
+  adminVagaCriar:function(v){return this.req("POST","/api/admin/vagas",v)},
+  adminVagaExcluir:function(id){return this.req("DELETE","/api/admin/vagas/"+id)},
+  adminMentorias:function(){return this.req("GET","/api/admin/mentorias").then(function(j){return j.mentorias})},
+  adminMentoriaResp:function(id,b){return this.req("PUT","/api/admin/mentorias/"+id,b)},
+  adminReset:function(email){return this.req("POST","/api/admin/reset",{email:email})}
+};
+var LK="carreira-em-foco-v2",memState=null;
+var LocalB={kind:"local",senha:false,temVagas:false,temMentoria:false,
+  init:function(){var s=this.read();return Promise.resolve(s?{nome:s.profile.nome,admin:false}:null)},
+  read:function(){try{var r=localStorage.getItem(LK);if(r)return JSON.parse(r)}catch(e){}return memState},
+  entrar:function(f){var ex=this.read();if(ex)return Promise.resolve({nome:ex.profile.nome,admin:false});memState=emptyState(f);this.write(memState);return Promise.resolve({nome:f.nome,admin:false})},
+  criar:function(f){return this.entrar(f)},
+  sair:function(){return Promise.resolve()},
+  load:function(){return Promise.resolve(this.read())},
+  write:function(s){memState=s;try{localStorage.setItem(LK,JSON.stringify(s))}catch(e){}},
+  save:function(s){this.write(s);return Promise.resolve()},
+  admin:function(){return Promise.resolve([])}
+};
+function docsComId(q){return q.docs.map(function(d){return Object.assign({id:d.id},d.data())})}
+var ArtB={kind:"artifact",senha:false,temVagas:true,temMentoria:true,db:null,uid:null,isAdmin:false,
+  setup:function(){
+    var self=this;
+    return Promise.all([claude.use("db"),claude.use("user")]).then(function(r){
+      if(!r[0]||!r[1])return false;
+      return r[1].id().then(function(id){
+        if(!id)return false;
+        self.db=r[0];self.uid=id;
+        return Promise.resolve(r[1].canEdit()).then(function(a){self.isAdmin=!!a;return true});
+      });
+    }).catch(function(){return false});
+  },
+  ref:function(){return this.db.doc("data/users/"+this.uid+"/estado")},
+  init:function(){var self=this;return this.ref().get().then(function(d){if(!d.exists)return self.isAdmin?{nome:"Coordena\u00e7\u00e3o",admin:true}:null;self._s=d.data();return {nome:self._s.profile.nome,admin:self.isAdmin}})},
+  entrar:function(f){if(this._s&&this._s.profile)return Promise.resolve({nome:this._s.profile.nome,admin:this.isAdmin});this._s=emptyState(f);var self=this;return this.save(this._s).then(function(){return {nome:f.nome,admin:self.isAdmin}})},
+  criar:function(f){return this.entrar(f)},
+  sair:function(){return Promise.resolve()},
+  load:function(){return Promise.resolve(this._s||null)},
+  save:function(s){
+    this._s=s;var self=this;
+    return this.ref().set(JSON.parse(JSON.stringify(s))).then(function(){return self.db.doc("resumo/"+self.uid).set(summary(s))});
+  },
+  admin:function(){return this.db.collection("resumo").get().then(function(q){return q.docs.map(function(d){return d.data()})})},
+  vagas:function(){return this.db.collection("vagas").get().then(function(q){var t=today();return docsComId(q).filter(function(v){return !v.prazo||v.prazo>=t}).sort(function(a,b){return String(b.criado||"").localeCompare(String(a.criado||""))})})},
+  adminVagas:function(){return this.db.collection("vagas").get().then(function(q){return docsComId(q).sort(function(a,b){return String(b.criado||"").localeCompare(String(a.criado||""))})})},
+  adminVagaCriar:function(v){
+    if(["Est\u00e1gio","Vaga","Curso","Evento"].indexOf(v.tipo)<0)return Promise.reject(new Error("Escolha o tipo."));
+    if(!v.titulo||v.titulo.length<3)return Promise.reject(new Error("Informe o t\u00edtulo."));
+    if(v.link&&!/^https?:\/\/\S+$/i.test(v.link))return Promise.reject(new Error("O link precisa come\u00e7ar com http:// ou https://."));
+    return this.db.collection("vagas").add({tipo:v.tipo,titulo:v.titulo.slice(0,120),empresa:(v.empresa||"").slice(0,120),descricao:(v.descricao||"").slice(0,600),link:v.link||"",prazo:v.prazo||"",criado:new Date().toISOString()});
+  },
+  adminVagaExcluir:function(id){return this.db.doc("vagas/"+id).delete()},
+  mentorias:function(){return this.db.collection("mentorias/"+this.uid+"/pedidos").get().then(function(q){return docsComId(q).sort(function(a,b){return String(b.criado_em).localeCompare(String(a.criado_em))})})},
+  mentoriaCriar:function(f){
+    var self=this;
+    return this.mentorias().then(function(l){
+      if(l.filter(function(m){return m.status!=="concluida"}).length>=3)throw new Error("Voc\u00ea j\u00e1 tem 3 pedidos em aberto. Aguarde a resposta da coordena\u00e7\u00e3o.");
+      if(!f.mensagem||f.mensagem.length<10)throw new Error("Conte um pouco mais sobre o que voc\u00ea precisa (m\u00ednimo de 10 caracteres).");
+      var p=S.profile,agora=new Date().toISOString();
+      return self.db.doc("mentorias/"+self.uid).set({nome:p.nome,curso:p.curso,semestre:p.semestre}).then(function(){
+        return self.db.collection("mentorias/"+self.uid+"/pedidos").add({tema:f.tema,mensagem:f.mensagem.slice(0,1000),status:"pendente",resposta:"",criado_em:agora,atualizado_em:agora});
+      });
+    });
+  },
+  adminMentorias:function(){
+    var self=this;
+    return this.db.collection("mentorias").get().then(function(q){
+      return Promise.all(q.docs.map(function(d){var a=d.data();return self.db.collection("mentorias/"+d.id+"/pedidos").get().then(function(pq){return pq.docs.map(function(x){return Object.assign({id:d.id+"/"+x.id,email:"",nome:a.nome,curso:a.curso,semestre:a.semestre},x.data())})})})).then(function(ls){
+        var ord={pendente:0,andamento:1,concluida:2};
+        return [].concat.apply([],ls).sort(function(a,b){return (ord[a.status]-ord[b.status])||String(b.criado_em).localeCompare(String(a.criado_em))});
+      });
+    });
+  },
+  adminMentoriaResp:function(id,b){var p=id.split("/");return this.db.doc("mentorias/"+p[0]+"/pedidos/"+p[1]).update({status:b.status,resposta:b.resposta,atualizado_em:new Date().toISOString()})}
+};
+
+/* ================= estado ================= */
+var lastTrack="";
+function track(tipo,detalhe){
+  if(B.kind!=="api"||!USER)return;
+  var k=tipo+"|"+(detalhe||"");
+  if(tipo==="tela"&&k===lastTrack)return;
+  lastTrack=k;
+  try{fetch("/api/evento",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify({tipo:tipo,detalhe:detalhe||""}),keepalive:true}).catch(function(){})}catch(e){}
+}
+var B=LocalB,S=null,USER=null,saveTimer=null,lastCompletedTaskId=null;
+function save(){
+  checkConquistas();setStat("busy");clearTimeout(saveTimer);
+  saveTimer=setTimeout(function(){
+    saveTimer=null;
+    B.save(S).then(function(){setStat("ok")},function(){setStat("err")});
+  },500);
+}
+/* grava j\u00e1 o que est\u00e1 pendente (ao sair da conta ou fechar a aba), para n\u00e3o perder a \u00faltima edi\u00e7\u00e3o */
+function flush(){
+  if(!saveTimer||!S||!USER)return Promise.resolve();
+  clearTimeout(saveTimer);saveTimer=null;
+  return B.save(S).then(function(){setStat("ok")},function(){setStat("err")});
+}
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden")flush()});
+function setStat(k){
+  var el=document.getElementById("savestat");if(!el)return;
+  el.className="savestat "+(k==="ok"?"":k);
+  el.innerHTML='<i></i>'+(k==="ok"?"Salvo":k==="busy"?"Salvando\u2026":"N\u00e3o salvou. Tente de novo.");
+}
+function goalTasks(g){return S.tasks.filter(function(t){return t.goalId===g.id})}
+function pct(g){var ts=goalTasks(g);if(!ts.length)return 0;return Math.round(ts.filter(function(t){return t.status==="done"}).length/ts.length*100)}
+function statusLabel(s){return STATUS.filter(function(x){return x[0]===s})[0][1]}
+function dots(id,n){var h='<div class="dots" role="group" aria-label="N\u00edvel de 1 a 5">';for(var i=1;i<=5;i++)h+='<button class="dot" data-act="level" data-id="'+id+'" data-n="'+i+'" aria-pressed="'+(i<=n)+'" aria-label="N\u00edvel '+i+'"></button>';return h+'</div>'}
+
+/* ================= pe\u00e7as de tela ================= */
+function brandMark(){return '<svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="17" fill="#3BAA35"/><circle cx="18" cy="18" r="10" fill="none" stroke="#003D22" stroke-width="3.5"/><circle cx="18" cy="18" r="3.6" fill="#F29A1F"/></svg>'}
+function header(v){
+  var h='<header class="top gut"><div class="in"><a class="brand" href="#inicio">'+brandMark()+'<span>Carreira em Foco</span></a>';
+  if(USER){
+    var items=NAV.slice();if(USER.admin)items.push(["coordenacao","Coordena\u00e7\u00e3o"]);
+    h+='<nav class="nav" aria-label="Menu principal">'+items.map(function(n){return '<a href="#'+n[0]+'"'+((GRUPO[v]||v)===n[0]?' aria-current="page"':"")+'>'+n[1]+'</a>'}).join("")+'</nav>';
+    h+='<div class="who"><span class="savestat" id="savestat"><i></i>Salvo</span><span class="nm">'+esc(USER.nome)+'</span>'+'<button class="btn sec sm" data-act="sair">Sair</button>'+'</div>';
+  }else{
+    h+='<div class="who"><a class="btn sec sm" href="#entrar">Entrar</a><a class="btn orange sm" href="#criar">Criar conta</a></div>';
+  }
+  return h+'</div></header>';
+}
+function tabbar(v){
+  if(!USER)return"";
+  var items=NAV.slice();if(USER.admin)items.push(["coordenacao","Coord."]);
+  var short={"Plano de a\u00e7\u00e3o":"Plano","Oportunidades":"Vagas","Avalia\u00e7\u00e3o":"Avaliar"};
+  return '<nav class="tabbar" aria-label="Menu principal">'+items.map(function(n){return '<a href="#'+n[0]+'"'+((GRUPO[v]||v)===n[0]?' aria-current="page"':"")+'>'+ico(n[0])+'<span>'+(short[n[1]]||n[1])+'</span></a>'}).join("")+'</nav>';
+}
+
+/* ---------- vitrine ---------- */
+function vInicio(){
+  var cta=USER?'<a class="btn orange lg" href="#painel">Ir para o meu painel</a>':'<a class="btn orange lg" href="#criar">Criar minha conta</a><a class="btn line lg" href="#entrar">J\u00e1 tenho conta</a>';
+  return '<section class="hero gut"><div class="in"><div class="stack hero-copy" style="gap:20px"><h1>Sua carreira come\u00e7a a ser planejada na gradua\u00e7\u00e3o.</h1><span class="affiliation">UNIFAMETRO \u00b7 Extens\u00e3o curricular</span>'+
+  '<p class="lead">Defina objetivos, descubra quais compet\u00eancias desenvolver e acompanhe cada passo at\u00e9 o primeiro est\u00e1gio.</p><div class="ctas">'+cta+'</div></div>'+
+  '<div class="focus target-art" aria-hidden="true"><svg viewBox="0 0 420 420" focusable="false"><circle class="target-ring" cx="210" cy="210" r="198"/><circle class="target-ring" cx="210" cy="210" r="153"/><circle class="target-ring inner" cx="210" cy="210" r="104"/><circle class="target-core" cx="210" cy="210" r="54"/><circle class="target-center" cx="210" cy="210" r="19"/><path class="target-mark" d="M210 12v64M210 344v64M12 210h64M344 210h64"/></svg>'+
+  '<div class="float a"><strong>Ingl\u00eas</strong><p>compet\u00eancia a desenvolver</p><div class="skill-dots"><i></i><i></i><i></i><i></i><i></i></div></div>'+
+  '<div class="float b"><strong>Conseguir um est\u00e1gio</strong><div class="mini-progress"><i></i></div><p>3 de 5 tarefas feitas</p></div></div></section>'+
+  '<section class="band gut"><div class="in"><div class="sec-h"><span class="kicker">Por que existe</span><h2>Os estudantes querem planejar, mas falta uma ferramenta simples.</h2><p class="muted">Um diagn\u00f3stico com 19 estudantes da UNIFAMETRO mostrou a lacuna que o Carreira em Foco procura fechar.</p></div>'+
+  '<div class="facts"><div class="fact"><b>17 de 19</b><span>acham \u00fatil ou muito \u00fatil uma ferramenta para organizar objetivos, habilidades e metas</span></div><div class="fact"><b>10 de 19</b><span>n\u00e3o t\u00eam um plano de a\u00e7\u00e3o organizado para a carreira</span></div><div class="fact"><b>4 de 19</b><span>nunca receberam orienta\u00e7\u00e3o sobre carreira ou mercado de trabalho</span></div></div></div></section>'+
+  '<section class="gut" style="background:var(--bg)"><div class="in" style="padding-block:clamp(36px,6vw,64px);display:flex;flex-direction:column;gap:28px"><div class="sec-h"><span class="kicker">Como funciona</span><h2>Do perfil ao plano de a\u00e7\u00e3o em quatro passos.</h2></div>'+
+  '<ol class="steps"><li><span class="n">1</span><h3>Monte seu perfil</h3><p class="muted">Registre pontos fortes e as compet\u00eancias que quer desenvolver, com n\u00edvel de 1 a 5.</p></li><li><span class="n">2</span><h3>Defina objetivos</h3><p class="muted">Separe o que alcan\u00e7ar no curto, no m\u00e9dio e no longo prazo.</p></li><li><span class="n">3</span><h3>Crie o plano de a\u00e7\u00e3o</h3><p class="muted">Transforme cada objetivo em tarefas com prazo e status.</p></li><li><span class="n">4</span><h3>Acompanhe o progresso</h3><p class="muted">Veja no painel o que j\u00e1 foi feito e o que est\u00e1 atrasado.</p></li></ol></div></section>'+
+  '<section class="band gut"><div class="in"><div class="sec-h"><span class="kicker">O que voc\u00ea encontra</span><h2>Tudo para organizar a carreira em um s\u00f3 lugar.</h2></div><div class="feat">'+
+  '<div>'+ico("perfil")+'<h3>Perfil e compet\u00eancias</h3><p class="muted">Veja seus pontos fortes e as lacunas que o mercado pede para fechar.</p></div>'+
+  '<div>'+ico("planodeacao")+'<h3>Plano de a\u00e7\u00e3o</h3><p class="muted">Objetivos com tarefas, prazos e status que avan\u00e7am com um toque.</p></div>'+
+  '<div>'+ico("oportunidades")+'<h3>Oportunidades</h3><p class="muted">Links de est\u00e1gios, vagas, cursos gratuitos e eventos, prontos para virar tarefa.</p></div>'+
+  '<div>'+ico("painel")+'<h3>Painel de progresso</h3><p class="muted">Percentual conclu\u00eddo, pr\u00f3ximas tarefas, conquistas e atrasos \u00e0 vista.</p></div>'+
+  '<div>'+ico("perfil")+'<h3>Teste de perfil e curr\u00edculo</h3><p class="muted">Descubra suas afinidades e gere um curr\u00edculo pronto em PDF ou Word.</p></div>'+
+  '<div>'+ico("mentoria")+'<h3>Mentoria da coordena\u00e7\u00e3o</h3><p class="muted">Pe\u00e7a orienta\u00e7\u00e3o e receba resposta direto no sistema.</p></div></div></div></section>'+
+  '<section class="cta gut"><div class="in"><div><h2 style="color:#fff">Comece hoje o plano da sua carreira.</h2><p style="color:#CFE8CB">Leva dois minutos para criar a conta.</p></div>'+(USER?'<a class="btn orange lg" href="#painel">Ir para o painel</a>':'<a class="btn orange lg" href="#criar">Criar minha conta</a>')+'</div></section>'+
+  '<footer class="gut"><div class="in"><span>Carreira em Foco \u00b7 Projeto de extens\u00e3o curricular \u00b7 UNIFAMETRO</span><span>Central de Extens\u00e3o Curricular</span></div></footer>';
+}
+
+/* ---------- entrar / criar ---------- */
+var GLOGO='<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.9 2.4 30.4 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 010-9.4l-7.9-6.1a24 24 0 000 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>';
+function googleBlock(api,criar){
+  var texto=criar?"Cadastrar com Google":"Entrar com Google";
+  var h=(api&&window.__googleId)?'<div class="gslot"><div id="g-btn" style="min-height:44px;width:100%;display:flex;justify-content:center;align-items:center"></div></div>':'<button type="button" class="btn gbtn" data-act="google-off">'+GLOGO+texto+'</button>';
+  return h+'<p class="gnote">R\u00e1pido e seguro: n\u00e3o guardamos a senha da sua conta Google.</p><div class="sep">ou use seu e-mail</div>';
+}
+function vAuth(modo){
+  var criar=modo==="criar",api=B.senha;
+  var h='<main class="main gut"><div class="auth"><div class="side"><span class="kicker" style="color:#BFE9B8">Carreira em Foco</span><h2 style="font-size:1.8rem;color:#fff">'+(criar?"Crie sua conta e monte seu plano.":"Que bom ver voc\u00ea de novo.")+'</h2><p>Seus objetivos, compet\u00eancias e tarefas ficam guardados na sua conta, prontos para continuar de onde parou.</p></div>'+
+  '<div class="form-side"><a class="back" href="#inicio">\u2190 Voltar \u00e0 tela inicial</a>';
+  if(api)h+='<div class="tabs"><a href="#entrar"'+(!criar?' aria-current="page"':"")+'>Entrar</a><a href="#criar"'+(criar?' aria-current="page"':"")+'>Criar conta</a></div>';
+  if(api)h+=googleBlock(api,criar);
+  else h+='<button type="button" class="btn gbtn" data-act="google-off">'+GLOGO+'Continuar com Google</button><div class="sep">ou preencha seus dados</div>';
+  h+='<form class="stack" data-form="auth" data-modo="'+(api&&!criar?"entrar":"criar")+'" novalidate><div class="err" id="auth-err" role="alert"'+(window.__authErr?'':' hidden')+'>'+esc(window.__authErr||"")+'</div>';
+  if(!api||criar)h+='<label for="a-nome">Nome completo<input id="a-nome" name="nome" autocomplete="name" maxlength="100" required placeholder="Ex.: Maria da Silva Souza"></label>';
+  if(api)h+='<label for="a-email">E-mail<input id="a-email" name="email" type="email" autocomplete="email" maxlength="160" required placeholder="voce@email.com"></label>';
+  if(!api)h+='<label for="a-curso">Curso<input id="a-curso" name="curso" required placeholder="Ex.: An\u00e1lise e Desenvolvimento de Sistemas"></label><label for="a-sem">Semestre<select id="a-sem" name="semestre">'+SEMESTRES.map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label>';
+  if(api)h+='<label for="a-senha">Senha'+(criar?" (m\u00ednimo de 8 caracteres)":"")+'<input id="a-senha" name="senha" type="password" autocomplete="'+(criar?"new-password":"current-password")+'" maxlength="200" required></label>';
+  if(api&&criar)h+='<label for="a-senha2">Confirmar senha<input id="a-senha2" name="senha2" type="password" autocomplete="new-password" maxlength="200" required></label>';
+  h+='<button class="btn orange lg" type="submit">'+(api&&!criar?"Entrar":api?"Criar conta":"Come\u00e7ar")+'</button>'+(api&&!criar?'<a href="#esqueci" class="small" style="text-align:center">Esqueci minha senha</a>':'')+'</form></div></div></main>';window.__authErr=null;
+  return h;
+}
+
+function vCompletar(){
+  return '<main class="main gut"><div class="auth" style="max-width:560px;grid-template-columns:minmax(0,1fr)"><div class="form-side"><span class="kicker">Quase pronto</span><h2>Conte um pouco sobre voc\u00ea</h2><p class="muted">Precisamos do seu curso e semestre para montar o seu plano.</p><form class="stack" data-form="completar"><label for="c-curso">Curso<input id="c-curso" name="curso" required placeholder="Ex.: An\u00e1lise e Desenvolvimento de Sistemas"></label><label for="c-sem">Semestre<select id="c-sem" name="semestre">'+SEMESTRES.map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label><button class="btn orange lg" type="submit">Continuar</button></form></div></div></main>';
+}
+
+/* ---------- \u00e1rea do aluno ---------- */
+/* ---------- novas telas ---------- */
+function subnav(v){
+  var g=GRUPO[v]||v,s=SUBS[g];if(!s)return"";
+  return '<div class="wrap"><nav class="subnav" aria-label="Se\u00e7\u00f5es">'+s.map(function(x){return '<a href="#'+x[0]+'"'+(x[0]===v?' aria-current="page"':"")+'>'+x[1]+'</a>'}).join("")+'</nav></div>';
+}
+function authShell(titulo,texto,corpo){
+  return '<main class="main gut"><div class="auth" style="max-width:560px;grid-template-columns:minmax(0,1fr)"><div class="form-side"><a class="back" href="#entrar">\u2190 Voltar para entrar</a><h2>'+titulo+'</h2><p class="muted">'+texto+'</p>'+corpo+'</div></div></main>';
+}
+function vEsqueci(){
+  if(!B.senha)return authShell("Esqueci minha senha","Neste ambiente de demonstra\u00e7\u00e3o n\u00e3o h\u00e1 senha para recuperar.",'<a class="btn sec" href="#inicio">Ir para o in\u00edcio</a>');
+  return authShell("Esqueci minha senha","Informe o e-mail da sua conta. Se ele estiver cadastrado, enviaremos um link para criar uma nova senha, v\u00e1lido por 1 hora."+(window.__emailAtivo?"":" O envio de e-mails ainda n\u00e3o foi ativado neste site: pe\u00e7a o link \u00e0 coordena\u00e7\u00e3o."),
+   '<form class="stack" data-form="esqueci" novalidate><div class="err" id="f-err" role="alert" hidden></div><div class="chip" id="f-ok" role="status" hidden style="border-radius:10px;padding:10px 12px;white-space:normal"></div><label for="e-email">E-mail<input id="e-email" name="email" type="email" autocomplete="email" required></label><button class="btn orange lg" type="submit">Enviar link</button></form>');
+}
+function vRedefinir(){
+  if(!B.senha)return vEsqueci();
+  return authShell("Criar nova senha","Escolha uma senha com pelo menos 8 caracteres.",
+   '<form class="stack" data-form="redefinir" novalidate><div class="err" id="f-err" role="alert" hidden></div><label for="r-s">Nova senha<input id="r-s" name="senha" type="password" autocomplete="new-password" required></label><label for="r-s2">Repita a senha<input id="r-s2" name="senha2" type="password" autocomplete="new-password" required></label><button class="btn orange lg" type="submit">Salvar nova senha</button></form>');
+}
+
+function painelExtra(){
+  var h="";
+  if(B.kind==="api"&&!S.profile.lembretes&&S.tasks.some(function(t){return t.data&&t.status!=="done"}))
+    h+='<section class="card" style="flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap"><div><h3>Receber lembretes de prazo por e-mail?</h3><p class="muted small">Avisamos quando uma tarefa estiver para vencer ou atrasada. Voc\u00ea desativa quando quiser.</p></div><button class="btn sec" data-act="lembretes">Ativar lembretes</button></section>';
+  return h;
+}
+function vConq(){
+  var have=S.extra.conq||[],n=streak();
+  var h='<section class="card"><div class="row between"><h2>Conquistas</h2><span class="chip">'+have.length+' de '+CONQ.length+'</span></div><p class="muted small">'+(n>0?"Voc\u00ea acessou "+pl(n,"dia seguido","dias seguidos")+".":"Acesse o sistema em dias seguidos para ganhar conquistas de const\u00e2ncia.")+'</p><div class="badges">';
+  CONQ.forEach(function(c){var ok=have.indexOf(c.id)>-1;h+='<div class="badge'+(ok?" on":"")+'"><span class="bi" aria-hidden="true">'+(ok?"\u2605":"\u2606")+'</span><b>'+c.n+'</b><span class="small">'+c.d+'</span><span class="sr">'+(ok?"Conquistada":"Bloqueada")+'</span></div>'});
+  return h+'</div></section>';
+}
+function lembretesCard(){
+  if(B.kind!=="api")return"";
+  var on=!!S.profile.lembretes;
+  return '<section class="card"><h2>Lembretes de prazo</h2><p class="muted small">Receba um e-mail por dia quando houver tarefas vencendo nos pr\u00f3ximos dias ou atrasadas.'+(window.__emailAtivo?"":" O envio de e-mails ainda n\u00e3o foi ativado neste site, ent\u00e3o os avisos s\u00f3 come\u00e7am a chegar depois disso.")+'</p><div class="row"><button class="btn '+(on?"":"sec")+'" role="switch" aria-checked="'+on+'" data-act="lembretes">'+(on?"Lembretes ativados":"Ativar lembretes")+'</button>'+(on?'<span class="small muted">Toque para desativar.</span>':'')+'</div></section>';
+}
+
+/* linha do tempo */
+var MESES=["janeiro","fevereiro","mar\u00e7o","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+function semDe(g){return (S.extra.sem||{})[g.id]||""}
+function vLinha(){
+  var modo=window.__tl||"mes",ev=[];
+  S.goals.forEach(function(g){ev.push({k:"g",d:g.data||"",t:g.titulo,s:semDe(g),g:g,prazo:PRAZO[g.prazo],q:pct(g)})});
+  S.tasks.forEach(function(t){var g=find(S.goals,t.goalId);ev.push({k:"t",d:t.data||"",t:t.titulo,s:g?semDe(g):"",st:t.status,late:overdue(t),gt:g?g.titulo:""})});
+  var h='<div class="wrap"><div class="head"><h1>Linha do tempo</h1><p>Veja seus objetivos e tarefas em ordem de data ou organizados por semestre.</p></div>';
+  h+='<div class="pills" role="group" aria-label="Modo de exibi\u00e7\u00e3o"><button class="pill" data-act="tl-modo" data-v="mes" aria-pressed="'+(modo==="mes")+'">Por m\u00eas</button><button class="pill" data-act="tl-modo" data-v="sem" aria-pressed="'+(modo==="sem")+'">Por semestre</button></div>';
+  if(!ev.length)return h+'<div class="empty"><b>Nada para mostrar ainda.</b><span>Crie objetivos e tarefas com datas no plano de a\u00e7\u00e3o.</span><a class="btn orange" href="#planodeacao">Ir para o plano de a\u00e7\u00e3o</a></div></div>';
+  var grupos={},ordem=[];
+  ev.forEach(function(e){
+    var k,lab;
+    if(modo==="sem"){k=e.s||"~";lab=e.s||"Sem semestre definido"}
+    else if(e.d){k=e.d.slice(0,7);lab=MESES[+k.slice(5,7)-1]+" de "+k.slice(0,4)}
+    else{k="~";lab="Sem data"}
+    if(!grupos[k]){grupos[k]={lab:lab,l:[]};ordem.push(k)}
+    grupos[k].l.push(e);
+  });
+  if(modo==="sem")ordem.sort(function(a,b){var ia=SEMESTRES.indexOf(a),ib=SEMESTRES.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)});
+  else ordem.sort();
+  if(modo==="sem")h+='<p class="muted small">Dica: escolha o semestre de cada objetivo na lista abaixo. As tarefas acompanham o objetivo.</p>';
+  ordem.forEach(function(k){
+    var gr=grupos[k];gr.l.sort(function(a,b){return (a.d||"9999").localeCompare(b.d||"9999")||(a.k==="g"?-1:1)});
+    h+='<section class="card"><h2 style="text-transform:capitalize">'+esc(gr.lab)+'</h2><ol class="tl">';
+    gr.l.forEach(function(e){
+      if(e.k==="g"){
+        h+='<li class="tl-i goal"><span class="tl-d">'+(e.d?fmt(e.d).slice(0,5):"\u2013")+'</span><div class="stack" style="gap:6px;flex:1;min-width:0"><div class="row between"><b>'+esc(e.t)+'</b><span class="chip">'+e.prazo+'</span></div><div class="bar" aria-hidden="true"><i style="width:'+e.q+'%"></i></div><span class="small muted">'+e.q+'% conclu\u00eddo</span>'+(modo==="sem"?'<label class="small" for="sg-'+e.g.id+'">Semestre alvo<select id="sg-'+e.g.id+'" data-semgoal="'+e.g.id+'"><option value="">Sem semestre</option>'+SEMESTRES.map(function(x){return '<option'+(x===e.s?" selected":"")+'>'+x+'</option>'}).join("")+'</select></label>':'')+'</div></li>';
+      }else{
+        h+='<li class="tl-i'+(e.st==="done"?" done":"")+'"><span class="tl-d">'+(e.d?fmt(e.d).slice(0,5):"\u2013")+'</span><div style="flex:1;min-width:0"><span class="t">'+esc(e.t)+'</span><br><span class="small muted">'+esc(e.gt)+' \u00b7 '+statusLabel(e.st)+'</span></div>'+(e.late?'<span class="chip bad">Atrasada</span>':'')+'</li>';
+      }
+    });
+    h+='</ol></section>';
+  });
+  return h+'</div>';
+}
+
+/* teste de perfil */
+function resultadoTeste(){
+  var r=window.__t||{},p={};AREAS.forEach(function(a){p[a.id]=0});
+  TQ.forEach(function(q,i){p[q[0]]+=r[i]||0});
+  var arr=AREAS.map(function(a){return {id:a.id,v:p[a.id]}}).sort(function(a,b){return b.v-a.v});
+  return {data:today(),pont:p,top:arr[0].id,segundo:arr[1].id};
+}
+function vTeste(){
+  var t=S.extra.teste,r=window.__t=window.__t||{};
+  var h='<div class="wrap"><div class="head"><h1>Teste de perfil profissional</h1><p>Dez afirma\u00e7\u00f5es r\u00e1pidas para descobrir com quais \u00e1reas voc\u00ea mais se identifica. N\u00e3o \u00e9 um diagn\u00f3stico: use como ponto de partida para conversar e explorar.</p></div>';
+  if(t&&!window.__refazer){
+    h+='<section class="card"><div class="row between"><h2>Seu resultado</h2><span class="chip">Feito em '+fmt(t.data)+'</span></div>';
+    [t.top,t.segundo].forEach(function(id,i){
+      var a=find(AREAS,id);
+      h+='<div class="stack" style="gap:8px"><h3>'+(i===0?"Maior afinidade: ":"Segunda afinidade: ")+esc(a.nome)+'</h3><p>'+esc(a.desc)+'</p><p class="small muted">Exemplos de caminhos: '+esc(a.ex)+'.</p>'+(i===0?'<div class="pills">'+a.comp.map(function(c){return '<span class="chip">'+esc(c)+'</span>'}).join("")+'</div><button class="btn sec sm" data-act="teste-add" style="align-self:flex-start">Adicionar essas compet\u00eancias ao meu perfil</button>':'')+'</div>';
+    });
+    h+='<h3>Pontua\u00e7\u00e3o por \u00e1rea</h3>'+AREAS.map(function(a){var v=t.pont[a.id]||0;return '<div class="hbar"><span>'+esc(a.nome)+'</span><div class="bar"><i style="width:'+v*10+'%"></i></div><b>'+v+'</b></div>'}).join("")+'<p class="muted small">Cada \u00e1rea soma at\u00e9 10 pontos.</p><div class="row"><button class="btn sec" data-act="teste-refazer">Refazer o teste</button><a class="btn" href="#curriculo">Montar curr\u00edculo</a></div></section></div>';
+    return h;
+  }
+  var feitas=Object.keys(r).length;
+  h+='<section class="card"><p class="muted small">1 = nada a ver comigo \u00b7 5 = tudo a ver comigo. Respondidas: '+feitas+' de '+TQ.length+'.</p>';
+  TQ.forEach(function(q,i){
+    h+='<div class="stack" style="gap:8px"><p style="font-weight:700">'+(i+1)+'. '+q[1]+'</p><div class="rate" role="group" aria-label="Pergunta '+(i+1)+'">'+[1,2,3,4,5].map(function(n){return '<button data-act="teste-resp" data-q="'+i+'" data-n="'+n+'" aria-pressed="'+(r[i]===n)+'">'+n+'</button>'}).join("")+'</div></div>';
+  });
+  h+='<button class="btn orange lg" data-act="teste-fim"'+(feitas<TQ.length?' disabled':'')+'>Ver meu resultado</button></section></div>';
+  return h;
+}
+
+/* curr\u00edculo */
+function lis(txt){var l=String(txt||"").split("\n").map(function(x){return x.trim()}).filter(Boolean);return l.length?'<ul>'+l.map(function(x){return '<li>'+esc(x)+'</li>'}).join("")+'</ul>':""}
+function cvHtml(){
+  var c=S.extra.cv||{},p=S.profile,forte=S.skills.filter(function(s){return s.kind==="forte"}).map(function(s){return s.nome});
+  var cont=[c.email,c.telefone,c.cidade,c.linkedin].filter(Boolean).map(esc).join(" \u00b7 ");
+  var h='<h1>'+esc(p.nome||"Seu nome")+'</h1>'+(cont?'<p class="cv-c">'+cont+'</p>':'');
+  if(c.resumo)h+='<h2>Resumo</h2><p>'+esc(c.resumo)+'</p>';
+  h+='<h2>Forma\u00e7\u00e3o</h2><p><b>UNIFAMETRO</b>, '+esc(p.curso||"curso")+' (cursando, '+esc(p.semestre||"")+')'+(c.conclusao?', conclus\u00e3o prevista: '+esc(c.conclusao):'')+'</p>';
+  if(c.exp)h+='<h2>Experi\u00eancias e projetos</h2>'+lis(c.exp);
+  if(c.cursos)h+='<h2>Cursos e certificados</h2>'+lis(c.cursos);
+  var comp=forte.concat(String(c.extras||"").split(",").map(function(x){return x.trim()}).filter(Boolean));
+  if(comp.length)h+='<h2>Compet\u00eancias</h2><p>'+comp.map(esc).join(" \u00b7 ")+'</p>';
+  if(c.idiomas)h+='<h2>Idiomas</h2>'+lis(c.idiomas);
+  return h;
+}
+function vCurriculo(){
+  var c=S.extra.cv||{};
+  var f=function(k,rot,ph){return '<label for="cv-'+k+'">'+rot+'<input id="cv-'+k+'" data-cv="'+k+'" value="'+esc(c[k]||"")+'" placeholder="'+(ph||"")+'"></label>'};
+  var ta=function(k,rot,ph){return '<label for="cv-'+k+'">'+rot+'<textarea id="cv-'+k+'" data-cv="'+k+'" placeholder="'+(ph||"")+'">'+esc(c[k]||"")+'</textarea></label>'};
+  return '<div class="wrap"><div class="head"><h1>Gerador de curr\u00edculo</h1><p>Preencha os campos e o curr\u00edculo se monta ao lado. Nome, curso, semestre e pontos fortes v\u00eam do seu perfil.</p></div><div class="grid2 cvgrid"><section class="card"><h2>Seus dados</h2><div class="stack">'+
+   f("email","E-mail para contato")+f("telefone","Telefone","(85) 90000-0000")+f("cidade","Cidade","Fortaleza, CE")+f("linkedin","LinkedIn ou portf\u00f3lio")+f("conclusao","Conclus\u00e3o prevista do curso","Ex.: dezembro de 2028")+
+   ta("resumo","Resumo profissional","Duas ou tr\u00eas frases sobre voc\u00ea e o que busca")+ta("exp","Experi\u00eancias e projetos (um por linha)","Projeto de extens\u00e3o Carreira em Foco, UNIFAMETRO, 2026")+ta("cursos","Cursos e certificados (um por linha)")+f("extras","Outras compet\u00eancias (separadas por v\u00edrgula)")+ta("idiomas","Idiomas (um por linha)","Ingl\u00eas, b\u00e1sico")+'</div></section>'+
+   '<section class="card"><div class="row between"><h2>Pr\u00e9-visualiza\u00e7\u00e3o</h2><div class="row"><button class="btn" data-act="cv-pdf">Salvar em PDF</button><button class="btn sec" data-act="cv-doc">Baixar Word</button></div></div><div id="cv" class="cvdoc">'+cvHtml()+'</div><p class="muted small">Em \u201cSalvar em PDF\u201d, escolha \u201cSalvar como PDF\u201d como destino de impress\u00e3o.</p></section></div></div>';
+}
+function cvDoc(){
+  var css='body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#111}h1{font-size:20pt;margin:0}h2{font-size:12pt;border-bottom:1px solid #1F6B3F;color:#1F6B3F;margin:14pt 0 4pt}ul{margin:0;padding-left:18pt}p{margin:2pt 0}.cv-c{color:#444}';
+  var blob=new Blob(['\ufeff<html><head><meta charset="utf-8"><title>Curr\u00edculo</title><style>'+css+'</style></head><body>'+cvHtml()+'<\/body></html>'],{type:"application/msword"});
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="curriculo-"+slug(S.profile.nome)+".doc";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);
+}
+function cvGerou(){S.extra.cvGerado=true;track("curriculo_gerado");save()}
+
+/* mentoria */
+var ST_M={pendente:"Aguardando",andamento:"Em andamento",concluida:"Respondida"};
+function vMentoria(){
+  var h='<div class="wrap"><div class="head"><h1>Mentoria</h1><p>Pe\u00e7a orienta\u00e7\u00e3o \u00e0 coordena\u00e7\u00e3o sobre escolha de \u00e1rea, curr\u00edculo, est\u00e1gio ou p\u00f3s-gradua\u00e7\u00e3o. Voc\u00ea recebe a resposta aqui'+(window.__emailAtivo?" e por e-mail":"")+'.</p></div>';
+  if(!B.temMentoria)return h+'<div class="empty">A mentoria fica dispon\u00edvel no site publicado da UNIFAMETRO.</div></div>';
+  h+='<form class="card" data-form="mentoria"><h2>Novo pedido</h2><div class="err" id="f-err" role="alert" hidden></div><label for="m-t">Assunto<select id="m-t" name="tema">'+TEMAS.map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label><label for="m-m">Como podemos ajudar?<textarea id="m-m" name="mensagem" maxlength="1000" required placeholder="Conte sua d\u00favida ou situa\u00e7\u00e3o"></textarea></label><button class="btn orange" type="submit" style="align-self:flex-start">Enviar pedido</button></form>';
+  var l=CH.ment;
+  if(l===undefined){carregar("ment",function(){return B.mentorias()},"mentoria",[]);return h+'<div class="loading" style="min-height:80px">Carregando seus pedidos\u2026</div></div>'}
+  if(l===null)return h+'<div class="loading" style="min-height:80px">Carregando seus pedidos\u2026</div></div>';
+  h+='<section class="card"><h2>Meus pedidos</h2>';
+  if(!l.length)h+='<div class="empty">Voc\u00ea ainda n\u00e3o enviou pedidos.</div>';
+  else h+='<ul class="list">'+l.map(function(m){return '<li class="item" style="flex-direction:column;align-items:stretch;gap:6px"><div class="row between"><b>'+esc(m.tema)+'</b><span class="chip'+(m.status==="concluida"?"":" warn")+'">'+ST_M[m.status]+'</span></div><p>'+esc(m.mensagem)+'</p><span class="small muted">Enviado em '+fmtDT(m.criado_em)+'</span>'+(m.resposta?'<blockquote><b>Resposta da coordena\u00e7\u00e3o:</b><br>'+esc(m.resposta)+'</blockquote>':'')+'</li>'}).join("")+'</ul>';
+  return h+'</section></div>';
+}
+
+/* vagas (aluno) */
+function vagasAluno(){
+  if(!B.temVagas)return"";
+  var l=CH.vagas;
+  if(l===undefined){carregar("vagas",function(){return B.vagas()},"oportunidades",[]);return""}
+  if(l===null||!l.length)return"";
+  window.__vagas=l;
+  var h='<section class="stack" style="gap:14px"><div><span class="kicker">Divulgadas pela coordena\u00e7\u00e3o</span><h2>Vagas e eventos da UNIFAMETRO</h2></div><div class="opps">';
+  l.forEach(function(v,i){
+    h+='<article class="card" style="border-color:var(--accent)"><div class="row"><span class="chip">'+esc(v.tipo)+'</span>'+(v.prazo?'<span class="chip warn">At\u00e9 '+fmt(v.prazo)+'</span>':'')+'</div><h3>'+esc(v.titulo)+'</h3>'+(v.empresa?'<p class="small"><b>'+esc(v.empresa)+'</b></p>':'')+(v.descricao?'<p class="muted small">'+esc(v.descricao)+'</p>':'')+'<div class="row" style="margin-top:auto">'+(v.link?'<a class="btn sm" href="'+esc(v.link)+'" target="_blank" rel="noopener noreferrer" data-track="vaga_aberta" data-detalhe="'+esc(v.titulo.slice(0,60))+'">Ver detalhes</a>':'')+'<button class="btn sec sm" data-act="vaga-task" data-i="'+i+'">Criar tarefa</button></div></article>';
+  });
+  return h+'</div></section>';
+}
+
+/* coordena\u00e7\u00e3o: vagas */
+function vCoordVagas(){
+  var h='<div class="wrap"><div class="head"><h1>Vagas e eventos</h1><p>Divulgue est\u00e1gios, vagas, cursos e eventos para os estudantes. Eles aparecem na tela Oportunidades at\u00e9 a data limite.</p></div>';
+  h+='<form class="card" data-form="vaga"><h2>Nova divulga\u00e7\u00e3o</h2><div class="err" id="f-err" role="alert" hidden></div><div class="form"><label for="v-t">Tipo<select id="v-t" name="tipo"><option>Est\u00e1gio</option><option>Vaga</option><option>Curso</option><option>Evento</option></select></label><label for="v-ti">T\u00edtulo<input id="v-ti" name="titulo" required maxlength="120"></label><label for="v-e">Empresa ou organizador<input id="v-e" name="empresa" maxlength="120"></label><label for="v-p">Prazo (opcional)<input id="v-p" name="prazo" type="date"></label></div><label for="v-d">Descri\u00e7\u00e3o<textarea id="v-d" name="descricao" maxlength="600"></textarea></label><label for="v-l">Link (opcional)<input id="v-l" name="link" type="url" placeholder="https://"></label><button class="btn orange" type="submit" style="align-self:flex-start">Publicar</button></form>';
+  var l=CH.avagas;
+  if(l===undefined){carregar("avagas",function(){return B.adminVagas()},"coordvagas",[]);return h+'<div class="loading" style="min-height:80px">Carregando\u2026</div></div>'}
+  if(l===null)return h+'<div class="loading" style="min-height:80px">Carregando\u2026</div></div>';
+  h+='<section class="card"><h2>Divulga\u00e7\u00f5es cadastradas</h2>';
+  if(!l.length)h+='<div class="empty">Nada publicado ainda.</div>';
+  else h+='<ul class="list">'+l.map(function(v){var venc=v.prazo&&v.prazo<today();return '<li class="item"><span class="chip">'+esc(v.tipo)+'</span><span class="t"><b>'+esc(v.titulo)+'</b>'+(v.empresa?' \u00b7 '+esc(v.empresa):'')+'<br><span class="small muted">'+(v.prazo?'Prazo: '+fmt(v.prazo):'Sem prazo')+'</span></span>'+(venc?'<span class="chip bad">Encerrada</span>':'')+'<button class="btn ghost" data-act="vaga-del" data-id="'+v.id+'">Excluir</button></li>'}).join("")+'</ul>';
+  return h+'</section></div>';
+}
+
+/* coordena\u00e7\u00e3o: mentorias */
+function vCoordMent(){
+  var h='<div class="wrap"><div class="head"><h1>Pedidos de mentoria</h1><p>Aqui aparecem o nome, o curso e o e-mail de quem pediu, porque a resposta \u00e9 individual.</p></div>';
+  var l=CH.ament;
+  if(l===undefined){carregar("ament",function(){return B.adminMentorias()},"coordmentorias",[]);return h+'<div class="loading">Carregando\u2026</div></div>'}
+  if(l===null)return h+'<div class="loading">Carregando\u2026</div></div>';
+  if(!l.length)return h+'<div class="empty">Nenhum pedido ainda.</div></div>';
+  l.forEach(function(m){
+    h+='<form class="card" data-form="ment-resp" data-id="'+esc(m.id)+'"><div class="row between"><div><b>'+esc(m.nome||"Estudante")+'</b><br><span class="small muted">'+esc(m.curso||"")+' \u00b7 '+esc(m.semestre||"")+(m.email?' \u00b7 '+esc(m.email):'')+'</span></div><span class="chip'+(m.status==="concluida"?"":" warn")+'">'+ST_M[m.status]+'</span></div><p><b>'+esc(m.tema)+'</b> \u00b7 <span class="small muted">'+fmtDT(m.criado_em)+'</span></p><blockquote>'+esc(m.mensagem)+'</blockquote><div class="err" hidden role="alert"></div><label>Resposta<textarea name="resposta" maxlength="2000">'+esc(m.resposta||"")+'</textarea></label><div class="row"><label style="flex:none">Situa\u00e7\u00e3o<select name="status">'+["pendente","andamento","concluida"].map(function(s){return '<option value="'+s+'"'+(m.status===s?" selected":"")+'>'+ST_M[s]+'</option>'}).join("")+'</select></label><button class="btn" type="submit" style="align-self:flex-end">Salvar resposta</button></div></form>';
+  });
+  return h+'</div>';
+}
+
+/* coordena\u00e7\u00e3o: relat\u00f3rio para o portf\u00f3lio */
+function textoRelatorio(){
+  var rows=window.__rows||[],a=window.__ativ||{},t=a.totais||{},n=rows.length;
+  var soma=function(k){return rows.reduce(function(x,r){return x+(r[k]||0)},0)};
+  var tar=soma("tarefas"),con=soma("concluidas"),atr=soma("atrasadas"),comObj=rows.filter(function(r){return r.objetivos>0}).length;
+  var logins=(t.login||0)+(t.login_google||0)+(t.login_microsoft||0);
+  var cursos={};rows.forEach(function(r){var c=r.curso||"N\u00e3o informado";cursos[c]=(cursos[c]||0)+1});
+  var cl=Object.keys(cursos).sort(function(x,y){return cursos[y]-cursos[x]}).slice(0,6).map(function(c){return c+" ("+cursos[c]+")"}).join("; ");
+  var L=[];
+  L.push("RESULTADOS DA A\u00c7\u00c3O: SISTEMA CARREIRA EM FOCO");
+  L.push("Dados extra\u00eddos do pr\u00f3prio sistema em "+fmt(today())+(a.periodo&&a.periodo.inicio?", cobrindo o uso registrado de "+fmt(a.periodo.inicio)+" a "+fmt(a.periodo.fim)+".":"."));
+  L.push("");
+  L.push("Participa\u00e7\u00e3o: "+pl(n,"estudante cadastrado","estudantes cadastrados")+(cl?". Cursos: "+cl:"")+".");
+  if(logins)L.push("Foram registrados "+logins+" acessos (logins) ao sistema.");
+  L.push("Uso do plano de a\u00e7\u00e3o: "+comObj+" de "+n+" estudantes ("+pc(comObj,n)+"%) criaram ao menos um objetivo. Foram criadas "+tar+" tarefas, das quais "+con+" ("+pc(con,tar)+"%) foram conclu\u00eddas e "+atr+" est\u00e3o atrasadas.");
+  var ex=[];
+  if(t.teste_concluido)ex.push(pl(t.teste_concluido,"teste de perfil conclu\u00eddo","testes de perfil conclu\u00eddos"));
+  if(t.curriculo_gerado)ex.push(pl(t.curriculo_gerado,"curr\u00edculo gerado","curr\u00edculos gerados"));
+  if(t.vaga_aberta)ex.push(pl(t.vaga_aberta,"abertura de vaga divulgada pela coordena\u00e7\u00e3o","aberturas de vagas divulgadas pela coordena\u00e7\u00e3o"));
+  if(t.oportunidade_aberta)ex.push(pl(t.oportunidade_aberta,"site de oportunidade aberto","sites de oportunidades abertos"));
+  if(t.mentoria_pedida)ex.push(pl(t.mentoria_pedida,"pedido de mentoria","pedidos de mentoria"));
+  if(ex.length)L.push("Recursos utilizados: "+ex.join("; ")+".");
+  if(a.mentorias&&a.mentorias.length)L.push("Situa\u00e7\u00e3o das mentorias: "+a.mentorias.map(function(m){return m.n+" "+(ST_M[m.status]||m.status).toLowerCase()}).join(", ")+".");
+  if(typeof a.vagas==="number")L.push("Vagas e eventos ativos divulgados: "+a.vagas+".");
+  var av=rows.filter(function(r){return r.util>0}).length;
+  if(av)L.push("Avalia\u00e7\u00e3o do sistema (m\u00e9dia de 1 a 5, "+pl(av,"resposta","respostas")+"): ajuda a organizar a carreira "+f1(avg(rows,"util"))+"; f\u00e1cil de usar "+f1(avg(rows,"facil"))+"; usaria durante a gradua\u00e7\u00e3o "+f1(avg(rows,"voltar"))+".");
+  else L.push("Avalia\u00e7\u00e3o do sistema: ainda sem respostas.");
+  var cm=rows.filter(function(r){return r.comentario}).slice(0,5);
+  if(cm.length){L.push("");L.push("Sugest\u00f5es dos estudantes:");cm.forEach(function(r){L.push("- "+r.comentario+" ("+(r.curso||"curso n\u00e3o informado")+")")})}
+  L.push("");L.push("Observa\u00e7\u00e3o: complemente este texto com a an\u00e1lise da equipe e com os registros presenciais da a\u00e7\u00e3o.");
+  return L.join("\n");
+}
+function vRelatorio(){
+  var h='<div class="wrap"><div class="head"><h1>Relat\u00f3rio do portf\u00f3lio</h1><p>Texto pronto com os n\u00fameros reais do sistema para a se\u00e7\u00e3o de resultados do Portf\u00f3lio Institucional. Copie, revise e cole no documento.</p></div>';
+  if(!window.__rows||(B.kind==="api"&&!window.__ativ))return h+'<div class="loading">Gerando relat\u00f3rio\u2026</div></div>';
+  if(!window.__rows.length)return h+'<div class="empty">Ainda n\u00e3o h\u00e1 estudantes cadastrados para gerar o relat\u00f3rio.</div></div>';
+  return h+'<section class="card"><textarea readonly style="min-height:380px;font-size:.92rem;line-height:1.5" aria-label="Texto do relat\u00f3rio">'+esc(textoRelatorio())+'</textarea><div class="row"><button class="btn" data-act="copiar-rel">Copiar texto</button><button class="btn sec" data-act="baixar-rel">Baixar .txt</button></div></section></div>';
+}
+function resetCard(){
+  if(B.kind!=="api")return"";
+  return '<form class="card" data-form="reset"><h2>Ajudar estudante a recuperar a senha</h2><p class="muted small">Gera um link de redefini\u00e7\u00e3o v\u00e1lido por 1 hora para voc\u00ea enviar ao estudante, caso o e-mail autom\u00e1tico n\u00e3o esteja ativo.</p><div class="err" id="f-err" role="alert" hidden></div><div class="row"><label for="rs-e" style="flex:1;min-width:220px">E-mail do estudante<input id="rs-e" name="email" type="email" required></label><button class="btn sec" type="submit" style="align-self:flex-end">Gerar link</button></div>'+(window.__resetLink?'<blockquote style="word-break:break-all">'+esc(window.__resetLink)+'</blockquote><button class="btn sm" type="button" data-act="copiar-link" style="align-self:flex-start">Copiar link</button>':'')+'</form>';
+}
+
+function vPainel(){
+  var all=S.tasks.length,done=S.tasks.filter(function(t){return t.status==="done"}).length;
+  var p=all?Math.round(done/all*100):0,late=S.tasks.filter(overdue).length;
+  var C=2*Math.PI*52,off=C*(1-p/100);
+  var next=S.tasks.filter(function(t){return t.status!=="done"}).sort(function(a,b){return (a.data||"9999").localeCompare(b.data||"9999")}).slice(0,5);
+  var completedTasks=S.tasks.filter(function(t){return t.status==="done"}).sort(function(a,b){return (b.data||"").localeCompare(a.data||"")});
+  var lastCompleted=completedTasks.filter(function(t){return t.id===lastCompletedTaskId})[0]||completedTasks[0];
+  if(lastCompleted)next.push(lastCompleted);
+  var dev=S.skills.filter(function(s){return s.kind==="desenvolver"});
+  var nome=(S.profile.nome||"").split(" ")[0];
+  var h='<div class="wrap"><section class="greet"><div class="stack" style="gap:8px"><h1>'+(nome?"Ol\u00e1, "+esc(nome)+"!":"Seu painel")+'</h1><p>'+(all?"Veja como est\u00e1 o seu plano e o que fazer em seguida.":"Seu plano est\u00e1 vazio. Crie um objetivo ou comece por um modelo sugerido.")+'</p></div>'+
+   '<div class="row" style="gap:28px"><div class="ring"><svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="12"/><circle cx="60" cy="60" r="52" fill="none" stroke="#3BAA35" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'"/></svg><b>'+p+'%</b></div>'+
+   '<div class="stats"><div class="stat"><b>'+S.goals.length+'</b><span>objetivos</span></div><div class="stat"><b>'+done+'/'+all+'</b><span>tarefas feitas</span></div><div class="stat"><b style="color:'+(late?"#FFB4AB":"#fff")+'">'+late+'</b><span>atrasadas</span></div></div></div></section>';
+  h+=painelExtra();
+  h+='<div class="grid2"><section class="card"><div class="row between"><h2>Pr\u00f3ximas tarefas</h2><a href="#planodeacao" class="small">Ver plano</a></div>';
+  if(!next.length)h+='<div class="empty">Nenhuma tarefa pendente.<a class="btn sec sm" href="#planodeacao">Criar tarefa</a></div>';
+  else h+='<ul class="list">'+next.map(function(t){var completed=t.status==="done";return '<li class="item'+(completed?" done":"")+'"><button class="check" role="checkbox" aria-checked="'+completed+'" aria-label="'+(completed?"Reabrir: ":"Concluir: ")+esc(t.titulo)+'" data-act="toggle" data-id="'+t.id+'"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10 4 4 8-8"/></svg></button><span class="t">'+esc(t.titulo)+'<br><span class="small muted">'+fmt(t.data)+'</span></span>'+(completed?'<span class="chip">Conclu\u00edda</span>':overdue(t)?'<span class="chip bad">Atrasada</span>':'<span class="chip">'+statusLabel(t.status)+'</span>')+'</li>'}).join("")+'</ul>';
+  h+='</section><section class="card"><div class="row between"><h2>Objetivos</h2><a href="#planodeacao" class="small">Editar</a></div>';
+  if(!S.goals.length)h+='<div class="empty">Voc\u00ea ainda n\u00e3o definiu objetivos.<a class="btn sec sm" href="#planodeacao">Definir objetivo</a></div>';
+  else h+='<ul class="list">'+S.goals.map(function(g){var q=pct(g);return '<li class="item" style="flex-direction:column;align-items:stretch;gap:6px"><div class="row between"><b>'+esc(g.titulo)+'</b><span class="chip">'+PRAZO[g.prazo]+'</span></div><div class="bar" role="progressbar" aria-valuenow="'+q+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+q+'%"></i></div><span class="small muted">'+q+'% conclu\u00eddo \u00b7 at\u00e9 '+fmt(g.data)+'</span></li>'}).join("")+'</ul>';
+  h+='</section></div><section class="card"><div class="row between"><h2>Compet\u00eancias para desenvolver</h2><a href="#perfil" class="small">Editar</a></div>';
+  if(!dev.length)h+='<div class="empty">Adicione compet\u00eancias no seu perfil.<a class="btn sec sm" href="#perfil">Ir para o perfil</a></div>';
+  else h+='<ul class="list">'+dev.map(function(s){return '<li class="item"><span class="t">'+esc(s.nome)+'</span><div class="bar" style="width:40%;min-width:90px"><i style="width:'+s.nivel*20+'%"></i></div><span class="small muted">n\u00edvel '+s.nivel+'/5</span></li>'}).join("")+'</ul>';
+  return h+'</section>'+vConq()+'</div>';
+}
+
+function vPlano(){
+  var f=window.__f||"todos";
+  var gs=S.goals.filter(function(g){return f==="todos"||g.prazo===f});
+  var h='<div class="wrap"><div class="head"><h1>Plano de a\u00e7\u00e3o</h1><p>Defina o que quer alcan\u00e7ar e quebre cada objetivo em passos com prazo. Toque no status para avan\u00e7ar a tarefa.</p></div>';
+  h+='<form class="card" data-form="goal"><h2>Novo objetivo</h2><div class="form"><label for="g-t">O que voc\u00ea quer alcan\u00e7ar?<input id="g-t" name="titulo" required maxlength="120" placeholder="Ex.: Fazer meu primeiro est\u00e1gio"></label>'+
+   '<label for="g-p">Prazo<select id="g-p" name="prazo"><option value="curto">Curto (at\u00e9 6 meses)</option><option value="medio">M\u00e9dio (6 meses a 2 anos)</option><option value="longo">Longo (mais de 2 anos)</option></select></label>'+
+   '<label for="g-d">Data alvo<input id="g-d" name="data" type="date"></label><label for="g-s">Semestre alvo (opcional)<select id="g-s" name="sem"><option value="">N\u00e3o definido</option>'+SEMESTRES.map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label><button class="btn" type="submit">Adicionar objetivo</button></div></form>';
+  if(S.goals.length)h+='<div class="pills" role="group" aria-label="Filtrar por prazo">'+[["todos","Todos"],["curto","Curto prazo"],["medio","M\u00e9dio prazo"],["longo","Longo prazo"]].map(function(x){return '<button class="pill" data-act="filter" data-v="'+x[0]+'" aria-pressed="'+(f===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>';
+  if(!S.goals.length)h+='<div class="empty"><b>Seu plano ainda est\u00e1 vazio.</b><span>Crie um objetivo acima ou comece por um modelo com tr\u00eas objetivos e tarefas de exemplo para editar.</span><button class="btn orange" data-act="modelo">Usar modelo sugerido</button></div>';
+  else if(!gs.length)h+='<div class="empty">Nenhum objetivo neste filtro.</div>';
+  gs.forEach(function(g){
+    var ts=goalTasks(g),q=pct(g);
+    h+='<section class="card"><div class="row between"><div><span class="chip">'+PRAZO[g.prazo]+'</span> <span class="small muted">at\u00e9 '+fmt(g.data)+'</span><h2 style="margin-top:6px">'+esc(g.titulo)+'</h2></div><button class="btn ghost" data-act="del-goal" data-id="'+g.id+'">Excluir objetivo</button></div>'+
+     '<div class="bar" role="progressbar" aria-valuenow="'+q+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+q+'%"></i></div>';
+    if(!ts.length)h+='<div class="empty">Sem tarefas ainda. Adicione o primeiro passo abaixo.</div>';
+    else h+='<ul class="list">'+ts.map(function(t){return '<li class="item'+(t.status==="done"?" done":"")+'"><span class="t">'+esc(t.titulo)+'<br><span class="small muted">'+fmt(t.data)+'</span></span>'+(overdue(t)?'<span class="chip bad">Atrasada</span>':'')+'<button class="chip'+(t.status==="doing"?" warn":"")+'" data-act="cycle" data-id="'+t.id+'" aria-label="Status: '+statusLabel(t.status)+'. Tocar para avan\u00e7ar">'+statusLabel(t.status)+'</button><button class="btn ghost" data-act="del-task" data-id="'+t.id+'" aria-label="Excluir tarefa">Excluir</button></li>'}).join("")+'</ul>';
+    h+='<form class="form" data-form="task" data-goal="'+g.id+'"><label for="t-'+g.id+'">Nova tarefa<input id="t-'+g.id+'" name="titulo" required maxlength="120" placeholder="Ex.: Pedir indica\u00e7\u00e3o a um professor"></label><label for="d-'+g.id+'">Prazo<input id="d-'+g.id+'" name="data" type="date"></label><button class="btn sec" type="submit">Adicionar tarefa</button></form></section>';
+  });
+  return h+'</div>';
+}
+
+function skillBlock(kind,titulo,desc){
+  var ss=S.skills.filter(function(s){return s.kind===kind});
+  var h='<section class="card"><div><h2>'+titulo+'</h2><p class="muted small">'+desc+'</p></div>';
+  if(!ss.length)h+='<div class="empty">Nada por aqui ainda.</div>';
+  else h+='<ul class="list">'+ss.map(function(s){return '<li class="item"><span class="t">'+esc(s.nome)+'</span>'+dots(s.id,s.nivel)+'<button class="btn ghost" data-act="del-skill" data-id="'+s.id+'" aria-label="Remover '+esc(s.nome)+'">Remover</button></li>'}).join("")+'</ul>';
+  h+='<form class="form" data-form="skill" data-kind="'+kind+'"><label for="s-'+kind+'">Adicionar<input id="s-'+kind+'" name="nome" required maxlength="60"></label><button class="btn sec" type="submit">Adicionar</button></form>';
+  var have=S.skills.filter(function(s){return s.kind===kind}).map(function(s){return s.nome.toLowerCase()});
+  h+='<div class="pills">'+SUG.filter(function(x){return have.indexOf(x.toLowerCase())<0}).slice(0,6).map(function(x){return '<button class="chip" data-act="sug" data-kind="'+kind+'" data-nome="'+esc(x)+'">+ '+esc(x)+'</button>'}).join("")+'</div></section>';
+  return h;
+}
+function vPerfil(){
+  var p=S.profile;
+  return '<div class="wrap"><div class="head"><h1>Perfil profissional</h1><p>Conhecer seus pontos fortes e lacunas mostra por onde come\u00e7ar. Toque nos c\u00edrculos para marcar o n\u00edvel de 1 a 5.</p></div>'+
+  '<section class="card"><h2>Seus dados</h2><div class="form"><label for="p-nome">Nome<input id="p-nome" data-field="nome" value="'+esc(p.nome)+'"></label><label for="p-curso">Curso<input id="p-curso" data-field="curso" value="'+esc(p.curso)+'"></label>'+
+  '<label for="p-sem">Semestre<select id="p-sem" data-field="semestre">'+SEMESTRES.map(function(x){return '<option'+(x===p.semestre?" selected":"")+'>'+x+'</option>'}).join("")+'</select></label>'+
+  '<label for="p-area">\u00c1rea em que quero atuar<input id="p-area" data-field="area" value="'+esc(p.area)+'" placeholder="Ex.: desenvolvimento web"></label></div><div class="row"><button class="btn sec" data-act="sair">Sair da conta</button></div></section>'+
+  lembretesCard()+'<div class="grid2">'+skillBlock("forte","Meus pontos fortes","Habilidades que voc\u00ea j\u00e1 tem e pode destacar no curr\u00edculo.")+skillBlock("desenvolver","Quero desenvolver","Compet\u00eancias que o mercado pede e voc\u00ea ainda precisa treinar.")+'</div></div>';
+}
+
+function vOpp(){
+  var f=window.__o||"Todos";
+  var h='<div class="wrap"><div class="head"><h1>Oportunidades</h1><p>Onde procurar est\u00e1gios, vagas, cursos e eventos. Use \u201cCriar tarefa\u201d para levar uma oportunidade ao seu plano de a\u00e7\u00e3o.</p></div>'+vagasAluno()+'<h2>Onde procurar</h2>';
+  h+='<div class="pills" role="group" aria-label="Filtrar por tipo">'+["Todos","Est\u00e1gio","Vagas","Cursos","Eventos"].map(function(x){return '<button class="pill" data-act="ofilter" data-v="'+x+'" aria-pressed="'+(f===x)+'">'+x+'</button>'}).join("")+'</div><div class="opps">';
+  OPPS.forEach(function(o,i){if(f!=="Todos"&&o.t!==f)return;
+    h+='<article class="card"><div><span class="chip">'+o.t+'</span></div><h3>'+o.n+'</h3><p class="muted small">'+o.d+'</p><div class="row" style="margin-top:auto"><a class="btn sm" href="'+o.u+'" target="_blank" rel="noopener noreferrer" data-track="oportunidade_aberta" data-detalhe="'+o.n+'">Abrir site</a><button class="btn sec sm" data-act="opp-task" data-i="'+i+'">Criar tarefa</button></div></article>'});
+  return h+'</div><section class="card"><h2>Antes de se candidatar</h2><ul class="list"><li class="item">Atualize o curr\u00edculo com curso, semestre e projetos de extens\u00e3o.</li><li class="item">Pe\u00e7a a um professor ou colega para revisar o texto.</li><li class="item">Confira se a vaga exige documento da faculdade e converse com a coordena\u00e7\u00e3o do curso.</li></ul></section></div>';
+}
+
+function vAvaliacao(){
+  var fb=S.feedback;
+  var h='<div class="wrap"><div class="head"><h1>Avalie o Carreira em Foco</h1><p>Suas respostas ajudam a coordena\u00e7\u00e3o a melhorar o sistema. Elas s\u00e3o enviadas sem o seu nome.</p></div><section class="card">';
+  QUESTIONS.forEach(function(q){h+='<div class="stack" style="gap:8px"><p style="font-weight:700">'+q[1]+'</p><div class="rate" role="group" aria-label="'+q[1]+'">'+[1,2,3,4,5].map(function(n){return '<button data-act="rate" data-q="'+q[0]+'" data-n="'+n+'" aria-pressed="'+(fb[q[0]]===n)+'">'+n+'</button>'}).join("")+'</div></div>'});
+  return h+'<p class="muted small">1 = discordo totalmente \u00b7 5 = concordo totalmente</p><label for="fb-t">O que voc\u00ea mudaria ou acrescentaria?<textarea id="fb-t" data-fbtext>'+esc(fb.texto||"")+'</textarea></label><p class="muted small">Suas respostas s\u00e3o salvas automaticamente.</p></section></div>';
+}
+
+/* ---------- coordena\u00e7\u00e3o ---------- */
+var NOMES={tela:"Telas visitadas",objetivo_criado:"Objetivos criados",tarefa_criada:"Tarefas criadas",tarefa_concluida:"Tarefas conclu\u00eddas",competencia_adicionada:"Compet\u00eancias adicionadas",modelo_usado:"Modelo sugerido usado",oportunidade_aberta:"Sites de oportunidades abertos",oportunidade_tarefa:"Oportunidades levadas ao plano",avaliacao_nota:"Notas da avalia\u00e7\u00e3o",login:"Logins",login_google:"Logins com Google",login_microsoft:"Logins com Microsoft",cadastro:"Contas criadas",vaga_aberta:"Vagas da coordena\u00e7\u00e3o abertas",curriculo_gerado:"Curr\u00edculos gerados",teste_concluido:"Testes de perfil conclu\u00eddos",conquista:"Conquistas",mentoria_pedida:"Pedidos de mentoria"};
+function vUso(){
+  if(B.kind!=="api")return"";
+  var a=window.__ativ;
+  if(!a)return '<section class="card"><h2>Uso do site</h2><p class="muted">Carregando\u2026</p></section>';
+  var dias=a.por_dia||[],mx=Math.max.apply(null,dias.map(function(d){return d.acessos}).concat([1]));
+  var h='<section class="card"><h2>Uso do site</h2><p class="muted small">Acessos e estudantes ativos por dia nos \u00faltimos 14 dias.</p>';
+  if(!dias.length)h+='<div class="empty">Ainda sem acessos registrados.</div>';
+  else h+='<div style="display:flex;align-items:flex-end;gap:6px;height:130px" role="img" aria-label="Acessos por dia">'+dias.map(function(d){return '<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;min-width:0;height:100%"><span class="small">'+d.acessos+'</span><div title="'+d.usuarios+' estudantes" style="width:100%;background:var(--verde-500);border-radius:6px 6px 0 0;height:'+Math.max(4,Math.round(d.acessos/mx*80))+'%"></div><span class="small muted">'+d.dia.slice(8)+'/'+d.dia.slice(5,7)+'</span></div>'}).join("")+'</div>';
+  var telas=(a.por_tela||[]).slice(0,8),acoes=(a.por_acao||[]).slice(0,10);
+  h+='<div class="grid2"><div class="stack" style="gap:8px"><h3>Telas mais visitadas</h3>'+(telas.length?telas.map(function(t){return '<div class="hbar"><span>'+esc(t.detalhe)+'</span><div class="bar"><i style="width:'+Math.round(t.n/telas[0].n*100)+'%"></i></div><b>'+t.n+'</b></div>'}).join(""):'<p class="muted small">Sem dados.</p>')+'</div>'+
+   '<div class="stack" style="gap:8px"><h3>A\u00e7\u00f5es mais feitas</h3>'+(acoes.length?acoes.map(function(t){return '<div class="hbar"><span>'+esc((NOMES[t.tipo]||t.tipo)+(t.detalhe?" ("+t.detalhe+")":""))+'</span><div class="bar"><i style="width:'+Math.round(t.n/acoes[0].n*100)+'%"></i></div><b>'+t.n+'</b></div>'}).join(""):'<p class="muted small">Sem dados.</p>')+'</div></div></section>';
+  return h;
+}
+function avg(rows,k){var v=rows.map(function(r){return r[k]}).filter(function(x){return x>0});return v.length?(v.reduce(function(a,b){return a+b},0)/v.length):0}
+function vCoord(){
+  var rows=window.__rows;
+  var h='<div class="wrap"><div class="head"><h1>Painel da coordena\u00e7\u00e3o</h1><p>Dados agregados de uso do sistema. Nomes e e-mails dos estudantes n\u00e3o aparecem aqui.</p></div>';
+  if(!rows)return h+'<div class="loading">Carregando dados\u2026</div></div>';
+  if(!rows.length)return h+'<div class="empty">Ainda n\u00e3o h\u00e1 estudantes cadastrados.</div></div>';
+  var n=rows.length,tar=rows.reduce(function(a,r){return a+r.tarefas},0),con=rows.reduce(function(a,r){return a+r.concluidas},0),atr=rows.reduce(function(a,r){return a+r.atrasadas},0);
+  var comPlano=rows.filter(function(r){return r.objetivos>0}).length;
+  var f1=function(x){return x?x.toFixed(1).replace(".",","):"\u2013"};
+  h+='<section class="tiles"><div class="tile"><b>'+n+'</b><span class="muted small">estudantes cadastrados</span></div><div class="tile"><b>'+Math.round(comPlano/n*100)+'%</b><span class="muted small">j\u00e1 criaram objetivos ('+comPlano+')</span></div><div class="tile"><b>'+(tar?Math.round(con/tar*100):0)+'%</b><span class="muted small">das tarefas conclu\u00eddas ('+con+' de '+tar+')</span></div><div class="tile"><b>'+atr+'</b><span class="muted small">tarefas atrasadas</span></div></section>';
+  var cursos={};rows.forEach(function(r){var c=r.curso||"N\u00e3o informado";cursos[c]=(cursos[c]||0)+1});
+  var cl=Object.keys(cursos).sort(function(a,b){return cursos[b]-cursos[a]}).slice(0,10),mx=cursos[cl[0]];
+  h+='<div class="grid2"><section class="card"><h2>Estudantes por curso</h2>'+cl.map(function(c){return '<div class="hbar"><span>'+esc(c)+'</span><div class="bar"><i style="width:'+Math.round(cursos[c]/mx*100)+'%"></i></div><b>'+cursos[c]+'</b></div>'}).join("")+'</section>';
+  h+='<section class="card"><h2>Avalia\u00e7\u00e3o do sistema</h2><div class="tiles"><div class="tile"><b>'+f1(avg(rows,"util"))+'</b><span class="muted small">ajuda a organizar a carreira</span></div><div class="tile"><b>'+f1(avg(rows,"facil"))+'</b><span class="muted small">f\u00e1cil de usar</span></div><div class="tile"><b>'+f1(avg(rows,"voltar"))+'</b><span class="muted small">usaria na gradua\u00e7\u00e3o</span></div></div><p class="muted small">M\u00e9dias de 1 a 5, considerando s\u00f3 quem respondeu ('+rows.filter(function(r){return r.util>0}).length+' avalia\u00e7\u00f5es).</p></section></div>';
+  var cm=rows.filter(function(r){return r.comentario});
+  h+=vUso();
+  h+='<section class="card"><h2>Respostas da avalia\u00e7\u00e3o</h2><p class="muted small">Cada linha \u00e9 um estudante, sem nome. Notas de 1 a 5.</p><div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;min-width:520px;font-size:.9rem"><thead><tr style="text-align:left;color:var(--muted)"><th style="padding:6px">Curso</th><th>Semestre</th><th>Ajuda</th><th>F\u00e1cil</th><th>Usaria</th></tr></thead><tbody>'+rows.filter(function(r){return r.util>0||r.facil>0||r.voltar>0}).map(function(r){return '<tr style="border-top:1px solid var(--line)"><td style="padding:8px 6px">'+esc(r.curso||"")+'</td><td>'+esc(r.semestre||"")+'</td><td>'+(r.util||"\u2013")+'</td><td>'+(r.facil||"\u2013")+'</td><td>'+(r.voltar||"\u2013")+'</td></tr>'}).join("")+'</tbody></table></div></section>';
+  h+='<section class="card"><div class="row between"><h2>Sugest\u00f5es dos estudantes</h2>'+(B.kind==="api"?'<a class="btn sec sm" href="/api/admin/exportar.csv">Baixar planilha (CSV)</a>':'')+'</div>'+(cm.length?cm.map(function(r){return '<blockquote>'+esc(r.comentario)+'<br><span class="small muted">'+esc(r.curso||"")+' \u00b7 '+esc(r.semestre||"")+'</span></blockquote>'}).join(""):'<p class="muted">Nenhuma sugest\u00e3o enviada ainda.</p>')+'</section>'+resetCard()+'</div>';
+  return h;
+}
+
+/* ================= rotas e render ================= */
+function modelo(){
+  var g1=uid(),g2=uid(),g3=uid(),mk=function(g,t,d){return{id:uid(),goalId:g,titulo:t,data:plusDays(d),status:"todo"}};
+  S.goals.push({id:g1,titulo:"Melhorar meu curr\u00edculo e meu perfil profissional",prazo:"curto",data:plusDays(30)},{id:g2,titulo:"Conseguir um est\u00e1gio na minha \u00e1rea",prazo:"medio",data:plusDays(180)},{id:g3,titulo:"Ser contratado(a) na minha \u00e1rea de forma\u00e7\u00e3o",prazo:"longo",data:plusDays(900)});
+  S.tasks.push(mk(g1,"Escrever a primeira vers\u00e3o do curr\u00edculo",7),mk(g1,"Criar o perfil no LinkedIn",14),mk(g1,"Pedir a um professor para revisar o curr\u00edculo",21),mk(g2,"Cadastrar o curr\u00edculo no CIEE",35),mk(g2,"Fazer um curso gratuito de ingl\u00eas b\u00e1sico",90),mk(g3,"Pesquisar empresas da minha \u00e1rea",60));
+}
+var VALIDAS=["inicio","entrar","criar","completar","esqueci","redefinir"].concat(PROTEGIDAS);
+function view(){
+  if(location.pathname!=="/"&&!/\/index\.html$/.test(location.pathname)&&location.pathname.indexOf("/api/")!==0&&window.__servidor)return "naoencontrada";
+  var h=(location.hash||"").replace("#","");
+  if(h.indexOf("redefinir/")===0){window.__rtoken=h.slice(10);return "redefinir"}
+  if(!h)return USER?"painel":"inicio";
+  if(VALIDAS.indexOf(h)<0)return "naoencontrada";
+  return h;
+}
+function vNaoEncontrada(){
+  return '<main class="main gut"><div class="wrap" style="align-items:center;text-align:center;padding-block:48px"><svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="none" stroke="var(--line)" stroke-width="3"/><circle cx="60" cy="60" r="34" fill="none" stroke="var(--verde-500)" stroke-width="4"/><circle cx="60" cy="60" r="9" fill="var(--laranja)"/></svg><span class="kicker">Erro 404</span><h1>P\u00e1gina n\u00e3o encontrada</h1><p class="muted" style="max-width:46ch">O endere\u00e7o que voc\u00ea digitou n\u00e3o existe ou mudou de lugar. Confira o link ou volte para uma p\u00e1gina do sistema.</p><div class="row" style="justify-content:center"><a class="btn orange" href="'+(USER?"#painel":"#inicio")+'" data-nav="1">'+(USER?"Ir para o painel":"Ir para o in\u00edcio")+'</a>'+(USER?'<a class="btn sec" href="#planodeacao">Plano de a\u00e7\u00e3o</a>':'<a class="btn sec" href="#entrar">Entrar</a>')+'</div></div></main>';
+}
+function render(){
+  var v=view();
+  if((v==="entrar"||v==="criar"||v==="esqueci")&&USER){location.hash="painel";return}
+  if(PROTEGIDAS.indexOf(v)>-1&&!USER){location.hash="entrar";return}
+  if(ADMINROTAS.indexOf(v)>-1&&!USER.admin){location.hash="painel";return}
+  if(USER&&S&&!S.profile.curso&&!USER.admin&&v!=="completar"&&v!=="naoencontrada"&&PROTEGIDAS.indexOf(v)>-1){location.hash="completar";return}
+  if(v==="completar"&&(!USER||S.profile.curso)){location.hash=USER?"painel":"entrar";return}
+  track("tela",v);
+  var body;
+  if(v==="naoencontrada")body=vNaoEncontrada();
+  else if(v==="completar")body=vCompletar();
+  else if(v==="esqueci")body=vEsqueci();
+  else if(v==="redefinir")body=vRedefinir();
+  else if(v==="entrar"||v==="criar")body=vAuth(v);
+  else if(PROTEGIDAS.indexOf(v)>-1){
+    var m={painel:vPainel,planodeacao:vPlano,perfil:vPerfil,oportunidades:vOpp,mentoria:vMentoria,avaliacao:vAvaliacao,coordenacao:vCoord,linhadotempo:vLinha,teste:vTeste,curriculo:vCurriculo,coordvagas:vCoordVagas,coordmentorias:vCoordMent,relatorio:vRelatorio};
+    body='<main class="main gut">'+subnav(v)+m[v]()+'</main>';
+  }else body=vInicio();
+  document.getElementById("root").innerHTML=header(v)+body+tabbar(v);
+  if((v==="entrar"||v==="criar")&&window.__googleId)montarGoogle();
+  if((v==="coordenacao"||v==="relatorio")&&B.kind==="api"&&!window.__ativ)B.atividade().then(function(a){window.__ativ=a;if(ADMINROTAS.indexOf(view())>-1)render()},function(){window.__ativ={por_dia:[],por_acao:[],por_tela:[]};});
+  if((v==="coordenacao"||v==="relatorio")&&!window.__rows)B.admin().then(function(r){window.__rows=r;if(ADMINROTAS.indexOf(view())>-1)render()},function(){window.__rows=[];render()});
+}
+function montarGoogle(){
+  var go=function(){
+    var el=document.getElementById("g-btn");if(!el||!window.google||!google.accounts)return;
+    google.accounts.id.initialize({client_id:window.__googleId,callback:function(r){
+      ApiB.google(r.credential).then(function(u){USER=u;return B.load().then(function(s){setS(s,{nome:u.nome});marcarDia();location.hash=S.profile.curso?"painel":"completar";render()})})
+        .catch(function(er){var e=document.getElementById("auth-err");if(e){e.textContent=er.message||"N\u00e3o foi poss\u00edvel entrar com o Google.";e.hidden=false}});
+    }});
+    var escuro=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.getAttribute("data-theme")!=="light";
+    google.accounts.id.renderButton(el,{theme:escuro?"filled_black":"outline",size:"large",shape:"rectangular",logo_alignment:"center",width:Math.max(200,Math.min(400,(el.clientWidth||320)-8)),text:view()==="criar"?"signup_with":"signin_with",locale:"pt-BR"});
+  };
+  if(window.google&&google.accounts)return go();
+  if(document.getElementById("gsi"))return;
+  var sc=document.createElement("script");sc.id="gsi";sc.src="https://accounts.google.com/gsi/client";sc.async=true;sc.onload=go;sc.onerror=function(){var el=document.getElementById("g-btn");if(el)el.parentNode.outerHTML='<button type="button" class="btn gbtn" data-act="google-off">'+GLOGO+'Continuar com Google</button>'};document.head.appendChild(sc);
+}
+window.addEventListener("hashchange",function(){if(view()!=="coordenacao"&&view()!=="relatorio")window.__rows=null;if(view()!=="teste")window.__refazer=false;render();window.scrollTo(0,0)});
+
+/* ---------- a\u00e7\u00f5es extras (ideias 1 a 10) ---------- */
+function irLogin(){CH={};window.__t={};window.__refazer=false;window.__resetLink=null;window.__tl=null}
+function msLogin(){
+  var n=rnd(),st=rnd();
+  try{sessionStorage.setItem("cef_ms",n+"|"+st)}catch(e){toast("Seu navegador bloqueou o login com a Microsoft.");return}
+  location.href="https://login.microsoftonline.com/"+encodeURIComponent(window.__msTenant||"organizations")+"/oauth2/v2.0/authorize?client_id="+encodeURIComponent(window.__msId)+"&response_type=id_token&response_mode=fragment&scope="+encodeURIComponent("openid profile email")+"&redirect_uri="+encodeURIComponent(location.origin+"/")+"&nonce="+n+"&state="+st+"&prompt=select_account";
+}
+function msFinal(){
+  var h=location.hash||"";
+  if(h.indexOf("#id_token=")!==0&&h.indexOf("#error=")!==0)return Promise.resolve();
+  var q=new URLSearchParams(h.slice(1)),guard="",msg=function(m){setTimeout(function(){toast(m)},400)};
+  try{guard=sessionStorage.getItem("cef_ms")||"";sessionStorage.removeItem("cef_ms")}catch(e){}
+  try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  if(q.get("error")){msg("N\u00e3o foi poss\u00edvel entrar com a Microsoft.");return Promise.resolve()}
+  var p=guard.split("|");
+  if(!p[1]||p[1]!==q.get("state")){msg("Sess\u00e3o de login expirada. Tente de novo.");return Promise.resolve()}
+  if(USER||B!==ApiB)return Promise.resolve();
+  return ApiB.microsoft(q.get("id_token"),p[0]).then(function(u){USER=u;return B.load().then(function(s){setS(s,{nome:u.nome});location.hash=S.profile.curso?"painel":"completar"})},function(er){msg(er.message||"N\u00e3o foi poss\u00edvel entrar com a Microsoft.")});
+}
+function baixarTxt(nome,txt){
+  var bl=new Blob(["\ufeff"+txt],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(bl);a.download=nome;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);
+}
+function extraAct(a,b,id){
+  if(a==="ms"){msLogin();return true}
+  if(a==="ms-off"){var ee=document.getElementById("auth-err");if(ee){ee.textContent="O login com a Microsoft ainda n\u00e3o foi ativado neste site. Use e-mail e senha por enquanto.";ee.hidden=false}return true}
+  if(a==="tl-modo"){window.__tl=b.getAttribute("data-v");render();return true}
+  if(a==="teste-resp"){window.__t=window.__t||{};window.__t[+b.getAttribute("data-q")]=+b.getAttribute("data-n");render();return true}
+  if(a==="teste-fim"){
+    if(Object.keys(window.__t||{}).length<TQ.length)return true;
+    S.extra.teste=resultadoTeste();window.__refazer=false;window.__t={};track("teste_concluido",S.extra.teste.top);toast("Resultado pronto");
+    checkConquistas();save();render();window.scrollTo(0,0);return true;
+  }
+  if(a==="teste-refazer"){window.__refazer=true;window.__t={};render();window.scrollTo(0,0);return true}
+  if(a==="teste-add"){
+    var t=S.extra.teste;if(!t)return true;
+    var ar=find(AREAS,t.top),have=S.skills.map(function(x){return x.nome.toLowerCase()}),n=0;
+    ar.comp.forEach(function(c){if(have.indexOf(c.toLowerCase())<0){S.skills.push({id:uid(),kind:"desenvolver",nome:c,nivel:1});n++}});
+    if(!S.profile.area)S.profile.area=ar.nome;
+    toast(n?pl(n,"compet\u00eancia adicionada","compet\u00eancias adicionadas")+" ao seu perfil":"Essas compet\u00eancias j\u00e1 est\u00e3o no seu perfil");
+    checkConquistas();save();render();return true;
+  }
+  if(a==="cv-pdf"){cvGerou();checkConquistas();try{window.print()}catch(e){toast("N\u00e3o foi poss\u00edvel abrir a impress\u00e3o neste navegador.")}return true}
+  if(a==="cv-doc"){cvGerou();checkConquistas();try{cvDoc()}catch(e){toast("N\u00e3o foi poss\u00edvel gerar o arquivo neste navegador.")}return true}
+  if(a==="lembretes"){S.profile.lembretes=!S.profile.lembretes;toast(S.profile.lembretes?"Lembretes ativados":"Lembretes desativados");save();render();return true}
+  if(a==="vaga-task"){
+    var v=(window.__vagas||[])[+b.getAttribute("data-i")];if(!v)return true;
+    var g=oppGoal();track("oportunidade_tarefa",String(v.titulo).slice(0,60));
+    S.tasks.push({id:uid(),goalId:g.id,titulo:"Conferir: "+v.titulo,data:(v.prazo&&v.prazo>=today())?v.prazo:plusDays(14),status:"todo"});
+    toast("Tarefa criada no plano de a\u00e7\u00e3o");checkConquistas();save();render();return true;
+  }
+  if(a==="vaga-del"){
+    B.adminVagaExcluir(id).then(function(){delete CH.avagas;delete CH.vagas;toast("Divulga\u00e7\u00e3o exclu\u00edda");render()},function(er){toast(er.message||"N\u00e3o foi poss\u00edvel excluir.")});
+    return true;
+  }
+  if(a==="copiar-link"){copiar(window.__resetLink||"");return true}
+  if(a==="copiar-rel"){copiar(textoRelatorio());return true}
+  if(a==="baixar-rel"){baixarTxt("relatorio-carreira-em-foco.txt",textoRelatorio());return true}
+  return false;
+}
+function extraSubmit(k,o,f){
+  var er=f.querySelector(".err"),ok=document.getElementById("f-ok");
+  var fail=function(m){if(er){er.textContent=m;er.hidden=false}};
+  var btn=f.querySelector("button[type=submit]");
+  var livre=function(){if(btn)btn.disabled=false};
+  if(er)er.hidden=true;
+  if(k==="esqueci"){
+    if(!o.email)return fail("Informe o e-mail."),true;
+    if(btn)btn.disabled=true;
+    B.esqueci(o.email).then(function(){livre();if(ok){ok.textContent="Se o e-mail estiver cadastrado, o link foi enviado. Confira tamb\u00e9m a caixa de spam.";ok.hidden=false}},function(e){livre();fail(e.message||"N\u00e3o foi poss\u00edvel enviar.")});
+    return true;
+  }
+  if(k==="redefinir"){
+    if(!o.senha||o.senha.length<8)return fail("A senha precisa ter pelo menos 8 caracteres."),true;
+    if(o.senha!==o.senha2)return fail("As senhas n\u00e3o s\u00e3o iguais."),true;
+    if(btn)btn.disabled=true;
+    B.redefinir(window.__tok,o.senha).then(function(){toast("Senha alterada. Entre com a nova senha.");location.hash="entrar"},function(e){livre();fail(e.message||"Link inv\u00e1lido ou expirado. Pe\u00e7a um novo.")});
+    return true;
+  }
+  if(k==="mentoria"){
+    if(btn)btn.disabled=true;
+    B.mentoriaCriar(o).then(function(){S.extra.mentoriaPedida=true;delete CH.ment;toast("Pedido enviado");checkConquistas();save();render()},function(e){livre();fail(e.message||"N\u00e3o foi poss\u00edvel enviar.")});
+    return true;
+  }
+  if(k==="vaga"){
+    if(btn)btn.disabled=true;
+    B.adminVagaCriar(o).then(function(){delete CH.avagas;delete CH.vagas;toast("Divulga\u00e7\u00e3o publicada");render()},function(e){livre();fail(e.message||"N\u00e3o foi poss\u00edvel publicar.")});
+    return true;
+  }
+  if(k==="ment-resp"){
+    if(btn)btn.disabled=true;
+    B.adminMentoriaResp(f.getAttribute("data-id"),{status:o.status,resposta:o.resposta||""}).then(function(){delete CH.ament;toast("Resposta salva");render()},function(e){livre();fail(e.message||"N\u00e3o foi poss\u00edvel salvar.")});
+    return true;
+  }
+  if(k==="reset"){
+    if(btn)btn.disabled=true;
+    B.adminReset(o.email).then(function(r){window.__resetLink=r.link;render()},function(e){livre();fail(e.message||"N\u00e3o foi poss\u00edvel gerar o link.")});
+    return true;
+  }
+  return false;
+}
+
+function find(arr,id){return arr.filter(function(x){return x.id===id})[0]}
+function oppGoal(){
+  var g=S.goals.filter(function(x){return x.titulo==="Explorar oportunidades"})[0];
+  if(!g){g={id:uid(),titulo:"Explorar oportunidades",prazo:"curto",data:plusDays(60)};S.goals.push(g)}
+  return g;
+}
+document.addEventListener("click",function(e){
+  var tk=e.target.closest("[data-track]");if(tk)track(tk.getAttribute("data-track"),tk.getAttribute("data-detalhe"));
+  var b=e.target.closest("[data-act]");if(!b)return;
+  var a=b.getAttribute("data-act"),id=b.getAttribute("data-id");
+  if(a==="google-off"){var ee=document.getElementById("auth-err");ee.textContent=B.senha?"O login com Google ainda n\u00e3o foi ativado neste site. Use e-mail e senha por enquanto.":"O login com Google fica dispon\u00edvel no site publicado. Aqui, preencha seus dados.";ee.hidden=false;return}
+  if(a==="sair"){flush().then(function(){return B.sair()}).then(function(){irLogin();USER=null;S=null;lastCompletedTaskId=null;window.__rows=null;window.__ativ=null;location.hash="inicio";render();toast("Voc\u00ea saiu da conta")});return}
+  if(extraAct(a,b,id))return;
+  if(a==="toggle"){var t=find(S.tasks,id);t.status=t.status==="done"?"todo":"done";if(t.status==="done"){lastCompletedTaskId=t.id;track("tarefa_concluida")}else if(lastCompletedTaskId===t.id)lastCompletedTaskId=null;toast(t.status==="done"?"Tarefa conclu\u00edda":"Tarefa reaberta")}
+  else if(a==="cycle"){var t2=find(S.tasks,id);var i=STATUS.map(function(x){return x[0]}).indexOf(t2.status);t2.status=STATUS[(i+1)%3][0];if(t2.status==="done")track("tarefa_concluida")}
+  else if(a==="del-task"){S.tasks=S.tasks.filter(function(x){return x.id!==id});toast("Tarefa exclu\u00edda")}
+  else if(a==="del-goal"){S.goals=S.goals.filter(function(x){return x.id!==id});S.tasks=S.tasks.filter(function(x){return x.goalId!==id});if(S.extra.sem)delete S.extra.sem[id];toast("Objetivo exclu\u00eddo")}
+  else if(a==="filter"){window.__f=b.getAttribute("data-v")}
+  else if(a==="ofilter"){window.__o=b.getAttribute("data-v")}
+  else if(a==="level"){find(S.skills,id).nivel=+b.getAttribute("data-n")}
+  else if(a==="del-skill"){S.skills=S.skills.filter(function(x){return x.id!==id})}
+  else if(a==="sug"){S.skills.push({id:uid(),kind:b.getAttribute("data-kind"),nome:b.getAttribute("data-nome"),nivel:1})}
+  else if(a==="modelo"){track("modelo_usado");modelo();toast("Modelo adicionado. Edite como quiser.")}
+  else if(a==="opp-task"){var o=OPPS[+b.getAttribute("data-i")],g=oppGoal();track("oportunidade_tarefa",o.n);S.tasks.push({id:uid(),goalId:g.id,titulo:"Conhecer "+o.n+" ("+o.t.toLowerCase()+")",data:plusDays(14),status:"todo"});toast("Tarefa criada no plano de a\u00e7\u00e3o")}
+  else if(a==="rate"){track("avaliacao_nota",b.getAttribute("data-q"));S.feedback[b.getAttribute("data-q")]=+b.getAttribute("data-n")}
+  checkConquistas();save();render();
+});
+document.addEventListener("submit",function(e){
+  var f=e.target,k=f.getAttribute("data-form");if(!k)return;e.preventDefault();
+  var d=new FormData(f),o={};d.forEach(function(v,key){o[key]=typeof v==="string"?v.trim():v});
+  if(extraSubmit(k,o,f))return;
+  if(k==="auth"){
+    var errEl=document.getElementById("auth-err");
+    var fail=function(m){errEl.textContent=m;errEl.hidden=false};
+    var modo=f.getAttribute("data-modo");
+    if(modo==="criar"&&B.senha&&!/^\S{2,}(\s+\S+)+$/.test(o.nome||""))return fail("Informe seu nome completo (nome e sobrenome).");
+    if(modo==="criar"&&!B.senha&&(!o.nome||!o.curso))return fail("Preencha nome e curso.");
+    if(B.senha&&(!o.email||!o.senha))return fail("Preencha e-mail e senha.");
+    if(B.senha&&modo==="criar"&&o.senha.length<8)return fail("A senha precisa ter pelo menos 8 caracteres.");
+    if(B.senha&&modo==="criar"&&o.senha!==o.senha2)return fail("As senhas n\u00e3o s\u00e3o iguais.");
+    var btn=f.querySelector("button[type=submit]");btn.disabled=true;
+    (modo==="entrar"?B.entrar(o):B.criar(o)).then(function(u){
+      USER=u;return B.load().then(function(s){setS(s,o);marcarDia();location.hash="painel";render()});
+    }).catch(function(er){btn.disabled=false;fail(er.message||"N\u00e3o foi poss\u00edvel entrar.")});
+    return;
+  }
+  if(k==="completar"){if(!o.curso)return;S.profile.curso=o.curso;S.profile.semestre=o.semestre;save();location.hash="painel";render();return}
+  if(k==="goal"){track("objetivo_criado");var gid=uid();S.goals.push({id:gid,titulo:o.titulo,prazo:o.prazo,data:o.data||""});if(o.sem){S.extra.sem=S.extra.sem||{};S.extra.sem[gid]=o.sem}toast("Objetivo adicionado")}
+  if(k==="task"){track("tarefa_criada");S.tasks.push({id:uid(),goalId:f.getAttribute("data-goal"),titulo:o.titulo,data:o.data||"",status:"todo"});toast("Tarefa adicionada")}
+  if(k==="skill"){track("competencia_adicionada",f.getAttribute("data-kind"));S.skills.push({id:uid(),kind:f.getAttribute("data-kind"),nome:o.nome,nivel:1})}
+  checkConquistas();save();render();
+});
+document.addEventListener("input",function(e){
+  var t=e.target;
+  if(t.hasAttribute("data-field")){S.profile[t.getAttribute("data-field")]=t.value;save()}
+  if(t.hasAttribute("data-cv")){S.extra.cv=S.extra.cv||{};S.extra.cv[t.getAttribute("data-cv")]=t.value;var cv=document.getElementById("cv");if(cv)cv.innerHTML=cvHtml();save()}
+  if(t.hasAttribute("data-semgoal")){S.extra.sem=S.extra.sem||{};S.extra.sem[t.getAttribute("data-semgoal")]=t.value;save();render()}
+  if(t.hasAttribute("data-fbtext")){S.feedback.texto=t.value;save()}
+});
+
+/* ================= in\u00edcio ================= */
+function start(){
+  var pick;
+  if(window.claude&&typeof claude.use==="function"){
+    pick=ArtB.setup().then(function(ok){return ok?ArtB:LocalB});
+  }else if(document.documentElement.getAttribute("data-api")==="enabled"){
+    window.__servidor=true;
+    pick=ApiB.config().then(function(c){window.__googleId=c.googleClientId||"";window.__msId=c.microsoftClientId||"";window.__msTenant=c.microsoftTenant||"";window.__emailAtivo=!!c.emailAtivo;return ApiB},function(){return LocalB});
+  }else{
+    pick=Promise.resolve(LocalB);
+  }
+  pick.then(function(b){
+    B=b;
+    return B.init().then(function(u){
+      USER=u;
+      if(!u)return;
+      return B.load().then(function(s){setS(s,{nome:u.nome});if(!s)USER.semEstado=true});
+    });
+  }).then(function(){return msFinal()}).then(function(){if(USER&&!S)setS(null,{nome:USER.nome});if(USER)marcarDia();render()},function(){render()});
+}
+start();
+})();
+</script>
+
+</body>
+</html>

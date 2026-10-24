@@ -1,0 +1,15 @@
+{
+  "name": "carreira-em-foco",
+  "version": "1.0.0",
+  "description": "Sistema web de planejamento de carreira para estudantes da UNIFAMETRO (projeto de extensão curricular). Sem dependências externas.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "node build.js",
+    "criar-admin": "node scripts/criar-admin.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "dependencies": {}
+}

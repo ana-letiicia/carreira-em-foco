@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-24T16:06:03.288-03:00",
+  "title": "Design System: Carreira em Foco",
+  "extensions": {
+    "colorMeta": {
+      "green-deep": {
+        "role": "primary",
+        "displayName": "Verde profundo",
+        "canonical": "#00301B",
+        "tonalRamp": ["#000F06", "#012A17", "#18442E", "#346048", "#517D64", "#6E9B81", "#9CCBAF", "#CCFCDF"]
+      },
+      "green-institutional": {
+        "role": "primary",
+        "displayName": "Verde institucional",
+        "canonical": "#003D22",
+        "tonalRamp": ["#010F06", "#042917", "#0D462A", "#2D6244", "#4A7F60", "#679D7D", "#95CDAB", "#C5FEDB"]
+      },
+      "green-mid": {
+        "role": "primary",
+        "displayName": "Verde médio",
+        "canonical": "#1F6B3F",
+        "tonalRamp": ["#010F05", "#022A13", "#094725", "#17653A", "#3A8355", "#59A172", "#88D19F", "#C8FED8"]
+      },
+      "green-bright": {
+        "role": "primary",
+        "displayName": "Verde vivo",
+        "canonical": "#3BAA35",
+        "tonalRamp": ["#011001", "#032A02", "#0B4809", "#076805", "#088A04", "#3BAA35", "#6EDB67", "#CDFEC8"]
+      },
+      "orange": {
+        "role": "secondary",
+        "displayName": "Laranja de destaque",
+        "canonical": "#F29A1F",
+        "tonalRamp": ["#140800", "#311C03", "#543101", "#774A0A", "#9E620F", "#C27E26", "#FAAA4B", "#FEEBD8"]
+      },
+      "canvas-light": {
+        "role": "neutral",
+        "displayName": "Fundo claro",
+        "canonical": "#F1F6EF",
+        "tonalRamp": ["#090C08", "#1F231E", "#383C36", "#535751", "#6F736D", "#8C918A", "#BBBFB9", "#EBF0E9"]
+      },
+      "canvas-dark": {
+        "role": "neutral",
+        "displayName": "Fundo escuro",
+        "canonical": "#0B1810",
+        "tonalRamp": ["#030E07", "#18251D", "#303F35", "#4B5A50", "#66766C", "#849489", "#B2C3B7", "#E2F4E8"]
+      },
+      "warning": {
+        "role": "tertiary",
+        "displayName": "Aviso",
+        "canonical": "#9A4A00",
+        "tonalRamp": ["#170600", "#381801", "#5B2C06", "#814213", "#AA581A", "#CB773D", "#FEA56D", "#FEEADF"]
+      },
+      "danger": {
+        "role": "tertiary",
+        "displayName": "Erro",
+        "canonical": "#B42318",
+        "tonalRamp": ["#1E0100", "#450402", "#700D07", "#A20501", "#C53629", "#E95948", "#FBA395", "#FFE9E5"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Títulos",
+        "purpose": "Títulos de destaque e estatísticas."
+      },
+      "body": {
+        "displayName": "Texto de interface",
+        "purpose": "Leitura, rótulos e controles."
+      }
+    },
+    "shadows": [
+      {
+        "name": "surface-light",
+        "value": "0 1px 2px rgba(0,40,20,.06), 0 8px 24px rgba(0,40,20,.06)",
+        "purpose": "Cartões e abas selecionadas no tema claro."
+      },
+      {
+        "name": "surface-dark",
+        "value": "0 1px 2px rgba(0,0,0,.4)",
+        "purpose": "Superfícies elevadas no tema escuro."
+      },
+      {
+        "name": "floating",
+        "value": "0 16px 36px rgba(0,0,0,.24)",
+        "purpose": "Cartões ilustrativos sobre o alvo da vitrine."
+      }
+    ],
+    "motion": [
+      {
+        "name": "transition-standard",
+        "value": "0.2s",
+        "purpose": "Transições curtas de estado observadas em foco, hover e feedback."
+      },
+      {
+        "name": "progress",
+        "value": "width 0.4s",
+        "purpose": "Mudanças de largura em barras de progresso."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "navigation-mobile",
+        "value": "1180px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão primário",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal com fundo verde.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">Continuar</button>",
+      "css": ".ds-btn-primary { border: 0; border-radius: 12px; padding: 10px 18px; min-height: 44px; background: var(--accent, #1F6B3F); color: var(--accent-ink, #fff); font: 700 1rem/1.5 'Nunito Sans', system-ui, sans-serif; cursor: pointer; transition: filter .2s; } .ds-btn-primary:hover { filter: brightness(1.08); } .ds-btn-primary:focus-visible { outline: 3px solid #F29A1F; outline-offset: 2px; }"
+    },
+    {
+      "name": "Botão de destaque",
+      "kind": "button",
+      "refersTo": "button-orange",
+      "description": "Ação ou destaque laranja.",
+      "html": "<button class=\"ds-btn-orange\" type=\"button\">Criar objetivo</button>",
+      "css": ".ds-btn-orange { border: 0; border-radius: 12px; padding: 10px 18px; min-height: 44px; background: #F29A1F; color: #2B1700; font: 700 1rem/1.5 'Nunito Sans', system-ui, sans-serif; cursor: pointer; transition: filter .2s; } .ds-btn-orange:hover { filter: brightness(1.08); } .ds-btn-orange:focus-visible { outline: 3px solid #F29A1F; outline-offset: 2px; }"
+    },
+    {
+      "name": "Botão secundário",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Ação secundária sobre fundo suave.",
+      "html": "<button class=\"ds-btn-secondary\" type=\"button\">Ver detalhes</button>",
+      "css": ".ds-btn-secondary { border: 0; border-radius: 12px; padding: 10px 18px; min-height: 44px; background: var(--accent-soft, #DDEFD9); color: var(--ink, #10261A); font: 700 1rem/1.5 'Nunito Sans', system-ui, sans-serif; cursor: pointer; transition: filter .2s; } .ds-btn-secondary:hover { filter: brightness(1.04); } .ds-btn-secondary:focus-visible { outline: 3px solid #F29A1F; outline-offset: 2px; }"
+    },
+    {
+      "name": "Cartão",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Superfície de conteúdo do painel.",
+      "html": "<article class=\"ds-card\"><h3>Meu plano</h3><p>Organize objetivos e próximos passos.</p></article>",
+      "css": ".ds-card { display: flex; flex-direction: column; gap: 14px; min-width: 0; padding: 22px; border: 1px solid var(--line, #D6E2D3); border-radius: 16px; background: var(--surface, #fff); color: var(--ink, #10261A); box-shadow: 0 1px 2px rgba(0,40,20,.06), 0 8px 24px rgba(0,40,20,.06); font: 400 16px/1.55 'Nunito Sans', system-ui, sans-serif; } .ds-card h3 { margin: 0; font: 600 1.05rem/1.12 'Bricolage Grotesque', 'Trebuchet MS', system-ui, sans-serif; } .ds-card p { margin: 0; color: var(--muted, #506558); }"
+    },
+    {
+      "name": "Campo de texto",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Campo com rótulo acima e foco destacado.",
+      "html": "<label class=\"ds-field\">Nome do objetivo<input type=\"text\" placeholder=\"Ex.: concluir um curso\"></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 5px; color: var(--ink, #10261A); font: 700 .9rem/1.4 'Nunito Sans', system-ui, sans-serif; } .ds-field input { box-sizing: border-box; width: 100%; min-height: 46px; padding: 10px 12px; border: 1.5px solid var(--line, #D6E2D3); border-radius: 12px; background: var(--surface-2, #F3F8F1); color: var(--ink, #10261A); font: 400 1rem/1.5 'Nunito Sans', system-ui, sans-serif; } .ds-field input:focus { border-color: var(--accent, #1F6B3F); outline: none; box-shadow: 0 0 0 3px var(--accent-soft, #DDEFD9); }"
+    },
+    {
+      "name": "Link de navegação",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Link com estados hover e atual.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#plano\" aria-current=\"page\">Meu plano</a><a href=\"#oportunidades\">Oportunidades</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 2px; align-items: center; font: 700 .9rem/1.4 'Nunito Sans', system-ui, sans-serif; } .ds-nav a { padding: 8px 9px; border-radius: 999px; color: var(--muted, #506558); text-decoration: none; white-space: nowrap; } .ds-nav a:hover { color: var(--ink, #10261A); background: var(--accent-soft, #DDEFD9); } .ds-nav a[aria-current='page'] { color: var(--accent-ink, #fff); background: var(--accent, #1F6B3F); }"
+    },
+    {
+      "name": "Chip de estado",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Etiqueta compacta para um estado.",
+      "html": "<span class=\"ds-chip\">Em andamento</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px; border-radius: 999px; border: 0; background: var(--accent-soft, #DDEFD9); color: var(--ink, #10261A); font: 700 .8rem/1.4 'Nunito Sans', system-ui, sans-serif; }"
+    },
+    {
+      "name": "Abas",
+      "kind": "nav",
+      "refersTo": "tabs",
+      "description": "Seletor compacto com estado ativo elevado.",
+      "html": "<nav class=\"ds-tabs\"><a href=\"#entrar\" aria-current=\"page\">Entrar</a><a href=\"#criar\">Criar conta</a></nav>",
+      "css": ".ds-tabs { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: var(--surface-2, #F3F8F1); font: 700 1rem/1.4 'Nunito Sans', system-ui, sans-serif; } .ds-tabs a { flex: 1; padding: 9px; border-radius: 9px; color: var(--muted, #506558); text-align: center; text-decoration: none; } .ds-tabs a[aria-current='page'] { background: var(--surface, #fff); color: var(--ink, #10261A); box-shadow: 0 1px 2px rgba(0,40,20,.06), 0 8px 24px rgba(0,40,20,.06); }"
+    },
+    {
+      "name": "Alvo de foco profissional",
+      "kind": "custom",
+      "refersTo": "focus-illustration",
+      "description": "Alvo concêntrico e cartões decorativos com exemplos de competência e tarefa.",
+      "html": "<div class=\"focus target-art\" aria-hidden=\"true\"><svg viewBox=\"0 0 420 420\" focusable=\"false\"><circle cx=\"210\" cy=\"210\" r=\"198\"/><circle cx=\"210\" cy=\"210\" r=\"153\"/><circle cx=\"210\" cy=\"210\" r=\"104\"/><circle cx=\"210\" cy=\"210\" r=\"54\"/><circle cx=\"210\" cy=\"210\" r=\"19\"/></svg><div class=\"float a\"><strong>Inglês</strong><p>competência a desenvolver</p><div class=\"skill-dots\"><i></i><i></i><i></i><i></i><i></i></div></div><div class=\"float b\"><strong>Conseguir um estágio</strong><div class=\"mini-progress\"><i></i></div><p>3 de 5 tarefas feitas</p></div></div>",
+      "css": ".focus.target-art { position: relative; display: grid; place-items: center; aspect-ratio: 1; max-width: 460px; } .target-art svg { position: absolute; inset: 2%; width: 96%; height: 96%; } .float { position: absolute; z-index: 2; width: 46%; padding: 12px 14px; border-radius: 16px; background: #10261A; color: #fff; box-shadow: 0 16px 36px rgba(0,0,0,.24); } .float.a { top: 8%; right: 0; } .float.b { bottom: 8%; left: 0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Não nomeada, conforme preferência do usuário.",
+    "overview": "A interface combina verdes de diferentes profundidades, laranja como cor de destaque, fundos claros e componentes em cartões. Na vitrine, um alvo concêntrico e cartões ilustrativos evocam foco em competências e tarefas; as estatísticas de pesquisa formam uma faixa contínua. O usuário descreveu a paleta como institucional e orientadora.",
+    "keyCharacteristics": [
+      "Verdes institucionais e laranja em destaques pontuais.",
+      "Camadas de superfície claras ou escuras, com bordas e sombras discretas.",
+      "Títulos em Bricolage Grotesque e texto de interface em Nunito Sans.",
+      "Alvo concêntrico com cartões decorativos de competência e tarefa na vitrine.",
+      "Navegação e conteúdo adaptados para telas menores.",
+      "Tema escuro respeitando a preferência do sistema e o atributo data-theme.",
+      "Transições desativadas quando o sistema solicita movimento reduzido."
+    ],
+    "rules": [
+      {
+        "name": "Regra do Laranja de Destaque",
+        "body": "Use o laranja como acento de ação ou ênfase; não o transforme no fundo dominante das áreas de conteúdo.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "Do use src/app.html como fonte de verdade para estilos; public/index.html é saída gerada por node build.js.",
+      "Do manter as variantes de tema para fundos, superfícies, texto, bordas e estados.",
+      "Do reservar laranja para ações e destaques, conforme o uso observado.",
+      "Do preservar o layout de navegação inferior e o espaço de conteúdo correspondente em larguras de até 1180px.",
+      "Do manter o indicador de foco visível e os estados atuais de navegação.",
+      "Do manter os exemplos da ilustração como decoração, sem atribuir progresso a uma conta real."
+    ],
+    "donts": [
+      "Don't substituir a paleta verde e laranja por cores semânticas de outra marca.",
+      "Don't aplicar sombras fortes a todos os cartões; o valor mais forte está reservado aos elementos flutuantes.",
+      "Don't usar a ilustração do alvo para afirmar progresso real de um estudante.",
+      "Don't editar diretamente public/index.html para mudanças persistentes: atualize src/app.html e gere a página.",
+      "Don't inventar uma metáfora visual ou alegações de impacto como se tivessem sido confirmadas."
+    ]
+  }
+}
