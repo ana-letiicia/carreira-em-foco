@@ -85,14 +85,14 @@ components:
 
 A interface existente combina verdes de diferentes profundidades, laranja como cor de destaque, fundos claros e componentes em cartões. O usuário descreveu a paleta como “institucional e orientadora”; essa expressão caracteriza a paleta escolhida, não uma promessa de resultado do produto.
 
-A vitrine pública organiza o conteúdo em faixas e apresenta a ideia de foco profissional com um alvo concêntrico. Para visitantes sem sessão, o alvo fica sem cartões de atividade. Quando a pessoa está conectada, os cartões mostram somente a competência e o objetivo mais recentes salvos na própria conta. As áreas de autenticação e do estudante usam cartões, navegação por abas e conteúdo em colunas que se reorganizam em larguras menores. O tema escuro troca as superfícies, os textos e os estados sem substituir a estrutura dos componentes. A fonte de verdade visual é o CSS em `src/app.html`; `public/index.html` é gerado a partir dele.
+A vitrine pública organiza o conteúdo em faixas. Sem sessão, a área ilustrativa mostra o símbolo do favicon; com uma conta conectada, mostra o alvo concêntrico e, quando existem dados, cartões com a competência e o objetivo mais recentes da própria conta. As áreas de autenticação e do estudante usam cartões, navegação por abas e conteúdo em colunas que se reorganizam em larguras menores. O tema escuro troca as superfícies, os textos e os estados sem substituir a estrutura dos componentes. A fonte de verdade visual é o CSS em `src/app.html`; `public/index.html` é gerado a partir dele.
 
 **Key Characteristics:**
 - Verdes institucionais e laranja em destaques pontuais.
 - Camadas de superfície claras ou escuras, com bordas e sombras discretas.
 - Títulos em Bricolage Grotesque e texto de interface em Nunito Sans.
 - Navegação e conteúdo adaptados para telas menores.
-- Alvo concêntrico; os cartões de competência e objetivo aparecem apenas com dados da conta conectada.
+- Símbolo do favicon para visitantes; alvo concêntrico e cartões de competência e objetivo com dados da conta conectada.
 - Tema escuro respeitando a preferência do sistema e o atributo `data-theme`.
 - Transições desativadas quando o sistema solicita movimento reduzido.
 
