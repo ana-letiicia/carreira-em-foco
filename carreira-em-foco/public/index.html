@@ -633,7 +633,8 @@ function authShell(titulo,texto,corpo){
 }
 function vEsqueci(){
   if(!B.senha)return authShell("Esqueci minha senha","Neste ambiente de demonstra\u00e7\u00e3o n\u00e3o h\u00e1 senha para recuperar.",'<a class="btn sec" href="#inicio">Ir para o in\u00edcio</a>');
-  return authShell("Esqueci minha senha","Informe o e-mail da sua conta. Se ele estiver cadastrado, enviaremos um link para criar uma nova senha, v\u00e1lido por 1 hora."+(window.__emailAtivo?"":" O envio de e-mails ainda n\u00e3o foi ativado neste site: pe\u00e7a o link \u00e0 coordena\u00e7\u00e3o."),
+  if(!window.__emailAtivo)return authShell("Esqueci minha senha","A recupera\u00e7\u00e3o por e-mail est\u00e1 indispon\u00edvel porque o envio ainda n\u00e3o foi configurado. A coordena\u00e7\u00e3o pode fornecer um link de redefini\u00e7\u00e3o. Para ativar o envio autom\u00e1tico, configure RESEND_API_KEY, EMAIL_FROM e BASE_URL nas vari\u00e1veis do Railway.",'<a class="btn sec" href="#entrar">Voltar para entrar</a>');
+  return authShell("Esqueci minha senha","Informe o e-mail da sua conta. Se ele estiver cadastrado, enviaremos um link para criar uma nova senha, v\u00e1lido por 1 hora.",
    '<form class="stack" data-form="esqueci" novalidate><div class="err" id="f-err" role="alert" hidden></div><div class="chip" id="f-ok" role="status" hidden style="border-radius:10px;padding:10px 12px;white-space:normal"></div><label for="e-email">E-mail<input id="e-email" name="email" type="email" autocomplete="email" required></label><button class="btn orange lg" type="submit">Enviar link</button></form>');
 }
 function vRedefinir(){
@@ -1098,7 +1099,7 @@ function extraSubmit(k,o,f){
   if(k==="esqueci"){
     if(!o.email)return fail("Informe o e-mail."),true;
     if(btn)btn.disabled=true;
-    B.esqueci(o.email).then(function(){livre();if(ok){ok.textContent="Se o e-mail estiver cadastrado, o link foi enviado. Confira tamb\u00e9m a caixa de spam.";ok.hidden=false}},function(e){livre();fail(e.message||"N\u00e3o foi poss\u00edvel enviar.")});
+    B.esqueci(o.email).then(function(r){livre();if(ok){ok.textContent=r.emailAtivo?"Se este e-mail estiver cadastrado, enviaremos um link. Confira tamb\u00e9m a caixa de spam; se n\u00e3o chegar, pe\u00e7a ajuda \u00e0 coordena\u00e7\u00e3o.":"O envio de e-mails est\u00e1 desativado. Pe\u00e7a um link \u00e0 coordena\u00e7\u00e3o.";ok.hidden=false}},function(e){livre();fail(e.message||"N\u00e3o foi poss\u00edvel enviar.")});
     return true;
   }
   if(k==="redefinir"){

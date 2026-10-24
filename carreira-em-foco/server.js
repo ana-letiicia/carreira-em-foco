@@ -36,7 +36,7 @@ const ALLOWED_DOMAIN = (process.env.ALLOWED_DOMAIN || process.env.GOOGLE_ALLOWED
 const BASE_URL = (process.env.BASE_URL || '').replace(/\/+$/, '');
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 const EMAIL_FROM = process.env.EMAIL_FROM || '';
-const EMAIL_ATIVO = !!(RESEND_API_KEY && EMAIL_FROM);
+const EMAIL_ATIVO = !!(RESEND_API_KEY && EMAIL_FROM && (!PROD || BASE_URL));
 const MS_CLIENT_ID = process.env.MICROSOFT_CLIENT_ID || '';
 const MS_TENANT = (process.env.MICROSOFT_TENANT || '').toLowerCase();
 const MS_ATIVO = !!(MS_CLIENT_ID && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(MS_TENANT));
@@ -179,7 +179,10 @@ async function enviarEmail(para, assunto, texto) {
       headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({ from: EMAIL_FROM, to: [para], subject: assunto, text: texto })
     });
-    if (!r.ok) { console.error('Falha ao enviar e-mail:', r.status); return false; }
+    if (!r.ok) {
+      console.error(`[email] Resend rejeitou o envio (HTTP ${r.status}). Verifique a chave, o remetente/domínio e as restrições da conta no painel do Resend.`);
+      return false;
+    }
     return true;
   } catch (e) { console.error('Falha ao enviar e-mail:', e.message); return false; }
 }
@@ -316,7 +319,7 @@ function criarReset(userId) {
   db.prepare('INSERT INTO resets(token_hash,user_id,expira_em) VALUES (?,?,?)').run(sha256(token), userId, new Date(Date.now() + 3600e3).toISOString());
   return token;
 }
-function esqueci(req, res, b) {
+async function esqueci(req, res, b) {
   const email = str(b.email, 160).toLowerCase();
   if (excedeu('esq|' + ipDe(req), 10, 15 * 60e3) || excedeu('esqm|' + email, 4, 60 * 60e3)) return send(res, 429, MUITAS);
   const u = emailOk(email) ? db.prepare('SELECT * FROM users WHERE email=?').get(email) : null;
@@ -325,7 +328,7 @@ function esqueci(req, res, b) {
     if (!base) console.error('Defina BASE_URL para enviar os links de redefinição de senha em produção.');
     else {
       const link = `${base}/#redefinir/${criarReset(u.id)}`;
-      enviarEmail(u.email, 'Redefinir sua senha no Carreira em Foco',
+      await enviarEmail(u.email, 'Redefinir sua senha no Carreira em Foco',
         `Olá, ${u.nome}!\n\nPara criar uma nova senha, abra o link abaixo (vale por 1 hora):\n${link}\n\nSe você não pediu isso, ignore esta mensagem.`);
     }
   }
@@ -585,7 +588,7 @@ const server = http.createServer(async (req, res) => {
     if (m === 'GET' && pathname === '/api/config') return send(res, 200, {
       googleClientId: GOOGLE_CLIENT_ID, microsoftClientId: MS_ATIVO ? MS_CLIENT_ID : '', microsoftTenant: MS_ATIVO ? MS_TENANT : '', emailAtivo: EMAIL_ATIVO });
     if (m === 'POST' && pathname === '/api/microsoft') return await entrarMicrosoft(req, res, await readBody(req));
-    if (m === 'POST' && pathname === '/api/esqueci') return esqueci(req, res, await readBody(req));
+    if (m === 'POST' && pathname === '/api/esqueci') return await esqueci(req, res, await readBody(req));
     if (m === 'POST' && pathname === '/api/redefinir') return redefinir(req, res, await readBody(req));
     if (m === 'POST' && pathname === '/api/google') return await entrarGoogle(req, res, await readBody(req));
     if (m === 'POST' && pathname === '/api/registrar') return registrar(req, res, await readBody(req));

@@ -623,7 +623,8 @@ function authShell(titulo,texto,corpo){
 }
 function vEsqueci(){
   if(!B.senha)return authShell("Esqueci minha senha","Neste ambiente de demonstração não há senha para recuperar.",'<a class="btn sec" href="#inicio">Ir para o início</a>');
-  return authShell("Esqueci minha senha","Informe o e-mail da sua conta. Se ele estiver cadastrado, enviaremos um link para criar uma nova senha, válido por 1 hora."+(window.__emailAtivo?"":" O envio de e-mails ainda não foi ativado neste site: peça o link à coordenação."),
+  if(!window.__emailAtivo)return authShell("Esqueci minha senha","A recuperação por e-mail está indisponível porque o envio ainda não foi configurado. A coordenação pode fornecer um link de redefinição. Para ativar o envio automático, configure RESEND_API_KEY, EMAIL_FROM e BASE_URL nas variáveis do Railway.",'<a class="btn sec" href="#entrar">Voltar para entrar</a>');
+  return authShell("Esqueci minha senha","Informe o e-mail da sua conta. Se ele estiver cadastrado, enviaremos um link para criar uma nova senha, válido por 1 hora.",
    '<form class="stack" data-form="esqueci" novalidate><div class="err" id="f-err" role="alert" hidden></div><div class="chip" id="f-ok" role="status" hidden style="border-radius:10px;padding:10px 12px;white-space:normal"></div><label for="e-email">E-mail<input id="e-email" name="email" type="email" autocomplete="email" required></label><button class="btn orange lg" type="submit">Enviar link</button></form>');
 }
 function vRedefinir(){
@@ -1088,7 +1089,7 @@ function extraSubmit(k,o,f){
   if(k==="esqueci"){
     if(!o.email)return fail("Informe o e-mail."),true;
     if(btn)btn.disabled=true;
-    B.esqueci(o.email).then(function(){livre();if(ok){ok.textContent="Se o e-mail estiver cadastrado, o link foi enviado. Confira também a caixa de spam.";ok.hidden=false}},function(e){livre();fail(e.message||"Não foi possível enviar.")});
+    B.esqueci(o.email).then(function(r){livre();if(ok){ok.textContent=r.emailAtivo?"Se este e-mail estiver cadastrado, enviaremos um link. Confira também a caixa de spam; se não chegar, peça ajuda à coordenação.":"O envio de e-mails está desativado. Peça um link à coordenação.";ok.hidden=false}},function(e){livre();fail(e.message||"Não foi possível enviar.")});
     return true;
   }
   if(k==="redefinir"){

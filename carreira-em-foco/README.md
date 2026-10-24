@@ -42,7 +42,7 @@ Também dá para promover alguém depois do cadastro: `npm run criar-admin -- em
 ## Como ativar cada login
 - **Google:** Google Cloud Console, crie um "ID do cliente OAuth" tipo Web, adicione o endereço do site em "Origens JavaScript autorizadas" e informe o ID em `GOOGLE_CLIENT_ID`.
 - **Microsoft 365:** no Microsoft Entra ID (Azure) registre um aplicativo de página única, com URI de redirecionamento `https://SEU-SITE/` e marque "Tokens de ID" em Autenticação. Informe o ID do aplicativo em `MICROSOFT_CLIENT_ID` e o ID do diretório em `MICROSOFT_TENANT`.
-- **E-mails:** crie conta no Resend, verifique o domínio de envio e informe `RESEND_API_KEY` e `EMAIL_FROM`.
+- **E-mails:** crie conta no Resend, verifique o domínio de envio e configure `RESEND_API_KEY`, `EMAIL_FROM` (remetente dentro do domínio verificado) e `BASE_URL` nas variáveis do Railway. `emailAtivo: true` confirma apenas que as variáveis estão configuradas; confira o painel/logs do Resend para saber se a mensagem foi aceita e entregue. `GOOGLE_CLIENT_ID` habilita apenas o login Google; não configura envio de e-mail.
 
 ## Estrutura
 - `server.js`: servidor HTTP e API (`/api/...`).
