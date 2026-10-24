@@ -80,15 +80,34 @@ try {
     if (!ADMIN_EMAIL) console.error('Defina ADMIN_EMAIL junto com ADMIN_PASSWORD. Conta de coordenação não criada.');
     else if (ADMIN_PASSWORD.length < 10) console.error('ADMIN_PASSWORD precisa ter pelo menos 10 caracteres. Conta de coordenação não criada.');
     else {
-      const salt = crypto.randomBytes(16).toString('hex'), h = hash(ADMIN_PASSWORD, salt);
-      if (!db.prepare('SELECT id FROM users WHERE email=?').get(ADMIN_EMAIL))
+      const existente = db.prepare('SELECT id, role, verificado, senha_hash, senha_salt FROM users WHERE email=?').get(ADMIN_EMAIL);
+      if (!existente) {
+        const salt = crypto.randomBytes(16).toString('hex'), h = hash(ADMIN_PASSWORD, salt);
         db.prepare("INSERT INTO users(nome,email,senha_hash,senha_salt,curso,semestre,role,verificado) VALUES ('Coordenação',?,?,?,'Coordenação','','coordenacao',1)").run(ADMIN_EMAIL, h, salt);
-      else
-        db.prepare("UPDATE users SET role='coordenacao', verificado=1, senha_hash=?, senha_salt=? WHERE email=?").run(h, salt, ADMIN_EMAIL);
+      } else {
+        const hashAtual = Buffer.from(existente.senha_hash, 'hex');
+        const hashConfigurado = Buffer.from(hash(ADMIN_PASSWORD, existente.senha_salt), 'hex');
+        const senhaIgual = hashAtual.length === hashConfigurado.length && crypto.timingSafeEqual(hashAtual, hashConfigurado);
+        if (existente.role !== 'coordenacao' || !existente.verificado || !senhaIgual) {
+          const salt = crypto.randomBytes(16).toString('hex'), h = hash(ADMIN_PASSWORD, salt);
+          transaction(() => {
+            db.prepare("UPDATE users SET role='coordenacao', verificado=1, senha_hash=?, senha_salt=? WHERE id=?").run(h, salt, existente.id);
+            db.prepare('DELETE FROM sessions WHERE user_id=?').run(existente.id);
+            db.prepare('DELETE FROM resets WHERE user_id=?').run(existente.id);
+          });
+        }
+      }
     }
   }
   /* só e-mails comprovados são promovidos a coordenação (evita que alguém crie conta com o e-mail de outra pessoa) */
-  if (ADMINS.length) db.prepare(`UPDATE users SET role='coordenacao' WHERE verificado=1 AND email IN (${ADMINS.map(() => '?').join(',')})`).run(...ADMINS);
+  if (ADMINS.length) {
+    const promover = db.prepare(`SELECT id FROM users WHERE verificado=1 AND role<>'coordenacao' AND email IN (${ADMINS.map(() => '?').join(',')})`).all(...ADMINS);
+    for (const u of promover) transaction(() => {
+      db.prepare("UPDATE users SET role='coordenacao' WHERE id=?").run(u.id);
+      db.prepare('DELETE FROM sessions WHERE user_id=?').run(u.id);
+      db.prepare('DELETE FROM resets WHERE user_id=?').run(u.id);
+    });
+  }
 } catch (e) { console.error('Erro ao configurar coordenação:', e.message); }
 
 const COOKIE = PROD ? '__Host-cef' : 'cef';
@@ -252,7 +271,14 @@ function contaExterna(res, email, nome, origem) {
     });
     u.verificado = 1;
   }
-  if (adm && u.role !== 'coordenacao') { db.prepare("UPDATE users SET role='coordenacao' WHERE id=?").run(u.id); u.role = 'coordenacao'; }
+  if (adm && u.role !== 'coordenacao') {
+    transaction(() => {
+      db.prepare("UPDATE users SET role='coordenacao' WHERE id=?").run(u.id);
+      db.prepare('DELETE FROM sessions WHERE user_id=?').run(u.id);
+      db.prepare('DELETE FROM resets WHERE user_id=?').run(u.id);
+    });
+    u.role = 'coordenacao';
+  }
   setSession(res, u.id);
   if (novo) evento(u.id, 'cadastro', origem);
   evento(u.id, 'login_' + origem, origem);

@@ -16,14 +16,14 @@ node server.js            # ou: npm start
 |---|---|
 | `PORT` | Porta HTTP (padrão 3000) |
 | `DB_PATH` | Arquivo do banco (padrão `data/carreira.db`) |
-| `ADMIN_EMAILS` | E-mails (separados por vírgula) que viram coordenação ao se cadastrar |
+| `ADMIN_EMAILS` | E-mails (separados por vírgula) promovidos a coordenação apenas depois de comprovados por Google/Microsoft |
 | `NODE_ENV` | Use `production` atrás de HTTPS (cookies seguros) |
 | `BASE_URL` | Endereço público do site, ex.: `https://carreira.unifametro.edu.br`. **Obrigatório em produção** para os links de e-mail |
 | `RESEND_API_KEY`, `EMAIL_FROM` | Envio de e-mails (recuperação de senha, lembretes, resposta da mentoria) via [Resend](https://resend.com). Sem isso o site funciona, só não envia e-mails |
 | `GOOGLE_CLIENT_ID` | Ativa "Continuar com Google" |
 | `MICROSOFT_CLIENT_ID`, `MICROSOFT_TENANT` | Ativa "Continuar com Microsoft 365". `MICROSOFT_TENANT` deve ser o **ID (GUID)** do diretório da faculdade |
 | `ALLOWED_DOMAIN` | (opcional) limita os logins Google e Microsoft a um domínio, ex.: `unifametro.edu.br` |
-| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Juntos, criam a conta de coordenação inicial (senha com 10+ caracteres). Defina ambos só nas variáveis do servidor (Railway), nunca no código. **A cada reinício a senha dessa conta volta ao valor da variável.** Não há e-mail administrador padrão. |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Juntos, criam ou configuram a conta de coordenação inicial (senha com 10+ caracteres). Defina ambos só nas variáveis privadas do servidor (Railway), nunca no código nem como argumento de terminal. Se a senha ou os privilégios mudarem, sessões e links de redefinição existentes são invalidados. Não há e-mail administrador padrão. |
 | `TRUST_PROXY_HOPS` | Quantos proxies ficam na frente do servidor (padrão 1 em produção, como no Railway). Serve para o limite de tentativas usar o IP real de cada pessoa |
 | `LEMBRETE_HORA`, `LEMBRETE_INTERVALO_MS`, `TZ_LEMBRETE` | Horário (padrão 8h), intervalo de verificação e fuso (padrão America/Fortaleza) dos lembretes |
 
@@ -32,7 +32,7 @@ Exemplo de produção:
 NODE_ENV=production PORT=8080 BASE_URL=https://carreira.unifametro.edu.br \
 ADMIN_EMAILS=coordenacao@unifametro.edu.br RESEND_API_KEY=... EMAIL_FROM="Carreira em Foco <carreira@unifametro.edu.br>" node server.js
 ```
-Também dá para promover alguém depois do cadastro: `npm run criar-admin -- email@unifametro.edu.br`.
+Para promover uma conta existente depois do cadastro, ela precisa ter o e-mail verificado por Google/Microsoft. Configure `ADMIN_PASSWORD` como variável de ambiente privada (nunca passe a senha como argumento) e execute `npm run criar-admin -- email@unifametro.edu.br`. O script encerra as sessões existentes e invalida links de redefinição. Para criar a primeira conta administrativa, configure `ADMIN_EMAIL` e `ADMIN_PASSWORD` no servidor.
 
 ## O que o sistema tem
 - **Estudante:** perfil e competências, objetivos e plano de ação, **linha do tempo por mês ou semestre**, **teste de perfil profissional**, **gerador de currículo** (PDF pela impressão e Word), **conquistas e sequência de acessos**, oportunidades (inclui **vagas e eventos divulgados pela coordenação**), **pedido de mentoria**, **lembretes de prazo por e-mail**, avaliação do sistema.
@@ -55,7 +55,7 @@ Também dá para promover alguém depois do cadastro: `npm run criar-admin -- em
 - Limite de tentativas por IP e por e-mail (login, cadastro, recuperação de senha, Google); o tempo de resposta do login não revela se o e-mail existe.
 - Cabeçalhos: Content-Security-Policy restrita (só o script do próprio site e do Google), HSTS, X-Frame-Options, nosniff, Permissions-Policy.
 - Proteção contra requisições de outros sites (CSRF) por checagem de origem e tipo do conteúdo; limite de tamanho das requisições.
-- Quem se cadastra com senha **nunca** vira coordenação. A coordenação só vem de `ADMIN_EMAIL`/`ADMIN_PASSWORD` ou de e-mail comprovado pelo Google/Microsoft listado em `ADMIN_EMAILS`.
+- Quem se cadastra com senha **nunca** vira coordenação apenas por informar um e-mail listado; o e-mail deve ser comprovado por Google/Microsoft ou a conta deve ser provisionada por `ADMIN_EMAIL`/`ADMIN_PASSWORD` no servidor.
 - Se alguém se cadastrar com o e-mail de outra pessoa e a dona entrar depois com Google, a senha antiga é descartada e a conta passa a ser só da dona.
 - A coordenação não gera link de senha para outras contas de coordenação. A exportação CSV neutraliza fórmulas de planilha. Links de vagas só aceitam http(s).
 - Não há confirmação de e-mail no cadastro por senha. Para exigir isso, use só Google/Microsoft com `ALLOWED_DOMAIN`.
