@@ -141,7 +141,7 @@ A paleta combina verdes escuros e médios com um verde vivo, laranja de destaque
 
 O conteúdo principal usa um contêiner de até `1120px`, centralizado, com recuos laterais mínimos de `16px` e respeito às áreas seguras do dispositivo. A navegação superior mede pelo menos `68px`. A vitrine usa uma grade assimétrica de texto e alvo ilustrado, com cartões flutuantes de competência e tarefa à direita; estatísticas de pesquisa aparecem em uma faixa com divisores, sem cartões individuais. Cartões de conteúdo usam duas colunas com intervalo de `20px`.
 
-Em larguras de até `1180px`, a navegação superior some, a navegação inferior fixa é exibida e as grades de destaque, autenticação e conteúdo passam a uma coluna. Até `680px`, os links da navegação inferior ficam em uma única linha horizontal, com ícones e nomes completos lado a lado, sem quebra de texto. A barra pode ser rolada horizontalmente, fica pelo menos `56px` acima da borda inferior para evitar sobreposição dos controles do navegador, respeita a área segura do aparelho e destaca o item atual; o conteúdo reserva espaço extra para não ficar encoberto. Grades de oportunidades passam a uma coluna para evitar rolagem horizontal em celulares estreitos. Grades de cartões usam `auto-fit`/`auto-fill` e larguras mínimas por padrão. Espaçamentos de seção variam com `clamp()`.
+Em larguras de até `1180px`, a navegação superior é substituída por uma barra contextual logo abaixo do cabeçalho; as grades de destaque, autenticação e conteúdo passam a uma coluna. Até `680px`, os links da navegação ficam em uma única linha horizontal, com ícones e nomes completos lado a lado, sem quebra de texto. A barra pode ser rolada horizontalmente, acompanha o cabeçalho ao rolar a página e ocupa seu próprio espaço no fluxo do documento para não cobrir campos ou cartões. Grades de oportunidades passam a uma coluna para evitar rolagem horizontal em celulares estreitos. Grades de cartões usam `auto-fit`/`auto-fill` e larguras mínimas por padrão. Espaçamentos de seção variam com `clamp()`.
 
 ## Elevation & Depth
 
@@ -178,7 +178,7 @@ Campos usam fundo de superfície suave, borda de `1.5px`, raio de `12px`, paddin
 
 ### Navigation
 
-A navegação superior é fixa no topo durante a rolagem, com fundo translúcido, desfoque e borda inferior. Links têm estado padrão secundário, hover com fundo verde suave e estado atual preenchido. Até `1180px`, é substituída pela barra inferior que mantém os mesmos nomes; até `680px`, a barra flutua pelo menos `56px` acima da borda inferior, respeita a área segura do aparelho e apresenta os links em uma linha rolável, com ícones e rótulos completos lado a lado, sem quebra de linha.
+A navegação superior é fixa no topo durante a rolagem, com fundo translúcido, desfoque e borda inferior. Links têm estado padrão secundário, hover com fundo verde suave e estado atual preenchido. Até `1180px`, é substituída por uma barra rolável logo abaixo do cabeçalho, que mantém os mesmos nomes e ocupa espaço no fluxo do conteúdo, sem sobreposição; até `680px`, ícones e rótulos completos ficam lado a lado em uma única linha, sem quebra.
 
 ### Tabs
 

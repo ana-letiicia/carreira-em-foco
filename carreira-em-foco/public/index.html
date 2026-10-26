@@ -207,8 +207,8 @@ blockquote{margin:0;padding:10px 14px;border-left:4px solid var(--verde-500);bac
   .who .nm{display:none}
   .hero .in,.auth,.grid2{grid-template-columns:minmax(0,1fr)}
   .focus{max-width:300px}
-  .main{padding-bottom:110px}
-  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--head-bg);backdrop-filter:blur(10px);border-top:1px solid var(--line);justify-content:space-around;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+  .main{padding-bottom:56px}
+  .tabbar{display:flex;position:sticky;top:calc(env(safe-area-inset-top,0px) + 68px);z-index:39;background:var(--head-bg);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);justify-content:space-around;padding:6px max(8px,env(safe-area-inset-right,0px)) 6px max(8px,env(safe-area-inset-left,0px))}
   .tabbar a{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);text-decoration:none;font-size:.66rem;font-weight:700;padding:6px 2px;border-radius:10px;min-width:0;flex:1}
   .tabbar a svg{stroke:currentColor;width:22px;height:22px}
   .tabbar a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
@@ -267,12 +267,12 @@ a{text-underline-offset:.18em}
   .brand span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .who{flex:0 0 auto;min-width:0;gap:6px;margin-left:0}
   .who .btn{min-height:36px;padding:6px 9px;font-size:.82rem}
-  .tabbar{display:flex;position:fixed;left:10px;right:10px;bottom:max(56px,calc(env(safe-area-inset-bottom,0px) + 16px));flex-flow:row nowrap;align-items:center;justify-content:flex-start;gap:6px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:6px 8px;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px rgba(0,40,20,.16)}
+  .tabbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 60px);left:auto;right:auto;bottom:auto;z-index:39;flex-flow:row nowrap;align-items:center;justify-content:flex-start;gap:6px;width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:7px max(12px,env(safe-area-inset-right,0px)) 7px max(12px,env(safe-area-inset-left,0px));background:var(--head-bg);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .tabbar::-webkit-scrollbar{display:none}
-  .tabbar a{display:flex;flex:0 0 auto;flex-direction:row;align-items:center;gap:7px;min-width:max-content;min-height:44px;padding:0 12px;border-radius:11px;font-size:.8rem;line-height:1.2;white-space:nowrap;scroll-snap-align:start}
+  .tabbar a{display:flex;flex:0 0 auto;flex-direction:row;align-items:center;gap:7px;min-width:max-content;min-height:44px;padding:0 12px;border-radius:11px;font-size:clamp(.76rem,3.5vw,.88rem);line-height:1.2;white-space:nowrap;scroll-snap-align:start}
   .tabbar a svg{width:19px;height:19px;flex:none}
   .tabbar a[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
-  .main{padding-block:20px calc(156px + env(safe-area-inset-bottom,0px))}
+  .main{padding-block:20px 56px}
   .wrap{gap:18px}
   .card{padding:16px}
   .opps{grid-template-columns:minmax(0,1fr)}
@@ -1033,7 +1033,7 @@ function render(){
     var m={painel:vPainel,planodeacao:vPlano,perfil:vPerfil,oportunidades:vOpp,mentoria:vMentoria,avaliacao:vAvaliacao,coordenacao:vCoord,linhadotempo:vLinha,teste:vTeste,curriculo:vCurriculo,coordvagas:vCoordVagas,coordmentorias:vCoordMent,relatorio:vRelatorio};
     body='<main class="main gut">'+subnav(v)+m[v]()+'</main>';
   }else body=vInicio();
-  document.getElementById("root").innerHTML=header(v)+body+tabbar(v);
+  document.getElementById("root").innerHTML=header(v)+tabbar(v)+body;
   if((v==="entrar"||v==="criar")&&window.__googleId)montarGoogle();
   if((v==="coordenacao"||v==="relatorio")&&B.kind==="api"&&!window.__ativ)B.atividade().then(function(a){window.__ativ=a;if(ADMINROTAS.indexOf(view())>-1)render()},function(){window.__ativ={por_dia:[],por_acao:[],por_tela:[]};});
   if((v==="coordenacao"||v==="relatorio")&&!window.__rows)B.admin().then(function(r){window.__rows=r;if(ADMINROTAS.indexOf(view())>-1)render()},function(){window.__rows=[];render()});
