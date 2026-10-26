@@ -257,12 +257,12 @@ a{text-underline-offset:.18em}
   .brand span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .who{flex:0 0 auto;min-width:0;gap:6px;margin-left:0}
   .who .btn{min-height:36px;padding:6px 9px;font-size:.82rem}
-  .tabbar{display:flex;flex-wrap:nowrap;gap:4px;justify-content:flex-start;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:7px max(8px,env(safe-area-inset-right,0px)) calc(7px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));background:var(--surface);box-shadow:0 -8px 24px rgba(0,40,20,.12)}
+  .tabbar{display:flex;position:fixed;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);flex-flow:row nowrap;align-items:center;justify-content:flex-start;gap:6px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:6px 8px;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px rgba(0,40,20,.16)}
   .tabbar::-webkit-scrollbar{display:none}
-  .tabbar a{flex:1 0 56px;min-width:0;min-height:50px;gap:3px;font-size:clamp(.52rem,2.2vw,.64rem);line-height:1.1;white-space:nowrap;padding:5px 2px;scroll-snap-align:start}
-  .tabbar a svg{width:19px;height:19px}
+  .tabbar a{display:flex;flex:0 0 auto;flex-direction:row;align-items:center;gap:7px;min-width:max-content;min-height:44px;padding:0 12px;border-radius:11px;font-size:.8rem;line-height:1.2;white-space:nowrap;scroll-snap-align:start}
+  .tabbar a svg{width:19px;height:19px;flex:none}
   .tabbar a[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
-  .main{padding-block:20px calc(86px + env(safe-area-inset-bottom,0px))}
+  .main{padding-block:20px calc(104px + env(safe-area-inset-bottom,0px))}
   .wrap{gap:18px}
   .card{padding:16px}
   .opps{grid-template-columns:minmax(0,1fr)}
@@ -288,7 +288,6 @@ a{text-underline-offset:.18em}
   .brand{font-size:.92rem}
   .who{gap:4px}
   .who .btn{padding-inline:7px;font-size:.78rem}
-  .tabbar a{flex-basis:54px}
   .feat,.steps{grid-template-columns:minmax(0,1fr)}
 }
 @media (prefers-reduced-motion:reduce){
