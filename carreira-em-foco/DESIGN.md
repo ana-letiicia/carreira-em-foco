@@ -141,7 +141,7 @@ A paleta combina verdes escuros e médios com um verde vivo, laranja de destaque
 
 O conteúdo principal usa um contêiner de até `1120px`, centralizado, com recuos laterais mínimos de `16px` e respeito às áreas seguras do dispositivo. A navegação superior mede pelo menos `68px`. A vitrine usa uma grade assimétrica de texto e alvo ilustrado, com cartões flutuantes de competência e tarefa à direita; estatísticas de pesquisa aparecem em uma faixa com divisores, sem cartões individuais. Cartões de conteúdo usam duas colunas com intervalo de `20px`.
 
-Em larguras de até `1180px`, a navegação superior some, a navegação inferior fixa é exibida e as grades de destaque, autenticação e conteúdo passam a uma coluna. Grades de cartões usam `auto-fit`/`auto-fill` e larguras mínimas por padrão. Espaçamentos de seção variam com `clamp()`; a área principal reserva espaço inferior para a navegação fixa em telas menores.
+Em larguras de até `1180px`, a navegação superior some, a navegação inferior fixa é exibida e as grades de destaque, autenticação e conteúdo passam a uma coluna. Até `680px`, a navegação inferior organiza os mesmos nomes completos do desktop em três colunas, com alvos de toque de pelo menos `44px`; grades de oportunidades passam a uma coluna para evitar rolagem horizontal em celulares estreitos. Grades de cartões usam `auto-fit`/`auto-fill` e larguras mínimas por padrão. Espaçamentos de seção variam com `clamp()`; a área principal reserva espaço inferior para a navegação fixa em telas menores.
 
 ## Elevation & Depth
 
@@ -178,7 +178,7 @@ Campos usam fundo de superfície suave, borda de `1.5px`, raio de `12px`, paddin
 
 ### Navigation
 
-A navegação superior é fixa no topo durante a rolagem, com fundo translúcido, desfoque e borda inferior. Links têm estado padrão secundário, hover com fundo verde suave e estado atual preenchido. Até `1180px`, é substituída pela barra inferior fixa, também translúcida.
+A navegação superior é fixa no topo durante a rolagem, com fundo translúcido, desfoque e borda inferior. Links têm estado padrão secundário, hover com fundo verde suave e estado atual preenchido. Até `1180px`, é substituída pela barra inferior fixa, também translúcida, mantendo os mesmos nomes; até `680px`, os links se distribuem em três colunas para preservar a legibilidade e a área de toque.
 
 ### Tabs
 

@@ -257,6 +257,12 @@ a{text-underline-offset:.18em}
   .brand span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .who{flex:0 0 auto;min-width:0;gap:6px;margin-left:0}
   .who .btn{min-height:36px;padding:6px 9px;font-size:.82rem}
+  .tabbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(44px,auto);gap:4px;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+  .tabbar a{font-size:.72rem;line-height:1.2;padding:4px 2px}
+  .tabbar a svg{width:20px;height:20px}
+  .main{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}
+  .card{padding:16px}
+  .opps{grid-template-columns:minmax(0,1fr)}
   .hero .in{width:calc(100vw - 32px);max-width:calc(100vw - 32px);min-width:0;gap:30px;padding-block:40px}
   .hero-copy{width:calc(100vw - 48px);max-width:100%;min-width:0;margin-inline:auto}
   .hero h1{font-size:clamp(2.55rem,11.5vw,3.5rem);letter-spacing:-.03em}
@@ -275,7 +281,10 @@ a{text-underline-offset:.18em}
 }
 @media (max-width:420px){
   .hero h1{font-size:clamp(2.35rem,11.2vw,2.9rem)}
-  .top .who a[href="#criar"]{display:none}
+  .top .in{gap:6px}
+  .brand{font-size:.92rem}
+  .who{gap:4px}
+  .who .btn{padding-inline:7px;font-size:.78rem}
   .feat,.steps{grid-template-columns:minmax(0,1fr)}
 }
 @media (prefers-reduced-motion:reduce){
@@ -557,9 +566,8 @@ function header(v){
 }
 function tabbar(v){
   if(!USER)return"";
-  var items=NAV.slice();if(USER.admin)items.push(["coordenacao","Coord."]);
-  var short={"Plano de ação":"Plano","Oportunidades":"Vagas","Avaliação":"Avaliar"};
-  return '<nav class="tabbar" aria-label="Menu principal">'+items.map(function(n){return '<a href="#'+n[0]+'"'+((GRUPO[v]||v)===n[0]?' aria-current="page"':"")+'>'+ico(n[0])+'<span>'+(short[n[1]]||n[1])+'</span></a>'}).join("")+'</nav>';
+  var items=NAV.slice();if(USER.admin)items.push(["coordenacao","Coordenação"]);
+  return '<nav class="tabbar" aria-label="Menu principal">'+items.map(function(n){return '<a href="#'+n[0]+'"'+((GRUPO[v]||v)===n[0]?' aria-current="page"':"")+'>'+ico(n[0])+'<span>'+n[1]+'</span></a>'}).join("")+'</nav>';
 }
 
 /* ---------- vitrine ---------- */
