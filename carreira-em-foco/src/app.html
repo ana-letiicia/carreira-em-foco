@@ -257,12 +257,12 @@ a{text-underline-offset:.18em}
   .brand span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .who{flex:0 0 auto;min-width:0;gap:6px;margin-left:0}
   .who .btn{min-height:36px;padding:6px 9px;font-size:.82rem}
-  .tabbar{display:flex;position:fixed;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);flex-flow:row nowrap;align-items:center;justify-content:flex-start;gap:6px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:6px 8px;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px rgba(0,40,20,.16)}
+  .tabbar{display:flex;position:fixed;left:10px;right:10px;bottom:max(56px,calc(env(safe-area-inset-bottom,0px) + 16px));flex-flow:row nowrap;align-items:center;justify-content:flex-start;gap:6px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:6px 8px;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px rgba(0,40,20,.16)}
   .tabbar::-webkit-scrollbar{display:none}
   .tabbar a{display:flex;flex:0 0 auto;flex-direction:row;align-items:center;gap:7px;min-width:max-content;min-height:44px;padding:0 12px;border-radius:11px;font-size:.8rem;line-height:1.2;white-space:nowrap;scroll-snap-align:start}
   .tabbar a svg{width:19px;height:19px;flex:none}
   .tabbar a[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
-  .main{padding-block:20px calc(104px + env(safe-area-inset-bottom,0px))}
+  .main{padding-block:20px calc(156px + env(safe-area-inset-bottom,0px))}
   .wrap{gap:18px}
   .card{padding:16px}
   .opps{grid-template-columns:minmax(0,1fr)}
