@@ -641,7 +641,7 @@ function googleBlock(api,criar){
   return h+'<p class="gnote">Rápido e seguro: não guardamos a senha da sua conta Google.</p><div class="sep">ou use seu e-mail</div>';
 }
 function campoSenha(id,nome,texto,autocomplete,maxlength){
-  return '<div class="password-entry"><label for="'+id+'">'+texto+'</label><span class="password-control"><input id="'+id+'" name="'+nome+'" type="password" autocomplete="'+autocomplete+'"'+(maxlength?' maxlength="'+maxlength+'"':'')+' required><button type="button" class="password-toggle" data-act="password-visibility" data-target="'+id+'" aria-label="Mostrar senha" aria-controls="'+id+'" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" data-eye-open><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" data-eye-closed hidden><path d="m3 3 18 18"/><path d="M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a15.7 15.7 0 0 1-3.1 3.8M6.2 6.2C3.5 8.1 2 12 2 12s3.6 7 10 7c1.3 0 2.5-.3 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></span></div>';
+  return '<div class="password-entry"><label for="'+id+'">'+texto+'</label><span class="password-control"><input id="'+id+'" name="'+nome+'" type="password" autocomplete="'+autocomplete+'"'+(maxlength?' maxlength="'+maxlength+'"':'')+' required><button type="button" class="password-toggle" data-act="password-visibility" data-target="'+id+'" aria-label="Mostrar senha" aria-controls="'+id+'" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" data-eye-open hidden><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" data-eye-closed><path d="m3 3 18 18"/><path d="M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a15.7 15.7 0 0 1-3.1 3.8M6.2 6.2C3.5 8.1 2 12 2 12s3.6 7 10 7c1.3 0 2.5-.3 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></span></div>';
 }
 function vAuth(modo){
   var criar=modo==="criar",api=B.senha;
@@ -1158,8 +1158,9 @@ document.addEventListener("click",function(e){
     input.type=visible?"text":"password";
     b.setAttribute("aria-label",visible?"Ocultar senha":"Mostrar senha");
     b.setAttribute("aria-pressed",String(visible));
-    b.querySelector("[data-eye-open]").hidden=visible;
-    b.querySelector("[data-eye-closed]").hidden=!visible;
+    var eyeOpen=b.querySelector("[data-eye-open]"),eyeClosed=b.querySelector("[data-eye-closed]");
+    if(visible){eyeOpen.removeAttribute("hidden");eyeClosed.setAttribute("hidden","")}
+    else{eyeOpen.setAttribute("hidden","");eyeClosed.removeAttribute("hidden")}
     return;
   }
   if(a==="google-off"){var ee=document.getElementById("auth-err");ee.textContent=B.senha?"O login com Google ainda não foi ativado neste site. Use e-mail e senha por enquanto.":"O login com Google fica disponível no site publicado. Aqui, preencha seus dados.";ee.hidden=false;return}
