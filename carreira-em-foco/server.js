@@ -7,20 +7,20 @@
  *   ADMIN_EMAILS   e-mails (separados por vírgula) que viram "coordenacao" ao se cadastrar
  *   NODE_ENV       use "production" atrás de HTTPS para cookies seguros
  *   BASE_URL       endereço público do site (ex.: https://carreira.unifametro.edu.br); obrigatório em produção
- *                  para os e-mails de redefinição de senha e lembretes
- *   RESEND_API_KEY / EMAIL_FROM   ativam o envio de e-mails (redefinição de senha, lembretes, respostas de mentoria)
+ *                  para os links de redefinição de senha
+ *   RESEND_API_KEY / EMAIL_FROM   ativam o envio de e-mails de redefinição de senha
  *   GOOGLE_CLIENT_ID              ativa o login com Google
  *   MICROSOFT_CLIENT_ID / MICROSOFT_TENANT   ativam o login com Microsoft 365 (MICROSOFT_TENANT = ID do diretório da faculdade)
  *   ALLOWED_DOMAIN                limita o login por Google/Microsoft a um domínio (ex.: unifametro.edu.br)
  *   ADMIN_EMAIL / ADMIN_PASSWORD     cria (ou atualiza) a conta de coordenação inicial; use senha forte e guarde só nas variáveis do servidor
  *   TRUST_PROXY_HOPS              quantos proxies ficam na frente do servidor (padrão 1 em produção); usado para identificar o IP real
- *   LEMBRETE_HORA                 hora (0 a 23, fuso de Fortaleza) a partir da qual os lembretes diários saem (padrão 8)
  */
 const http = require('http');
 const { DatabaseSync } = require('node:sqlite');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const CATALOGO_CURSOS = require('./cursos.json');
 
 const PORT = process.env.PORT || 3000;
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'data', 'carreira.db');
@@ -40,9 +40,7 @@ const EMAIL_ATIVO = !!(RESEND_API_KEY && EMAIL_FROM && (!PROD || BASE_URL));
 const MS_CLIENT_ID = process.env.MICROSOFT_CLIENT_ID || '';
 const MS_TENANT = (process.env.MICROSOFT_TENANT || '').toLowerCase();
 const MS_ATIVO = !!(MS_CLIENT_ID && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(MS_TENANT));
-const LEMBRETE_HORA = parseInt(process.env.LEMBRETE_HORA || '8', 10);
-const LEMBRETE_INTERVALO = parseInt(process.env.LEMBRETE_INTERVALO_MS || '3600000', 10);
-const TZ = process.env.TZ_LEMBRETE || 'America/Fortaleza';
+const TZ = 'America/Fortaleza';
 
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 const db = new DatabaseSync(DB_PATH);
@@ -52,8 +50,6 @@ db.exec(fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8'));
 (function migrar() {
   const cols = db.prepare('PRAGMA table_info(users)').all().map(c => c.name);
   if (!cols.includes('extra')) db.exec("ALTER TABLE users ADD COLUMN extra TEXT NOT NULL DEFAULT '{}'");
-  if (!cols.includes('lembretes')) db.exec('ALTER TABLE users ADD COLUMN lembretes INTEGER NOT NULL DEFAULT 0');
-  if (!cols.includes('lembrete_em')) db.exec('ALTER TABLE users ADD COLUMN lembrete_em TEXT');
   /* verificado = 1 quando o e-mail foi comprovado (Google, Microsoft ou conta criada pelo administrador do servidor) */
   if (!cols.includes('verificado')) db.exec('ALTER TABLE users ADD COLUMN verificado INTEGER NOT NULL DEFAULT 0');
   /* tokens de sessão passam a ser guardados só como hash: sessões antigas deixam de valer */
@@ -64,6 +60,14 @@ db.exec(fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8'));
 
 /* ---------- utilidades ---------- */
 const str = (v, max) => String(v == null ? '' : v).trim().slice(0, max);
+const chaveCurso = v => String(v == null ? '' : v).normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/\s+/g, ' ').toLowerCase();
+const cursosPorChave = new Map(CATALOGO_CURSOS.flatMap(grupo => grupo.cursos.map(curso => [chaveCurso(curso), curso])));
+cursosPorChave.set('ads', cursosPorChave.get(chaveCurso('Análise e Desenvolvimento de Sistemas')));
+const cursoOficial = v => cursosPorChave.get(chaveCurso(v)) || '';
+const nomeCurso = v => {
+  const curso = str(v, 120).replace(/\s+/g, ' ');
+  return cursoOficial(curso) || (chaveCurso(curso) === '__outro__' ? '' : curso);
+};
 const hash = (senha, salt) => crypto.scryptSync(senha, salt, 64).toString('hex');
 const emailOk = e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 const dateOk = d => d === '' || /^\d{4}-\d{2}-\d{2}$/.test(d);
@@ -216,9 +220,10 @@ function baseUrl(req) {
 function registrar(req, res, b) {
   if (excedeu('reg|' + ipDe(req), 10, 60 * 60e3)) return send(res, 429, MUITAS);
   const nome = str(b.nome, 100).replace(/\s+/g, ' '), email = str(b.email, 160).toLowerCase();
-  const curso = str(b.curso, 120), semestre = str(b.semestre, 40), senha = String(b.senha || '');
+  const curso = nomeCurso(b.curso), semestre = str(b.semestre, 40), senha = String(b.senha || '');
   if (!/^\S{2,}( \S+)+$/.test(nome)) return send(res, 400, { erro: 'Informe seu nome completo (nome e sobrenome).' });
   if (!emailOk(email)) return send(res, 400, { erro: 'Informe um e-mail válido.' });
+  if (!curso) return send(res, 400, { erro: 'Selecione um curso ou informe o nome do seu curso.' });
   if (senha.length < 8) return send(res, 400, { erro: 'A senha precisa ter pelo menos 8 caracteres.' });
   if (senha.length > SENHA_MAX) return send(res, 400, { erro: 'A senha é longa demais.' });
   if (senhaFraca(senha, email)) return send(res, 400, { erro: 'Essa senha é muito fácil de adivinhar. Escolha outra.' });
@@ -384,7 +389,7 @@ function estado(req, res, u) {
   const fb = db.prepare('SELECT * FROM feedback WHERE user_id=?').get(id);
   const un = x => String(x).replace(/:\d+$/, '');
   send(res, 200, {
-    profile: { nome: u.nome, curso: u.curso, semestre: u.semestre, area: u.area, lembretes: !!u.lembretes },
+    profile: { nome: u.nome, curso: u.curso, semestre: u.semestre, area: u.area },
     extra: (() => { try { return JSON.parse(u.extra || '{}'); } catch (e) { return {}; } })(),
     skills: db.prepare('SELECT id, tipo AS kind, nome, nivel FROM skills WHERE user_id=? ORDER BY rowid').all(id).map(r => ({ ...r, id: un(r.id) })),
     goals: db.prepare('SELECT id, titulo, prazo, data FROM goals WHERE user_id=? ORDER BY rowid').all(id).map(r => ({ ...r, id: un(r.id) })),
@@ -396,9 +401,12 @@ function estado(req, res, u) {
 function salvar(id, s) {
   transaction(() => {
     const p = s.profile || {};
+    const cursoRecebido = str(p.curso, 120);
+    const curso = nomeCurso(cursoRecebido);
+    if (cursoRecebido && !curso && cursoRecebido !== cursoAtual) throw new Error('Selecione um curso ou informe o nome do seu curso.');
     const extra = JSON.stringify(s.extra && typeof s.extra === 'object' && !Array.isArray(s.extra) ? s.extra : {});
-    db.prepare(`UPDATE users SET nome=?, curso=?, semestre=?, area=?, lembretes=?, atualizado_em=datetime('now') WHERE id=?`)
-      .run(str(p.nome, 100) || 'Estudante', str(p.curso, 120), str(p.semestre, 40), str(p.area, 120), p.lembretes ? 1 : 0, id);
+    db.prepare(`UPDATE users SET nome=?, curso=?, semestre=?, area=?, atualizado_em=datetime('now') WHERE id=?`)
+      .run(str(p.nome, 100) || 'Estudante', curso || cursoRecebido, str(p.semestre, 40), str(p.area, 120), id);
     if (extra.length <= 40000) db.prepare('UPDATE users SET extra=? WHERE id=?').run(extra, id);
     db.prepare('DELETE FROM tasks WHERE user_id=?').run(id);
     db.prepare('DELETE FROM goals WHERE user_id=?').run(id);
@@ -451,9 +459,8 @@ function atividade() {
     FROM eventos WHERE tipo<>'tela' GROUP BY 1, 2 ORDER BY n DESC LIMIT 12`).all();
   const totais = Object.fromEntries(db.prepare('SELECT tipo, COUNT(*) AS n FROM eventos GROUP BY tipo').all().map(r => [r.tipo, r.n]));
   const periodo = { ...db.prepare('SELECT MIN(date(criado_em)) AS inicio, MAX(date(criado_em)) AS fim FROM eventos').get() };
-  const mentorias = db.prepare('SELECT status, COUNT(*) AS n FROM mentorias GROUP BY status').all().map(r => ({ ...r }));
   const vagas = db.prepare('SELECT COUNT(*) AS n FROM vagas WHERE ativo=1').get().n;
-  return { por_dia, por_tela, por_acao, totais, periodo, mentorias, vagas };
+  return { por_dia, por_tela, por_acao, totais, periodo, vagas };
 }
 
 function exportarCsv(res) {
@@ -468,9 +475,6 @@ function exportarCsv(res) {
 
 /* mentoria */
 const TEMAS = ['Escolha da área', 'Currículo e entrevista', 'Estágio e primeiro emprego', 'Pós-graduação', 'Outro'];
-const SQL_MENT_ADMIN = `SELECT m.id, m.tema, m.mensagem, m.status, m.resposta, m.criado_em, m.atualizado_em,
-  u.nome, u.email, u.curso, u.semestre FROM mentorias m JOIN users u ON u.id=m.user_id ORDER BY
-  CASE m.status WHEN 'pendente' THEN 0 WHEN 'andamento' THEN 1 ELSE 2 END, m.criado_em DESC`;
 function criarMentoria(res, u, b) {
   if (excedeu('men|' + u.id, 10, 60 * 60e3)) return send(res, 429, MUITAS);
   const tema = TEMAS.includes(b.tema) ? b.tema : 'Outro', mensagem = str(b.mensagem, 1000);
@@ -481,17 +485,6 @@ function criarMentoria(res, u, b) {
   evento(u.id, 'mentoria_pedida', tema);
   send(res, 200, { ok: true });
 }
-function responderMentoria(res, id, b) {
-  const m = db.prepare('SELECT m.*, u.email, u.nome FROM mentorias m JOIN users u ON u.id=m.user_id WHERE m.id=?').get(id);
-  if (!m) return send(res, 404, { erro: 'Pedido não encontrado.' });
-  const status = ['pendente', 'andamento', 'concluida'].includes(b.status) ? b.status : m.status;
-  const resposta = str(b.resposta, 2000);
-  db.prepare("UPDATE mentorias SET status=?, resposta=?, atualizado_em=datetime('now') WHERE id=?").run(status, resposta, id);
-  if (resposta && resposta !== m.resposta)
-    enviarEmail(m.email, 'A coordenação respondeu ao seu pedido de mentoria', `Olá, ${m.nome}!\n\nA coordenação respondeu ao seu pedido de mentoria:\n\n${resposta}\n\nVeja também no Carreira em Foco, na aba Mentoria.`);
-  send(res, 200, { ok: true });
-}
-
 /* vagas, cursos e eventos da coordenação */
 function criarVaga(res, b) {
   const tipo = ['Estágio', 'Vaga', 'Curso', 'Evento'].includes(b.tipo) ? b.tipo : '';
@@ -502,32 +495,6 @@ function criarVaga(res, b) {
   if (!dateOk(prazo)) return send(res, 400, { erro: 'Data inválida.' });
   db.prepare('INSERT INTO vagas(tipo,titulo,empresa,descricao,link,prazo) VALUES (?,?,?,?,?,?)').run(tipo, titulo, str(b.empresa, 120), str(b.descricao, 600), link, prazo);
   send(res, 200, { ok: true });
-}
-
-/* lembretes diários de prazo por e-mail (só para quem ativou no perfil) */
-let enviandoLembretes = false;
-async function enviarLembretes() {
-  if (!EMAIL_ATIVO || enviandoLembretes) return 0;
-  const hora = parseInt(new Date().toLocaleString('en-GB', { timeZone: TZ, hour: '2-digit', hour12: false }), 10);
-  if (hora < LEMBRETE_HORA) return 0;
-  enviandoLembretes = true;
-  try {
-    const hoje = hojeLocal(), limite = hojeLocal(new Date(Date.now() + 2 * 864e5));
-    let enviados = 0;
-    const alvos = db.prepare("SELECT id, nome, email FROM users WHERE lembretes=1 AND (lembrete_em IS NULL OR lembrete_em <> ?)").all(hoje);
-    for (const u of alvos) {
-      const ts = db.prepare("SELECT titulo, data FROM tasks WHERE user_id=? AND status<>'done' AND data<>'' AND data<=? ORDER BY data LIMIT 10").all(u.id, limite);
-      if (ts.length) {
-        const linhas = ts.map(t => `- ${t.titulo} (${t.data < hoje ? 'atrasada desde ' : t.data === hoje ? 'vence hoje, ' : 'até '}${fmtData(t.data)})`).join('\n');
-        const site = BASE_URL ? `\n\nAbra o Carreira em Foco: ${BASE_URL}` : '';
-        const ok = await enviarEmail(u.email, 'Seus prazos no Carreira em Foco', `Olá, ${u.nome}!\n\nEstas tarefas do seu plano de ação pedem atenção:\n\n${linhas}${site}\n\nPara parar de receber estes lembretes, desative a opção no seu Perfil.`);
-        if (!ok) continue;
-        enviados++;
-      }
-      db.prepare('UPDATE users SET lembrete_em=? WHERE id=?').run(hoje, u.id);
-    }
-    return enviados;
-  } finally { enviandoLembretes = false; }
 }
 
 const PUBLIC = path.join(__dirname, 'public');
@@ -635,7 +602,14 @@ const server = http.createServer(async (req, res) => {
       if (EVENTOS_OK.has(b.tipo) && !excedeu('evt|' + u.id, 400, 10 * 60e3)) evento(u.id, b.tipo, b.detalhe);
       return send(res, 200, { ok: true });
     }
-    if (m === 'PUT' && pathname === '/api/estado') { salvar(u.id, await readBody(req)); return send(res, 200, { ok: true }); }
+    if (m === 'PUT' && pathname === '/api/estado') {
+      try { salvar(u.id, await readBody(req)); }
+      catch (e) {
+        if (e.message === 'Selecione um curso ou informe o nome do seu curso.') return send(res, 400, { erro: e.message });
+        throw e;
+      }
+      return send(res, 200, { ok: true });
+    }
     if (m === 'GET' && pathname === '/api/vagas')
       return send(res, 200, { vagas: db.prepare("SELECT id,tipo,titulo,empresa,descricao,link,prazo FROM vagas WHERE ativo=1 AND (prazo='' OR prazo>=?) ORDER BY id DESC").all(hojeLocal()).map(r => ({ ...r })) });
     if (m === 'GET' && pathname === '/api/mentorias')
@@ -646,9 +620,6 @@ const server = http.createServer(async (req, res) => {
       if (m === 'GET' && pathname === '/api/admin/resumo') return send(res, 200, { linhas: db.prepare(SQL_RESUMO).all() });
       if (m === 'GET' && pathname === '/api/admin/atividade') return send(res, 200, atividade());
       if (m === 'GET' && pathname === '/api/admin/exportar.csv') return exportarCsv(res);
-      if (m === 'GET' && pathname === '/api/admin/mentorias') return send(res, 200, { mentorias: db.prepare(SQL_MENT_ADMIN).all().map(r => ({ ...r })) });
-      const mm = pathname.match(/^\/api\/admin\/mentorias\/(\d+)$/);
-      if (m === 'PUT' && mm) return responderMentoria(res, Number(mm[1]), await readBody(req));
       if (m === 'GET' && pathname === '/api/admin/vagas') return send(res, 200, { vagas: db.prepare('SELECT * FROM vagas ORDER BY id DESC').all().map(r => ({ ...r })) });
       if (m === 'POST' && pathname === '/api/admin/vagas') return criarVaga(res, await readBody(req));
       const vv = pathname.match(/^\/api\/admin\/vagas\/(\d+)$/);
@@ -679,7 +650,5 @@ setInterval(() => {
   db.prepare('DELETE FROM resets WHERE expira_em < ?').run(agora);
 }, 6 * 3600e3).unref();
 setInterval(() => { const t = Date.now(); for (const [k, l] of tentativas) if (!l.length || t - l[l.length - 1] > 3600e3) tentativas.delete(k); }, 10 * 60e3).unref();
-setInterval(() => enviarLembretes().catch(e => console.error(e)), LEMBRETE_INTERVALO).unref();
-setTimeout(() => enviarLembretes().catch(e => console.error(e)), 30000).unref();
 server.headersTimeout = 15e3; server.requestTimeout = 30e3;
 server.listen(PORT, () => console.log(`Carreira em Foco em http://localhost:${PORT}`));

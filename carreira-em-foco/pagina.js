@@ -2,6 +2,7 @@
 // Monta o documento HTML completo a partir de src/app.html (usado por build.js e pelo servidor).
 const fs = require('fs'), path = require('path');
 const SRC = path.join(__dirname, 'src', 'app.html');
+const CURSOS = require('./cursos.json');
 const CABECA = `<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -15,6 +16,7 @@ const CABECA = `<!doctype html>
 `;
 function montar() {
   let corpo = fs.readFileSync(SRC, 'utf8').replace(/^\uFEFF/, '');
+  corpo = corpo.replace('<script>', '<script>window.__CURSOS=' + JSON.stringify(CURSOS) + ';');
   /* dentro do <script>, caracteres fora do ASCII viram escapes \uXXXX: o JS fica imune a problemas de codificação */
   corpo = corpo.replace(/<script>([\s\S]*?)<\/script>/, (m, js) => '<script>' + js.replace(/[^\x00-\x7f]/g, c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')) + '</script>');
   const html = CABECA + corpo + '\n</body>\n</html>\n';

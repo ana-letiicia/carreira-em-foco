@@ -62,6 +62,12 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .btn.sm{padding:6px 12px;min-height:36px;font-size:.9rem}
 label{font-weight:700;font-size:.9rem;display:flex;flex-direction:column;gap:5px}
 input,select,textarea{background:var(--surface-2);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;min-height:46px;width:100%}
+.password-entry{display:flex;flex-direction:column;gap:5px}
+.password-control{position:relative;display:flex;align-items:center}
+.password-control input{padding-right:52px}
+.password-toggle{position:absolute;right:4px;display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer}
+.password-toggle:hover{background:var(--accent-soft);color:var(--ink)}
+.password-toggle svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 textarea{min-height:96px;resize:vertical}
 input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
 .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;align-items:end}
@@ -312,7 +318,8 @@ var ICON={
  mentoria:'<path d="M17 20v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M21 20v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8"/>'
 };
 var NAV=[["painel","Painel"],["planodeacao","Plano de ação"],["perfil","Perfil"],["oportunidades","Oportunidades"],["avaliacao","Avaliação"]];
-var PROTEGIDAS=["painel","planodeacao","perfil","oportunidades","mentoria","avaliacao","coordenacao","linhadotempo","teste","curriculo","coordvagas","coordmentorias","relatorio"];
+var PROTEGIDAS=["painel","planodeacao","perfil","oportunidades","mentoria","avaliacao","coordenacao","linhadotempo","teste","curriculo","coordvagas","relatorio"];
+var CURSOS=window.__CURSOS||[];
 var SEMESTRES=["1º semestre","2º semestre","3º semestre","4º semestre","5º semestre","6º semestre","7º semestre ou mais"];
 var STATUS=[["todo","A fazer"],["doing","Em andamento"],["done","Concluída"]];
 var PRAZO={curto:"Curto prazo",medio:"Médio prazo",longo:"Longo prazo"};
@@ -331,12 +338,12 @@ var QUESTIONS=[["util","O Carreira em Foco ajuda a organizar minha carreira?"],[
 
 /* ================= dados do novo ciclo ================= */
 var TEMAS=["Escolha da área","Currículo e entrevista","Estágio e primeiro emprego","Pós-graduação","Outro"];
-var ADMINROTAS=["coordenacao","coordvagas","coordmentorias","relatorio"];
-var GRUPO={linhadotempo:"planodeacao",teste:"perfil",curriculo:"perfil",coordvagas:"coordenacao",coordmentorias:"coordenacao",relatorio:"coordenacao"};
+var ADMINROTAS=["coordenacao","coordvagas","relatorio"];
+var GRUPO={linhadotempo:"planodeacao",teste:"perfil",curriculo:"perfil",coordvagas:"coordenacao",relatorio:"coordenacao"};
 var SUBS={
  planodeacao:[["planodeacao","Lista de objetivos"],["linhadotempo","Linha do tempo"]],
  perfil:[["perfil","Dados e competências"],["teste","Teste de perfil"],["curriculo","Currículo"]],
- coordenacao:[["coordenacao","Resumo"],["coordvagas","Vagas e eventos"],["coordmentorias","Mentorias"],["relatorio","Relatório do portfólio"]]
+ coordenacao:[["coordenacao","Resumo"],["coordvagas","Vagas e eventos"],["relatorio","Relatório do portfólio"]]
 };
 var AREAS=[
  {id:"tec",nome:"Tecnologia e análise",desc:"Você tende a gostar de entender como as coisas funcionam, resolver problemas lógicos e trabalhar com dados e sistemas.",comp:["Pensamento crítico","Resolução de problemas","Análise de dados","Lógica de programação"],ex:"desenvolvimento de sistemas, análise de dados, segurança da informação, pesquisa e engenharia"},
@@ -376,13 +383,43 @@ var CONQ=[
 /* ================= utilidades ================= */
 function uid(){return Math.random().toString(36).slice(2,10)}
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function chaveCurso(c){return String(c||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().replace(/\s+/g," ").toLowerCase()}
+var CURSOS_POR_CHAVE={};
+CURSOS.forEach(function(grupo){grupo.cursos.forEach(function(curso){CURSOS_POR_CHAVE[chaveCurso(curso)]=curso})});
+CURSOS_POR_CHAVE.ads=CURSOS_POR_CHAVE[chaveCurso("Análise e Desenvolvimento de Sistemas")];
+function cursoCanonico(c){
+  var bruto=String(c||"").trim().replace(/\s+/g," "),chave=chaveCurso(bruto);
+  return CURSOS_POR_CHAVE[chave]||bruto||"Não informado";
+}
+function agruparCursos(rows){
+  var contagens=Object.create(null),nomes=Object.create(null),cursos=Object.create(null);
+  rows.forEach(function(r){
+    var c=cursoCanonico(r.curso),chave=chaveCurso(c);
+    if(!Object.prototype.hasOwnProperty.call(contagens,chave)){contagens[chave]=0;nomes[chave]=c}
+    contagens[chave]++;
+  });
+  Object.keys(contagens).forEach(function(chave){cursos[nomes[chave]]=contagens[chave]});
+  return cursos;
+}
+function opcoesCursos(selecionado){
+  var valor=String(selecionado||"").trim(),oficial=CURSOS_POR_CHAVE[chaveCurso(valor)];
+  return '<option value="">Selecione seu curso</option>'+CURSOS.map(function(grupo){
+    return '<optgroup label="'+esc(grupo.area)+'">'+grupo.cursos.map(function(curso){
+      return '<option value="'+esc(curso)+'"'+(curso===(oficial||valor)?' selected':'')+'>'+esc(curso)+'</option>';
+    }).join("")+'</optgroup>';
+  }).join("")+'<option value="__outro__"'+(!oficial&&valor?' selected':'')+'>Outro</option>';
+}
+function campoOutroCurso(id,valor){
+  var visivel=valor&&!CURSOS_POR_CHAVE[chaveCurso(valor)];
+  return '<label for="'+id+'-outro" data-course-extra-label'+(visivel?'':' hidden')+'>Informe seu curso<input id="'+id+'-outro" name="curso_outro" data-course-extra'+(visivel?' required':' disabled')+' maxlength="120" placeholder="Digite o nome do seu curso" value="'+esc(visivel?valor:'')+'"></label>';
+}
 function iso(d){var m=d.getMonth()+1,dd=d.getDate();return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(dd<10?"0":"")+dd}
 function plusDays(n){var d=new Date();d.setDate(d.getDate()+n);return iso(d)}
 function today(){return iso(new Date())}
 function fmt(s){if(!s)return"sem prazo";var p=s.split("-");return p[2]+"/"+p[1]+"/"+p[0]}
 function ico(k){return '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">'+ICON[k]+'</svg>'}
 function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove("on")},2400)}
-function emptyState(p){return {profile:{nome:p.nome||"",curso:p.curso||"",semestre:p.semestre||SEMESTRES[0],area:"",lembretes:false},skills:[],goals:[],tasks:[],feedback:{texto:""},extra:{}}}
+function emptyState(p){return {profile:{nome:p.nome||"",curso:p.curso||"",semestre:p.semestre||SEMESTRES[0],area:""},skills:[],goals:[],tasks:[],feedback:{texto:""},extra:{}}}
 function pl(n,s,p){return n+" "+(n===1?s:p)}
 function f1(x){return x?x.toFixed(1).replace(".",","):"–"}
 function pc(a,b){return b?Math.round(a/b*100):0}
@@ -390,7 +427,7 @@ function fmtDT(s){return s?fmt(String(s).slice(0,10)):""}
 function rnd(){var a=new Uint8Array(16);try{crypto.getRandomValues(a)}catch(e){for(var i=0;i<16;i++)a[i]=Math.floor(Math.random()*256)}return Array.prototype.map.call(a,function(x){return("0"+x.toString(16)).slice(-2)}).join("")}
 function copiar(txt){var ok=function(){toast("Copiado")},fail=function(){toast("Não foi possível copiar. Selecione o texto e copie.")};try{navigator.clipboard.writeText(txt).then(ok,fail)}catch(e){fail()}}
 function slug(s){return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-zA-Z0-9]+/g,"-").replace(/^-|-$/g,"").toLowerCase()||"curriculo"}
-function norm(s){s.extra=s.extra&&typeof s.extra==="object"&&!Array.isArray(s.extra)?s.extra:{};s.profile=s.profile||{};s.profile.lembretes=!!s.profile.lembretes;s.skills=s.skills||[];s.goals=s.goals||[];s.tasks=s.tasks||[];s.feedback=s.feedback||{texto:""};return s}
+function norm(s){s.extra=s.extra&&typeof s.extra==="object"&&!Array.isArray(s.extra)?s.extra:{};s.profile=s.profile||{};s.skills=s.skills||[];s.goals=s.goals||[];s.tasks=s.tasks||[];s.feedback=s.feedback||{texto:""};return s}
 function setS(s,p){S=norm(s||emptyState(p||{}));return S}
 var CH={};
 function carregar(chave,fn,vista,padrao){
@@ -447,8 +484,6 @@ var ApiB={kind:"api",senha:true,temVagas:true,temMentoria:true,
   adminVagas:function(){return this.req("GET","/api/admin/vagas").then(function(j){return j.vagas})},
   adminVagaCriar:function(v){return this.req("POST","/api/admin/vagas",v)},
   adminVagaExcluir:function(id){return this.req("DELETE","/api/admin/vagas/"+id)},
-  adminMentorias:function(){return this.req("GET","/api/admin/mentorias").then(function(j){return j.mentorias})},
-  adminMentoriaResp:function(id,b){return this.req("PUT","/api/admin/mentorias/"+id,b)},
   adminReset:function(email){return this.req("POST","/api/admin/reset",{email:email})}
 };
 var LK="carreira-em-foco-v2",memState=null;
@@ -508,16 +543,6 @@ var ArtB={kind:"artifact",senha:false,temVagas:true,temMentoria:true,db:null,uid
       });
     });
   },
-  adminMentorias:function(){
-    var self=this;
-    return this.db.collection("mentorias").get().then(function(q){
-      return Promise.all(q.docs.map(function(d){var a=d.data();return self.db.collection("mentorias/"+d.id+"/pedidos").get().then(function(pq){return pq.docs.map(function(x){return Object.assign({id:d.id+"/"+x.id,email:"",nome:a.nome,curso:a.curso,semestre:a.semestre},x.data())})})})).then(function(ls){
-        var ord={pendente:0,andamento:1,concluida:2};
-        return [].concat.apply([],ls).sort(function(a,b){return (ord[a.status]-ord[b.status])||String(b.criado_em).localeCompare(String(a.criado_em))});
-      });
-    });
-  },
-  adminMentoriaResp:function(id,b){var p=id.split("/");return this.db.doc("mentorias/"+p[0]+"/pedidos/"+p[1]).update({status:b.status,resposta:b.resposta,atualizado_em:new Date().toISOString()})}
 };
 
 /* ================= estado ================= */
@@ -615,6 +640,9 @@ function googleBlock(api,criar){
   var h=(api&&window.__googleId)?'<div class="gslot"><div id="g-btn" style="min-height:44px;width:100%;display:flex;justify-content:center;align-items:center"></div></div>':'<button type="button" class="btn gbtn" data-act="google-off">'+GLOGO+texto+'</button>';
   return h+'<p class="gnote">Rápido e seguro: não guardamos a senha da sua conta Google.</p><div class="sep">ou use seu e-mail</div>';
 }
+function campoSenha(id,nome,texto,autocomplete,maxlength){
+  return '<div class="password-entry"><label for="'+id+'">'+texto+'</label><span class="password-control"><input id="'+id+'" name="'+nome+'" type="password" autocomplete="'+autocomplete+'"'+(maxlength?' maxlength="'+maxlength+'"':'')+' required><button type="button" class="password-toggle" data-act="password-visibility" data-target="'+id+'" aria-label="Mostrar senha" aria-controls="'+id+'" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" data-eye-open><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" data-eye-closed hidden><path d="m3 3 18 18"/><path d="M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a15.7 15.7 0 0 1-3.1 3.8M6.2 6.2C3.5 8.1 2 12 2 12s3.6 7 10 7c1.3 0 2.5-.3 3.5-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></span></div>';
+}
 function vAuth(modo){
   var criar=modo==="criar",api=B.senha;
   var h='<main class="main gut"><div class="auth"><div class="side"><span class="kicker" style="color:#BFE9B8">Carreira em Foco</span><h2 style="font-size:1.8rem;color:#fff">'+(criar?"Crie sua conta e monte seu plano.":"Que bom ver você de novo.")+'</h2><p>Seus objetivos, competências e tarefas ficam guardados na sua conta, prontos para continuar de onde parou.</p></div>'+
@@ -625,15 +653,15 @@ function vAuth(modo){
   h+='<form class="stack" data-form="auth" data-modo="'+(api&&!criar?"entrar":"criar")+'" novalidate><div class="err" id="auth-err" role="alert"'+(window.__authErr?'':' hidden')+'>'+esc(window.__authErr||"")+'</div>';
   if(!api||criar)h+='<label for="a-nome">Nome completo<input id="a-nome" name="nome" autocomplete="name" maxlength="100" required placeholder="Ex.: Maria da Silva Souza"></label>';
   if(api)h+='<label for="a-email">E-mail<input id="a-email" name="email" type="email" autocomplete="email" maxlength="160" required placeholder="voce@email.com"></label>';
-  if(!api)h+='<label for="a-curso">Curso<input id="a-curso" name="curso" required placeholder="Ex.: Análise e Desenvolvimento de Sistemas"></label><label for="a-sem">Semestre<select id="a-sem" name="semestre">'+SEMESTRES.map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label>';
-  if(api)h+='<label for="a-senha">Senha'+(criar?" (mínimo de 8 caracteres)":"")+'<input id="a-senha" name="senha" type="password" autocomplete="'+(criar?"new-password":"current-password")+'" maxlength="200" required></label>';
-  if(api&&criar)h+='<label for="a-senha2">Confirmar senha<input id="a-senha2" name="senha2" type="password" autocomplete="new-password" maxlength="200" required></label>';
+  if(criar)h+='<label for="a-curso">Curso<select id="a-curso" name="curso" data-course-select data-course-extra="a-curso-outro" required>'+opcoesCursos("")+'</select></label>'+campoOutroCurso("a-curso","")+'<label for="a-sem">Semestre<select id="a-sem" name="semestre">'+SEMESTRES.map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label>';
+  if(api)h+=campoSenha("a-senha","senha","Senha"+(criar?" (mínimo de 8 caracteres)":""),criar?"new-password":"current-password",200);
+  if(api&&criar)h+=campoSenha("a-senha2","senha2","Confirmar senha","new-password",200);
   h+='<button class="btn orange lg" type="submit">'+(api&&!criar?"Entrar":api?"Criar conta":"Começar")+'</button>'+(api&&!criar?'<a href="#esqueci" class="small" style="text-align:center">Esqueci minha senha</a>':'')+'</form></div></div></main>';window.__authErr=null;
   return h;
 }
 
 function vCompletar(){
-  return '<main class="main gut"><div class="auth" style="max-width:560px;grid-template-columns:minmax(0,1fr)"><div class="form-side"><span class="kicker">Quase pronto</span><h2>Conte um pouco sobre você</h2><p class="muted">Precisamos do seu curso e semestre para montar o seu plano.</p><form class="stack" data-form="completar"><label for="c-curso">Curso<input id="c-curso" name="curso" required placeholder="Ex.: Análise e Desenvolvimento de Sistemas"></label><label for="c-sem">Semestre<select id="c-sem" name="semestre">'+SEMESTRES.map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label><button class="btn orange lg" type="submit">Continuar</button></form></div></div></main>';
+  return '<main class="main gut"><div class="auth" style="max-width:560px;grid-template-columns:minmax(0,1fr)"><div class="form-side"><span class="kicker">Quase pronto</span><h2>Conte um pouco sobre você</h2><p class="muted">Precisamos do seu curso e semestre para montar o seu plano.</p><form class="stack" data-form="completar"><label for="c-curso">Curso<select id="c-curso" name="curso" data-course-select data-course-extra="c-curso-outro" required>'+opcoesCursos("")+'</select></label>'+campoOutroCurso("c-curso","")+'<label for="c-sem">Semestre<select id="c-sem" name="semestre">'+SEMESTRES.map(function(x){return '<option>'+x+'</option>'}).join("")+'</select></label><button class="btn orange lg" type="submit">Continuar</button></form></div></div></main>';
 }
 
 /* ---------- área do aluno ---------- */
@@ -654,27 +682,15 @@ function vEsqueci(){
 function vRedefinir(){
   if(!B.senha)return vEsqueci();
   return authShell("Criar nova senha","Escolha uma senha com pelo menos 8 caracteres.",
-   '<form class="stack" data-form="redefinir" novalidate><div class="err" id="f-err" role="alert" hidden></div><label for="r-s">Nova senha<input id="r-s" name="senha" type="password" autocomplete="new-password" required></label><label for="r-s2">Repita a senha<input id="r-s2" name="senha2" type="password" autocomplete="new-password" required></label><button class="btn orange lg" type="submit">Salvar nova senha</button></form>');
+   '<form class="stack" data-form="redefinir" novalidate><div class="err" id="f-err" role="alert" hidden></div>'+campoSenha("r-s","senha","Nova senha","new-password")+campoSenha("r-s2","senha2","Repita a senha","new-password")+'<button class="btn orange lg" type="submit">Salvar nova senha</button></form>');
 }
 
-function painelExtra(){
-  var h="";
-  if(B.kind==="api"&&!S.profile.lembretes&&S.tasks.some(function(t){return t.data&&t.status!=="done"}))
-    h+='<section class="card" style="flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap"><div><h3>Receber lembretes de prazo por e-mail?</h3><p class="muted small">Avisamos quando uma tarefa estiver para vencer ou atrasada. Você desativa quando quiser.</p></div><button class="btn sec" data-act="lembretes">Ativar lembretes</button></section>';
-  return h;
-}
 function vConq(){
   var have=S.extra.conq||[],n=streak();
   var h='<section class="card"><div class="row between"><h2>Conquistas</h2><span class="chip">'+have.length+' de '+CONQ.length+'</span></div><p class="muted small">'+(n>0?"Você acessou "+pl(n,"dia seguido","dias seguidos")+".":"Acesse o sistema em dias seguidos para ganhar conquistas de constância.")+'</p><div class="badges">';
   CONQ.forEach(function(c){var ok=have.indexOf(c.id)>-1;h+='<div class="badge'+(ok?" on":"")+'"><span class="bi" aria-hidden="true">'+(ok?"★":"☆")+'</span><b>'+c.n+'</b><span class="small">'+c.d+'</span><span class="sr">'+(ok?"Conquistada":"Bloqueada")+'</span></div>'});
   return h+'</div></section>';
 }
-function lembretesCard(){
-  if(B.kind!=="api")return"";
-  var on=!!S.profile.lembretes;
-  return '<section class="card"><h2>Lembretes de prazo</h2><p class="muted small">Receba um e-mail por dia quando houver tarefas vencendo nos próximos dias ou atrasadas.'+(window.__emailAtivo?"":" O envio de e-mails ainda não foi ativado neste site, então os avisos só começam a chegar depois disso.")+'</p><div class="row"><button class="btn '+(on?"":"sec")+'" role="switch" aria-checked="'+on+'" data-act="lembretes">'+(on?"Lembretes ativados":"Ativar lembretes")+'</button>'+(on?'<span class="small muted">Toque para desativar.</span>':'')+'</div></section>';
-}
-
 /* linha do tempo */
 var MESES=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
 function semDe(g){return (S.extra.sem||{})[g.id]||""}
@@ -813,26 +829,13 @@ function vCoordVagas(){
   return h+'</section></div>';
 }
 
-/* coordenação: mentorias */
-function vCoordMent(){
-  var h='<div class="wrap"><div class="head"><h1>Pedidos de mentoria</h1><p>Aqui aparecem o nome, o curso e o e-mail de quem pediu, porque a resposta é individual.</p></div>';
-  var l=CH.ament;
-  if(l===undefined){carregar("ament",function(){return B.adminMentorias()},"coordmentorias",[]);return h+'<div class="loading">Carregando…</div></div>'}
-  if(l===null)return h+'<div class="loading">Carregando…</div></div>';
-  if(!l.length)return h+'<div class="empty">Nenhum pedido ainda.</div></div>';
-  l.forEach(function(m){
-    h+='<form class="card" data-form="ment-resp" data-id="'+esc(m.id)+'"><div class="row between"><div><b>'+esc(m.nome||"Estudante")+'</b><br><span class="small muted">'+esc(m.curso||"")+' · '+esc(m.semestre||"")+(m.email?' · '+esc(m.email):'')+'</span></div><span class="chip'+(m.status==="concluida"?"":" warn")+'">'+ST_M[m.status]+'</span></div><p><b>'+esc(m.tema)+'</b> · <span class="small muted">'+fmtDT(m.criado_em)+'</span></p><blockquote>'+esc(m.mensagem)+'</blockquote><div class="err" hidden role="alert"></div><label>Resposta<textarea name="resposta" maxlength="2000">'+esc(m.resposta||"")+'</textarea></label><div class="row"><label style="flex:none">Situação<select name="status">'+["pendente","andamento","concluida"].map(function(s){return '<option value="'+s+'"'+(m.status===s?" selected":"")+'>'+ST_M[s]+'</option>'}).join("")+'</select></label><button class="btn" type="submit" style="align-self:flex-end">Salvar resposta</button></div></form>';
-  });
-  return h+'</div>';
-}
-
 /* coordenação: relatório para o portfólio */
 function textoRelatorio(){
   var rows=window.__rows||[],a=window.__ativ||{},t=a.totais||{},n=rows.length;
   var soma=function(k){return rows.reduce(function(x,r){return x+(r[k]||0)},0)};
   var tar=soma("tarefas"),con=soma("concluidas"),atr=soma("atrasadas"),comObj=rows.filter(function(r){return r.objetivos>0}).length;
   var logins=(t.login||0)+(t.login_google||0)+(t.login_microsoft||0);
-  var cursos={};rows.forEach(function(r){var c=r.curso||"Não informado";cursos[c]=(cursos[c]||0)+1});
+  var cursos=agruparCursos(rows);
   var cl=Object.keys(cursos).sort(function(x,y){return cursos[y]-cursos[x]}).slice(0,6).map(function(c){return c+" ("+cursos[c]+")"}).join("; ");
   var L=[];
   L.push("RESULTADOS DA AÇÃO: SISTEMA CARREIRA EM FOCO");
@@ -848,7 +851,6 @@ function textoRelatorio(){
   if(t.oportunidade_aberta)ex.push(pl(t.oportunidade_aberta,"site de oportunidade aberto","sites de oportunidades abertos"));
   if(t.mentoria_pedida)ex.push(pl(t.mentoria_pedida,"pedido de mentoria","pedidos de mentoria"));
   if(ex.length)L.push("Recursos utilizados: "+ex.join("; ")+".");
-  if(a.mentorias&&a.mentorias.length)L.push("Situação das mentorias: "+a.mentorias.map(function(m){return m.n+" "+(ST_M[m.status]||m.status).toLowerCase()}).join(", ")+".");
   if(typeof a.vagas==="number")L.push("Vagas e eventos ativos divulgados: "+a.vagas+".");
   var av=rows.filter(function(r){return r.util>0}).length;
   if(av)L.push("Avaliação do sistema (média de 1 a 5, "+pl(av,"resposta","respostas")+"): ajuda a organizar a carreira "+f1(avg(rows,"util"))+"; fácil de usar "+f1(avg(rows,"facil"))+"; usaria durante a graduação "+f1(avg(rows,"voltar"))+".");
@@ -882,7 +884,6 @@ function vPainel(){
   var h='<div class="wrap"><section class="greet"><div class="stack" style="gap:8px"><h1>'+(nome?"Olá, "+esc(nome)+"!":"Seu painel")+'</h1><p>'+(all?"Veja como está o seu plano e o que fazer em seguida.":"Seu plano está vazio. Crie um objetivo ou comece por um modelo sugerido.")+'</p></div>'+
    '<div class="row" style="gap:28px"><div class="ring"><svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="12"/><circle cx="60" cy="60" r="52" fill="none" stroke="#3BAA35" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'"/></svg><b>'+p+'%</b></div>'+
    '<div class="stats"><div class="stat"><b>'+S.goals.length+'</b><span>objetivos</span></div><div class="stat"><b>'+done+'/'+all+'</b><span>tarefas feitas</span></div><div class="stat"><b style="color:'+(late?"#FFB4AB":"#fff")+'">'+late+'</b><span>atrasadas</span></div></div></div></section>';
-  h+=painelExtra();
   h+='<div class="grid2"><section class="card"><div class="row between"><h2>Próximas tarefas</h2><a href="#planodeacao" class="small">Ver plano</a></div>';
   if(!next.length)h+='<div class="empty">Nenhuma tarefa pendente.<a class="btn sec sm" href="#planodeacao">Criar tarefa</a></div>';
   else h+='<ul class="list">'+next.map(function(t){var completed=t.status==="done";return '<li class="item'+(completed?" done":"")+'"><button class="check" role="checkbox" aria-checked="'+completed+'" aria-label="'+(completed?"Reabrir: ":"Concluir: ")+esc(t.titulo)+'" data-act="toggle" data-id="'+t.id+'"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10 4 4 8-8"/></svg></button><span class="t">'+esc(t.titulo)+'<br><span class="small muted">'+fmt(t.data)+'</span></span>'+(completed?'<span class="chip">Concluída</span>':overdue(t)?'<span class="chip bad">Atrasada</span>':'<span class="chip">'+statusLabel(t.status)+'</span>')+'</li>'}).join("")+'</ul>';
@@ -929,10 +930,10 @@ function skillBlock(kind,titulo,desc){
 function vPerfil(){
   var p=S.profile;
   return '<div class="wrap"><div class="head"><h1>Perfil profissional</h1><p>Conhecer seus pontos fortes e lacunas mostra por onde começar. Toque nos círculos para marcar o nível de 1 a 5.</p></div>'+
-  '<section class="card"><h2>Seus dados</h2><div class="form"><label for="p-nome">Nome<input id="p-nome" data-field="nome" value="'+esc(p.nome)+'"></label><label for="p-curso">Curso<input id="p-curso" data-field="curso" value="'+esc(p.curso)+'"></label>'+
+  '<section class="card"><h2>Seus dados</h2><div class="form"><label for="p-nome">Nome<input id="p-nome" data-field="nome" value="'+esc(p.nome)+'"></label><label for="p-curso">Curso<select id="p-curso" data-field="curso" data-course-select data-course-extra="p-curso-outro" required>'+opcoesCursos(p.curso)+'</select></label>'+campoOutroCurso("p-curso",p.curso)+
   '<label for="p-sem">Semestre<select id="p-sem" data-field="semestre">'+SEMESTRES.map(function(x){return '<option'+(x===p.semestre?" selected":"")+'>'+x+'</option>'}).join("")+'</select></label>'+
   '<label for="p-area">Área em que quero atuar<input id="p-area" data-field="area" value="'+esc(p.area)+'" placeholder="Ex.: desenvolvimento web"></label></div><div class="row"><button class="btn sec" data-act="sair">Sair da conta</button></div></section>'+
-  lembretesCard()+'<div class="grid2">'+skillBlock("forte","Meus pontos fortes","Habilidades que você já tem e pode destacar no currículo.")+skillBlock("desenvolver","Quero desenvolver","Competências que o mercado pede e você ainda precisa treinar.")+'</div></div>';
+  '<div class="grid2">'+skillBlock("forte","Meus pontos fortes","Habilidades que você já tem e pode destacar no currículo.")+skillBlock("desenvolver","Quero desenvolver","Competências que o mercado pede e você ainda precisa treinar.")+'</div></div>';
 }
 
 function vOpp(){
@@ -976,7 +977,7 @@ function vCoord(){
   var comPlano=rows.filter(function(r){return r.objetivos>0}).length;
   var f1=function(x){return x?x.toFixed(1).replace(".",","):"–"};
   h+='<section class="tiles"><div class="tile"><b>'+n+'</b><span class="muted small">estudantes cadastrados</span></div><div class="tile"><b>'+Math.round(comPlano/n*100)+'%</b><span class="muted small">já criaram objetivos ('+comPlano+')</span></div><div class="tile"><b>'+(tar?Math.round(con/tar*100):0)+'%</b><span class="muted small">das tarefas concluídas ('+con+' de '+tar+')</span></div><div class="tile"><b>'+atr+'</b><span class="muted small">tarefas atrasadas</span></div></section>';
-  var cursos={};rows.forEach(function(r){var c=r.curso||"Não informado";cursos[c]=(cursos[c]||0)+1});
+  var cursos=agruparCursos(rows);
   var cl=Object.keys(cursos).sort(function(a,b){return cursos[b]-cursos[a]}).slice(0,10),mx=cursos[cl[0]];
   h+='<div class="grid2"><section class="card"><h2>Estudantes por curso</h2>'+cl.map(function(c){return '<div class="hbar"><span>'+esc(c)+'</span><div class="bar"><i style="width:'+Math.round(cursos[c]/mx*100)+'%"></i></div><b>'+cursos[c]+'</b></div>'}).join("")+'</section>';
   h+='<section class="card"><h2>Avaliação do sistema</h2><div class="tiles"><div class="tile"><b>'+f1(avg(rows,"util"))+'</b><span class="muted small">ajuda a organizar a carreira</span></div><div class="tile"><b>'+f1(avg(rows,"facil"))+'</b><span class="muted small">fácil de usar</span></div><div class="tile"><b>'+f1(avg(rows,"voltar"))+'</b><span class="muted small">usaria na graduação</span></div></div><p class="muted small">Médias de 1 a 5, considerando só quem respondeu ('+rows.filter(function(r){return r.util>0}).length+' avaliações).</p></section></div>';
@@ -1020,7 +1021,7 @@ function render(){
   else if(v==="redefinir")body=vRedefinir();
   else if(v==="entrar"||v==="criar")body=vAuth(v);
   else if(PROTEGIDAS.indexOf(v)>-1){
-    var m={painel:vPainel,planodeacao:vPlano,perfil:vPerfil,oportunidades:vOpp,mentoria:vMentoria,avaliacao:vAvaliacao,coordenacao:vCoord,linhadotempo:vLinha,teste:vTeste,curriculo:vCurriculo,coordvagas:vCoordVagas,coordmentorias:vCoordMent,relatorio:vRelatorio};
+    var m={painel:vPainel,planodeacao:vPlano,perfil:vPerfil,oportunidades:vOpp,mentoria:vMentoria,avaliacao:vAvaliacao,coordenacao:vCoord,linhadotempo:vLinha,teste:vTeste,curriculo:vCurriculo,coordvagas:vCoordVagas,relatorio:vRelatorio};
     body='<main class="main gut">'+subnav(v)+m[v]()+'</main>';
   }else body=vInicio();
   document.getElementById("root").innerHTML=header(v)+tabbar(v)+body;
@@ -1088,7 +1089,6 @@ function extraAct(a,b,id){
   }
   if(a==="cv-pdf"){cvGerou();checkConquistas();try{window.print()}catch(e){toast("Não foi possível abrir a impressão neste navegador.")}return true}
   if(a==="cv-doc"){cvGerou();checkConquistas();try{cvDoc()}catch(e){toast("Não foi possível gerar o arquivo neste navegador.")}return true}
-  if(a==="lembretes"){S.profile.lembretes=!S.profile.lembretes;toast(S.profile.lembretes?"Lembretes ativados":"Lembretes desativados");save();render();return true}
   if(a==="vaga-task"){
     var v=(window.__vagas||[])[+b.getAttribute("data-i")];if(!v)return true;
     var g=oppGoal();track("oportunidade_tarefa",String(v.titulo).slice(0,60));
@@ -1133,11 +1133,6 @@ function extraSubmit(k,o,f){
     B.adminVagaCriar(o).then(function(){delete CH.avagas;delete CH.vagas;toast("Divulgação publicada");render()},function(e){livre();fail(e.message||"Não foi possível publicar.")});
     return true;
   }
-  if(k==="ment-resp"){
-    if(btn)btn.disabled=true;
-    B.adminMentoriaResp(f.getAttribute("data-id"),{status:o.status,resposta:o.resposta||""}).then(function(){delete CH.ament;toast("Resposta salva");render()},function(e){livre();fail(e.message||"Não foi possível salvar.")});
-    return true;
-  }
   if(k==="reset"){
     if(btn)btn.disabled=true;
     B.adminReset(o.email).then(function(r){window.__resetLink=r.link;render()},function(e){livre();fail(e.message||"Não foi possível gerar o link.")});
@@ -1156,6 +1151,17 @@ document.addEventListener("click",function(e){
   var tk=e.target.closest("[data-track]");if(tk)track(tk.getAttribute("data-track"),tk.getAttribute("data-detalhe"));
   var b=e.target.closest("[data-act]");if(!b)return;
   var a=b.getAttribute("data-act"),id=b.getAttribute("data-id");
+  if(a==="password-visibility"){
+    var input=document.getElementById(b.getAttribute("data-target"));
+    if(!input)return;
+    var visible=input.type==="password";
+    input.type=visible?"text":"password";
+    b.setAttribute("aria-label",visible?"Ocultar senha":"Mostrar senha");
+    b.setAttribute("aria-pressed",String(visible));
+    b.querySelector("[data-eye-open]").hidden=visible;
+    b.querySelector("[data-eye-closed]").hidden=!visible;
+    return;
+  }
   if(a==="google-off"){var ee=document.getElementById("auth-err");ee.textContent=B.senha?"O login com Google ainda não foi ativado neste site. Use e-mail e senha por enquanto.":"O login com Google fica disponível no site publicado. Aqui, preencha seus dados.";ee.hidden=false;return}
   if(a==="sair"){flush().then(function(){return B.sair()}).then(function(){irLogin();USER=null;S=null;lastCompletedTaskId=null;window.__rows=null;window.__ativ=null;location.hash="inicio";render();toast("Você saiu da conta")});return}
   if(extraAct(a,b,id))return;
@@ -1177,12 +1183,21 @@ document.addEventListener("submit",function(e){
   var f=e.target,k=f.getAttribute("data-form");if(!k)return;e.preventDefault();
   var d=new FormData(f),o={};d.forEach(function(v,key){o[key]=typeof v==="string"?v.trim():v});
   if(extraSubmit(k,o,f))return;
+  if(o.curso==="__outro__"){
+    o.curso=String(o.curso_outro||"").trim().replace(/\s+/g," ");
+    if(!o.curso){
+      var cursoErr=document.getElementById("auth-err");
+      if(cursoErr){cursoErr.textContent="Informe o nome do seu curso.";cursoErr.hidden=false}
+      return;
+    }
+  }
   if(k==="auth"){
     var errEl=document.getElementById("auth-err");
     var fail=function(m){errEl.textContent=m;errEl.hidden=false};
     var modo=f.getAttribute("data-modo");
     if(modo==="criar"&&B.senha&&!/^\S{2,}(\s+\S+)+$/.test(o.nome||""))return fail("Informe seu nome completo (nome e sobrenome).");
-    if(modo==="criar"&&!B.senha&&(!o.nome||!o.curso))return fail("Preencha nome e curso.");
+    if(modo==="criar"&&!B.senha&&!o.nome)return fail("Preencha seu nome.");
+    if(modo==="criar"&&!o.curso)return fail("Selecione seu curso.");
     if(B.senha&&(!o.email||!o.senha))return fail("Preencha e-mail e senha.");
     if(B.senha&&modo==="criar"&&o.senha.length<8)return fail("A senha precisa ter pelo menos 8 caracteres.");
     if(B.senha&&modo==="criar"&&o.senha!==o.senha2)return fail("As senhas não são iguais.");
@@ -1200,10 +1215,25 @@ document.addEventListener("submit",function(e){
 });
 document.addEventListener("input",function(e){
   var t=e.target;
+  if(t.hasAttribute("data-course-extra")){
+    var select=document.getElementById(t.id.replace(/-outro$/,""));
+    if(select&&select.hasAttribute("data-field")){S.profile.curso=t.value.trim();save()}
+  }
   if(t.hasAttribute("data-field")){S.profile[t.getAttribute("data-field")]=t.value;save()}
   if(t.hasAttribute("data-cv")){S.extra.cv=S.extra.cv||{};S.extra.cv[t.getAttribute("data-cv")]=t.value;var cv=document.getElementById("cv");if(cv)cv.innerHTML=cvHtml();save()}
   if(t.hasAttribute("data-semgoal")){S.extra.sem=S.extra.sem||{};S.extra.sem[t.getAttribute("data-semgoal")]=t.value;save();render()}
   if(t.hasAttribute("data-fbtext")){S.feedback.texto=t.value;save()}
+});
+document.addEventListener("change",function(e){
+  var t=e.target;
+  if(!t.hasAttribute("data-course-select"))return;
+  var extra=document.getElementById(t.getAttribute("data-course-extra"));
+  if(!extra)return;
+  var outro=t.value==="__outro__";
+  extra.parentElement.hidden=!outro;
+  extra.disabled=!outro;
+  extra.required=outro;
+  if(t.hasAttribute("data-field")&&!outro){S.profile.curso=t.value;save()}
 });
 
 /* ================= início ================= */

@@ -1,7 +1,7 @@
 # Carreira em Foco
 
 Sistema web de planejamento de carreira para estudantes da UNIFAMETRO (projeto de extensão curricular).
-Site completo com cadastro e login, banco de dados SQLite, painel da coordenação, mentoria, vagas e lembretes.
+Site completo com cadastro e login, banco de dados SQLite, painel da coordenação, mentoria e vagas.
 Não usa dependências externas: só o Node.js 22.13 ou mais novo.
 
 ## Rodar
@@ -19,13 +19,12 @@ node server.js            # ou: npm start
 | `ADMIN_EMAILS` | E-mails (separados por vírgula) promovidos a coordenação apenas depois de comprovados por Google/Microsoft |
 | `NODE_ENV` | Use `production` atrás de HTTPS (cookies seguros) |
 | `BASE_URL` | Endereço público do site, ex.: `https://carreira.unifametro.edu.br`. **Obrigatório em produção** para os links de e-mail |
-| `RESEND_API_KEY`, `EMAIL_FROM` | Envio de e-mails (recuperação de senha, lembretes, resposta da mentoria) via [Resend](https://resend.com). Sem isso o site funciona, só não envia e-mails |
+| `RESEND_API_KEY`, `EMAIL_FROM` | Envio de e-mails de recuperação de senha via [Resend](https://resend.com). Sem isso o site funciona, só não envia e-mails |
 | `GOOGLE_CLIENT_ID` | Ativa "Continuar com Google" |
 | `MICROSOFT_CLIENT_ID`, `MICROSOFT_TENANT` | Ativa "Continuar com Microsoft 365". `MICROSOFT_TENANT` deve ser o **ID (GUID)** do diretório da faculdade |
 | `ALLOWED_DOMAIN` | (opcional) limita os logins Google e Microsoft a um domínio, ex.: `unifametro.edu.br` |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Juntos, criam ou configuram a conta de coordenação inicial (senha com 10+ caracteres). Defina ambos só nas variáveis privadas do servidor (Railway), nunca no código nem como argumento de terminal. Se a senha ou os privilégios mudarem, sessões e links de redefinição existentes são invalidados. Não há e-mail administrador padrão. |
 | `TRUST_PROXY_HOPS` | Quantos proxies ficam na frente do servidor (padrão 1 em produção, como no Railway). Serve para o limite de tentativas usar o IP real de cada pessoa |
-| `LEMBRETE_HORA`, `LEMBRETE_INTERVALO_MS`, `TZ_LEMBRETE` | Horário (padrão 8h), intervalo de verificação e fuso (padrão America/Fortaleza) dos lembretes |
 
 Exemplo de produção:
 ```bash
@@ -35,9 +34,9 @@ ADMIN_EMAILS=coordenacao@unifametro.edu.br RESEND_API_KEY=... EMAIL_FROM="Carrei
 Para promover uma conta existente depois do cadastro, ela precisa ter o e-mail verificado por Google/Microsoft. Configure `ADMIN_PASSWORD` como variável de ambiente privada (nunca passe a senha como argumento) e execute `npm run criar-admin -- email@unifametro.edu.br`. O script encerra as sessões existentes e invalida links de redefinição. Para criar a primeira conta administrativa, configure `ADMIN_EMAIL` e `ADMIN_PASSWORD` no servidor.
 
 ## O que o sistema tem
-- **Estudante:** perfil e competências, objetivos e plano de ação, **linha do tempo por mês ou semestre**, **teste de perfil profissional**, **gerador de currículo** (PDF pela impressão e Word), **conquistas e sequência de acessos**, oportunidades (inclui **vagas e eventos divulgados pela coordenação**), **pedido de mentoria**, **lembretes de prazo por e-mail**, avaliação do sistema.
-- **Coordenação:** resumo agregado e uso do site, **publicação de vagas e eventos**, **respostas às mentorias**, **relatório pronto para o portfólio**, link de redefinição de senha para estudante, exportação CSV.
-- **Acesso:** e-mail e senha, **Google**, **Microsoft 365**, **esqueci minha senha**.
+- **Estudante:** perfil e competências, objetivos e plano de ação, **linha do tempo por mês ou semestre**, **teste de perfil profissional**, **gerador de currículo** (PDF pela impressão e Word), **conquistas e sequência de acessos**, oportunidades (inclui **vagas e eventos divulgados pela coordenação**), **pedido de mentoria**, avaliação do sistema.
+- **Coordenação:** resumo agregado e uso do site, **publicação de vagas e eventos**, **relatório pronto para o portfólio**, link de redefinição de senha para estudante, exportação CSV.
+- **Acesso:** cadastro com escolha do curso em uma lista organizada por área ou opção **Outro** para informar um curso não listado, e-mail e senha, **Google**, **Microsoft 365**, **esqueci minha senha**. Variações de escrita do mesmo curso são agrupadas nos relatórios.
 
 ## Como ativar cada login
 - **Google:** Google Cloud Console, crie um "ID do cliente OAuth" tipo Web, adicione o endereço do site em "Origens JavaScript autorizadas" e informe o ID em `GOOGLE_CLIENT_ID`.

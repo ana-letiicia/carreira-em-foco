@@ -1,0 +1,32 @@
+[
+  {
+    "area": "Tecnologia",
+    "cursos": [
+      "Análise e Desenvolvimento de Sistemas",
+      "Ciência da Computação",
+      "Sistemas de Informação"
+    ]
+  },
+  {
+    "area": "Saúde",
+    "cursos": [
+      "Biomedicina",
+      "Enfermagem",
+      "Farmácia",
+      "Fisioterapia",
+      "Fonoaudiologia",
+      "Odontologia",
+      "Terapia Ocupacional",
+      "Radiologia",
+      "Estética e Cosmética",
+      "Medicina Veterinária",
+      "Educação Física (Bacharelado)"
+    ]
+  },
+  {
+    "area": "Educação",
+    "cursos": [
+      "Pedagogia (Licenciatura)"
+    ]
+  }
+]
